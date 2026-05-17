@@ -1,0 +1,55 @@
+.register-container {
+    display: flex;
+    height: 100vh; 
+    width: 100vw; 
+    background-image: url('../assets/images/Cadastro.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.register-left {
+    flex: 1; 
+    display: flex;
+    flex-direction: column;
+    align-items: self-end;
+}
+
+.register-left h1 {
+    color: var(--rosa-escuro);
+    font-size: 50px;
+    font-weight: 900;
+    margin-top: 100px;
+    margin-right: 120px;
+}
+
+.register-right {
+    flex: 1; 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.register-form-wrapper {
+    width: 100%;
+    max-width: 550px; 
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.2); 
+}
+
+.register-row {
+    display: flex;
+    gap: 15px; 
+    width: 100%;
+}
+
+.register-row > * {
+    flex: 1;
+}
+

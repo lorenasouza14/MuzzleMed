@@ -1,0 +1,56 @@
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+    width: 100%;
+}
+
+.save-button {
+    background-color: var(--rosa-escuro); 
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    width: 100%;
+    font-weight: 600;
+    font-family: var(--font-family);
+    transition: all 0.3s ease;
+}
+
+.cancel-button {
+    background-color: white; 
+    color: var(--azul-escuro);
+    border: 1px var(--azul-escuro) solid;
+    padding: 10px 20px;
+    border-radius: 5px ;
+    cursor: pointer;
+    font-size: 14px;
+    width: 100%;
+    font-weight: 600;
+    font-family: var(--font-family);
+    transition: all 0.3s ease;
+}
+
+.save-button:hover {
+    color: var(--background-color);
+    box-shadow: 0 0 15px var(--rosa-claro); 
+    transform: scale(1.02);
+}
+
+.cancel-button:hover {
+    box-shadow: 0 0 15px var(--azul-claro); 
+    transform: scale(1.02);
+}
+
+.save-button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+}
+
+.cancel-button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+}
