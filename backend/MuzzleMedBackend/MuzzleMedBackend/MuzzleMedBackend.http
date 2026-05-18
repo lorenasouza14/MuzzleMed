@@ -1,0 +1,6 @@
+@MuzzleMedBackend_HostAddress = http://localhost:5179
+
+GET {{MuzzleMedBackend_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
