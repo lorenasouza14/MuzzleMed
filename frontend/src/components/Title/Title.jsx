@@ -1,10 +1,33 @@
-import 'react';
-import './Title.css';
+import React from "react";
+import "./Title.css";
+import { LuX } from "react-icons/lu";
 
-function Title({ children }) {
+function Title({ 
+    title, 
+    botao, 
+    onButtonClick,  
+    onCloseClick,   
+    showButton, 
+    showCloseButton 
+}) {
     return (
-        <h1 className="title-text">{children}</h1>
+        <div className="titulo-botao">
+            <h1>{title}</h1>
+            <div className="botoes-wrapper">
+                {showButton && (
+                    <button className="botao" onClick={onButtonClick}>
+                        {botao}
+                    </button>
+                )}
+                
+                {showCloseButton && (
+                    <button className="btn-fechar" onClick={onCloseClick} aria-label="Fechar">
+                        <LuX size={24} />
+                    </button>
+                )}
+            </div>
+        </div>
     );
 }
 
-export default Title;   
+export default Title;

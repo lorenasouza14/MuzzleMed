@@ -3,7 +3,7 @@ import FormsInput from "../components/FormsInput/FormsInput";
 import "../styles/OwnerRegister.css";
 import ButtonSaveCancel from "../components/ButtonSaveCancel/ButtonSaveCancel";
 import { useNavigate } from "react-router-dom";
-
+import logo from '../assets/images/logo.png';
 
 function OwnerRegister() {
 
@@ -20,6 +20,11 @@ function OwnerRegister() {
     return (
         <main className="container">
             <div className="register-container">
+
+                <div className="logo">
+                    <img src={logo} alt="Logo" />
+                </div>
+
                 <div className="register-left">
                     <h1>Cadastre-se</h1>
                 </div>

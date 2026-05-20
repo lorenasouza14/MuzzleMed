@@ -14,7 +14,7 @@ function App() {
     <Routes>
       <Route path='/' element={<Login />} />
       <Route path='/novo-usuario' element={<OwnerRegister />} />
-      <Route path='/visualizar-pets' element={<PetVisualizer />} />
+      <Route path='/pets' element={<PetVisualizer />} />
       <Route path='/home' element={<Home />} />
       <Route path='/agendamento' element={<Home />} />
     </Routes>

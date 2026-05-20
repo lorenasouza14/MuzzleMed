@@ -1,0 +1,10 @@
+
+.pet-row {
+    display: flex;
+    gap: 15px; 
+    width: 100%;
+}
+
+.pet-row > * {
+    flex: 1;
+}

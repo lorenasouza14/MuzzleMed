@@ -1,0 +1,41 @@
+.toggle-input {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.toggle-input-label {
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #000; 
+}
+
+.toggle-input-wrapper {
+    display: flex;
+    width: 100%;
+    border: 1px solid var(--rosa-escuro); 
+    border-radius: 5px;
+    height: 42px;
+    overflow: hidden; 
+}
+
+
+.toggle-btn {
+    flex: 1; 
+    background-color: transparent;
+    border: none;
+    color: #000;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+    font-size: 14px;
+    font-family: var(--font-family);
+}
+
+.toggle-btn.active {
+    background-color: var(--rosa-escuro);
+    color: #ffffff;
+    font-weight: 500;
+    border-radius: 5px;
+    margin: 3px;
+}

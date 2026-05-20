@@ -2,6 +2,7 @@ import { useState } from "react";
 import FormsInput from "../components/FormsInput/FormsInput";
 import LoginButton from "../components/LoginButton/LoginButton";
 import "../styles/Login.css";
+import logo from '../assets/images/logo.png';
 
 function Login() {
     const [email, setEmail] = useState("");
@@ -9,8 +10,10 @@ function Login() {
 
     return (
         <main className="container">
-
             <div className="login-container">
+                <div className="logo">
+                    <img src={logo} alt="Logo" />
+                </div>
                 <div className="login-left">
                     <div className="login-form-wrapper">
                         <FormsInput

@@ -1,5 +1,55 @@
-.title-text{
-    color: #FF4F6C;
-    font-size: 1.4rem;
-    margin:5px
+.titulo-botao {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    /* Se quiser a margem para baixo do título inteiro, coloque aqui, e não no h1 */
+    margin-bottom: 20px; 
+}
+
+h1 {
+    font-size: 30px;
+    font-weight: bold;
+    text-align: left;
+    color: var(--rosa-escuro);
+    margin: 0; 
+}
+.botoes-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 16px; 
+}
+
+.botao {
+    background-color: var(--azul-escuro);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    font-family: var(--font-family);
+    transition: filter 0.2s;
+}
+
+.botao:hover {
+    filter: brightness(0.9);
+}
+
+.btn-fechar {
+    background: transparent;
+    border: none;
+    color: var(--rosa-escuro); 
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.btn-fechar:hover {
+    background-color: #f0f0f0; 
 }

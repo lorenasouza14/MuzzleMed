@@ -1,0 +1,116 @@
+
+.table-wrapper {
+    border: 2px solid var(--azul-escuro);
+    border-radius: 12px;
+    overflow: hidden;
+    width: 100%;
+    margin: 20px auto;
+    background-color: #FFFFFF;
+    box-shadow: 0 4px 12px rgba(33, 163, 237, 0.08);
+}
+
+.muzzle-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.muzzle-table th {
+    background-color: #BFEDFF;
+    color: #1c6fa3;
+    padding: 16px;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+}
+
+.muzzle-table td {
+    padding: 16px;
+    color: #4A4A4A;
+    font-size: 14px;
+}
+
+.muzzle-table tbody tr {
+    border-bottom: 1px solid #E6F7FF;
+    transition: background-color 0.2s ease;
+}
+
+.muzzle-table tbody tr:hover {
+    background-color: #F7FCFF;
+}
+
+.muzzle-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.actions {
+    text-align: right;
+    white-space: nowrap;
+}
+
+.actions button {
+    border: none;
+    border-radius: 8px;
+    padding: 8px 12px;
+    cursor: pointer;
+    margin-left: 8px;
+    font-size: 14px;
+    transition: all 0.2s ease;
+}
+
+.btn-delete {
+    background-color: var(--rosa-claro);
+    color: #333333;
+}
+
+.btn-delete:hover {
+    background-color: var(--rosa-escuro);
+    transform: translateY(-1px);
+}
+
+.btn-edit {
+    background-color: var(--azul-claro);
+    color: #333333;
+}
+
+.btn-edit:hover {
+    background-color: var(--azul-escuro);
+    transform: translateY(-1px);
+}
+
+.pagination {
+    background-color: var(--azul-claro);
+    padding: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    border-top: 2px solid var(--azul-escuro);
+}
+
+.page-number {
+    cursor: pointer;
+    padding: 6px 12px;
+    border-radius: 6px;
+    color: #1c7cb5;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.page-number:hover {
+    background-color: rgba(255, 255, 255, 0.4);
+}
+
+.page-number.active {
+    background-color: #FFFFFF;
+    color: #21A3ED;
+    font-weight: bold;
+    box-shadow: 0 2px 6px rgba(33, 163, 237, 0.15);
+}
+    
+.dots {
+    color: #1c7cb5;
+    padding: 0 4px;
+    font-weight: 500;
+}
