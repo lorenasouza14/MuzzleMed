@@ -1,0 +1,95 @@
+/* /* .container-hm {
+    display: flex;
+    width: 100%;
+    align-items: start;
+} 
+
+.box-hm {
+    display: flex;
+    width: 100%;
+    align-items: start;
+
+   
+}
+
+.column-hm {
+    padding-left: 50px;
+    border-radius: 10px;
+    flex: 3;
+}
+
+.row-hm {
+    margin-left: 15px;
+    margin-top: 44px;
+    flex: 1;
+    background-color: #EAF9FF;
+    height: 70vh;
+    margin-right: 50px;
+    border-radius: 10px;
+}
+
+.row-consultation-hm {
+    background-color: #EAF9FF;
+    padding: 20px;
+    display: flex;
+    border-radius: 10px;
+}
+
+.h2-hm{
+    color: #FF4F6C;
+    font-size: 1.2rem;
+    text-align: center;
+    padding-top: 10px;
+} */
+
+.container-hm {
+    width: 100%;
+    min-height: 70vh;
+    background-color: #ffffff;
+}
+
+.box-hm {
+    display: flex;
+    width: 100%;
+    align-items: flex-start;
+    gap: 30px;
+}
+
+.column-hm {
+    padding-left: 70px;
+    flex: 2.5; /* Dá mais espaço para a coluna da esquerda */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Container azul das Próximas Consultas */
+.row-consultation-hm {
+    background-color: #EAF9FF;
+    padding: 20px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 10px;
+    gap: 10px;
+}
+
+.carousel-cards {
+    display: flex;
+    gap: 15px;
+    width: 100%;
+}
+
+.carousel-arrow {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    color: #FF4F6C;
+    cursor: pointer;
+    padding: 0 5px;
+}
+
+.history-list-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}

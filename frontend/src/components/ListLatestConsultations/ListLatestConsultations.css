@@ -1,0 +1,68 @@
+
+.card-history-lt {
+    border: #BFEDFF 2px solid;
+    border-radius: 10px;
+    padding: 10px;
+    background-color: #ffffff;
+}
+
+.row-header-lt {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 8px;
+    margin-bottom: 12px;
+}
+
+.pet-name-lt {
+    color: #FF4F6C;
+    font-size: 1.1rem;
+    margin: 0;
+}
+
+.status-date-lt {
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+}
+
+.status-text {
+    color: #FF4F6C;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+.date-text {
+    color: #999;
+    font-size: 0.75rem;
+}
+
+.body-history-lt {
+    display: flex;
+    gap: 40px;
+    margin-bottom: 15px;
+}
+
+.info-block-lt {
+    flex: 1;
+}
+
+.info-block-lt strong {
+    color: #21A3ED;
+    font-size: 0.9rem;
+}
+
+.desc-text {
+    font-size: 0.8rem;
+    color: #555;
+    margin-top: 5px;
+    line-height: 1.4;
+}
+
+.row-footer-lt {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    font-size: 0.75rem;
+    color: #666;
+}

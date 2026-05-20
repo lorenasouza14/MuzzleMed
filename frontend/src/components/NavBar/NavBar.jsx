@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { NavLink } from 'react-router-dom';
 import SearchBar from '../SearchBar/SearchBar'; 
 import './NavBar.css';
@@ -17,7 +17,7 @@ function Navbar({ showLogo = true, showNav = true, showSearch = true }) {
                 <nav className="navbar-center-pill">
                     <NavLink to="/home" className="nav-item">Home</NavLink>
                     <NavLink to="/agendamento" className="nav-item">Agendamento</NavLink>
-                    <NavLink to="/pet" className="nav-item active">Pet</NavLink>
+                    <NavLink to="/visualizar-pets" className="nav-item">Pet</NavLink>
                 </nav>
             )}
 
