@@ -10,6 +10,7 @@ public class UserAuthContext
     public Email EmailAuthContext { get; set; }
     public String PasswordHash { get; set; }
     
+    protected UserAuthContext() { }
     public UserAuthContext(Email email, string password)
     {
         Id = Guid.NewGuid();

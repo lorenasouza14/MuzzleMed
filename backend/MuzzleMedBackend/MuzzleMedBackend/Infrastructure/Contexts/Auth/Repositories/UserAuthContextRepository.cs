@@ -1,5 +1,6 @@
 using MuzzleMedBackend.Domain.Contexts.Auth.Entities;
 using MuzzleMedBackend.Domain.Contexts.Auth.Interfaces.Repositories;
+using MuzzleMedBackend.Domain.Contexts.Auth.ValueObjects;
 using MuzzleMedBackend.Infrastructure.Persistence;
 
 namespace MuzzleMedBackend.Infrastructure.Contexts.Auth.Repositories;
@@ -14,9 +15,10 @@ public class UserAuthContextRepository : IUserAuthContextRepository
     }
     public UserAuthContext GetByEmail(string email)
     {
+        var searchEmail = new Email(email);
         return _context.UsersAuth.FirstOrDefault(
             u => 
-                u.EmailAuthContext.ToString() == email.Trim().ToLower());
+                u.EmailAuthContext == searchEmail);
     }
 
     public void SaveNewUserAuthContext(UserAuthContext userAuthContext)
