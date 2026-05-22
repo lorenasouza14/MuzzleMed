@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Navbar from "../components/NavBar/NavBar";
 import Title from "../components/Title/Title";
 import Modal from "../components/Modal/Modal";
@@ -27,11 +27,12 @@ function PetVisualizer() {
             </div>
 
             <div>
-            <Modal
-                isOpen={isModalOpen}
-                onClose={() => setModalOpen(false)}>
-            <PetForms onSave={() => setModalOpen(false)} onCancel={() => setModalOpen(false)} />
-            </Modal>
+                <Modal
+                    title={"Cadastro de Pet"}
+                    isOpen={isModalOpen}
+                    onClose={() => setModalOpen(false)}>
+                    <PetForms onSave={() => setModalOpen(false)} onCancel={() => setModalOpen(false)} />
+                </Modal>
             </div>
         </main>
     );

@@ -1,65 +1,37 @@
-/* /* .container-hm {
-    display: flex;
-    width: 100%;
-    align-items: start;
-} 
 
-.box-hm {
-    display: flex;
-    width: 100%;
-    align-items: start;
-
-   
-}
-
-.column-hm {
-    padding-left: 50px;
-    border-radius: 10px;
-    flex: 3;
-}
-
-.row-hm {
-    margin-left: 15px;
-    margin-top: 44px;
-    flex: 1;
-    background-color: #EAF9FF;
-    height: 70vh;
-    margin-right: 50px;
-    border-radius: 10px;
-}
-
-.row-consultation-hm {
-    background-color: #EAF9FF;
-    padding: 20px;
-    display: flex;
-    border-radius: 10px;
-}
-
-.h2-hm{
-    color: #FF4F6C;
-    font-size: 1.2rem;
-    text-align: center;
-    padding-top: 10px;
-} */
 
 .container-hm {
-    width: 100%;
-    min-height: 70vh;
-    background-color: #ffffff;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Impede que a tela inteira crie barras de rolagem */
+    box-sizing: border-box;
 }
 
 .box-hm {
     display: flex;
-    width: 100%;
+    justify-content: space-between;
     align-items: flex-start;
-    gap: 30px;
+    flex: 1;          /* Ocupa todo o resto do espaço abaixo da Navbar */
+    height: calc(100vh - 80px); /* Ajuste os '80px' para a altura exata da sua Navbar */
+    overflow: hidden; /* Garante que nada vaze para fora desse bloco */
+    padding: 0 70px 0px 70px;    /* Seus espaçamentos atuais */
 }
 
 .column-hm {
-    padding-left: 70px;
-    flex: 2.5; /* Dá mais espaço para a coluna da esquerda */
-    display: flex;
-    flex-direction: column;
+    flex: 1;
+    height: 100%;       /* Ocupa toda a altura do box-hm */
+    overflow-y: auto;   /* Habilita o scroll vertical apenas aqui dentro! */
+    padding-right: 20px; /* Um espacinho para o conteúdo não colar na sidebar */
+
+    /* --- MÁGICA PARA ESCONDER A BARRA DE ROLAGEM --- */
+    scrollbar-width: none;            /* Esconde no Firefox */
+    -ms-overflow-style: none;         /* Esconde no IE/Edge */
+}
+
+/* Esconde a barra de rolagem no Chrome, Safari e Opera */
+.column-hm::-webkit-scrollbar {
+    display: none;
 }
 
 /* Container azul das Próximas Consultas */
@@ -71,12 +43,14 @@
     justify-content: space-between;
     border-radius: 10px;
     gap: 10px;
+    margin-bottom: 20px;
 }
 
 .carousel-cards {
     display: flex;
     gap: 15px;
     width: 100%;
+    
 }
 
 .carousel-arrow {

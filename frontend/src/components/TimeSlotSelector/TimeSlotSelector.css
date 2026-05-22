@@ -1,0 +1,45 @@
+.time-selector-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  position: relative;
+}
+
+.time-selector-label {
+  font-weight: bold;
+  margin-top: 5px;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+.open-modal-btn {
+  background-color: #fff;
+  border: 1px solid #ff5376;
+  height: 44px; /* Alinhado com a altura padrão do seu formulário */
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 500;
+  text-align: left;
+  padding: 0 12px;
+  transition: all 0.2s;
+}
+
+.open-modal-btn:hover:not(:disabled) {
+  background-color: #ffeef1;
+}
+
+.date-warning-text {
+  font-size: 11px;
+  color: #ff5376;
+  margin-top: 4px;
+  position: absolute;
+  bottom: -18px;
+
+}
+
+.time-selector-label{
+     margin-bottom: 5px;
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--text-color);
+}
