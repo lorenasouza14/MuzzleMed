@@ -1,10 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using MuzzleMedBackend.Core.Contexts.Auth.UseCases;
+using MuzzleMedBackend.Domain.Contexts.Auth.Entities;
 using MuzzleMedBackend.Domain.Contexts.Auth.Interfaces.Repositories;
+using MuzzleMedBackend.Domain.Contexts.Auth.Interfaces.Services;
 using MuzzleMedBackend.Infrastructure.Contexts.Auth.Repositories;
 using MuzzleMedBackend.Infrastructure.Persistence;
 using MuzzleMedBackend.Infrastructure.Security;
-using MuzzleMedBackend.Domain.Contexts.Auth.Interfaces.Services;
+using MuzzleMedBackend.Domain.Contexts.Auth.ValueObjects;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,12 +22,31 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<AuthDbContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
 );
-// Register token service as its interface so consumers that depend on ITokenService can be resolved
+
 builder.Services.AddTransient<ITokenService, TokenService>();
 builder.Services.AddScoped<IUserAuthContextRepository, UserAuthContextRepository>();
 builder.Services.AddTransient<LoginUseCase>();
 
+
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<AuthDbContext>();
+    
+    if (!dbContext.UsersAuth.Any())
+    {
+        var usuarioTeste = new UserAuthContext(
+            new Email("lucas@vet.com"), 
+            "senha123"
+        );
+        
+        dbContext.UsersAuth.Add(usuarioTeste);
+        dbContext.SaveChanges();
+        
+        Console.WriteLine("Usuário de teste 'lucas@vet.com' criado com sucesso!");
+    }
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
