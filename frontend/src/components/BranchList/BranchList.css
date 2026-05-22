@@ -1,0 +1,117 @@
+.branch-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    width: 320px;      /* Ou a largura padrão que você escolheu */
+    height: 100%;      /* Preenche a altura total fixa */
+    flex-shrink: 0;    /* Impede que o flexbox "esmague" a sidebar */
+}
+
+.branch-container {
+    background-color: #EAF9FF;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.branch-title {
+    color: #FF4F6C;
+    font-size: 1.2rem;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.branch-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.branch-item {
+    background-color: #ffffff;
+    border-radius: 6px;
+    padding-right: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.branch-marker-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+}
+
+.color-branch {
+    color: #000000;
+    font-weight: bold;
+}
+
+.pin-icon {
+    color: #FF4F6C;
+}
+
+.branch-address {
+    text-align: right;
+    font-size: 0.7rem;
+    color: #555;
+    line-height: 1.2;
+}
+
+.branch-address p {
+    margin: 0;
+}
+
+.sub-addr {
+    color: #999;
+}
+
+/* Estilização do Banner Promocional */
+.promo-banner {
+    background-color: #EAF9FF;
+    border-radius: 10px;
+    padding: 25px 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.promo-banner h3 {
+    color: #FF4F6C;
+    margin: 0 0 5px 0;
+    font-size: 1.2rem;
+}
+
+.promo-banner p {
+    color: #666;
+    font-size: 0.85rem;
+    margin: 0 0 15px 0;
+}
+
+.promo-img {
+    width: 200px;
+    height: auto;
+    margin-bottom: 15px;
+}
+
+.btn-schedule {
+    background-color: #FF4F6C;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+    font-size: 1rem;
+    transition: background 0.2s;
+}
+
+.btn-schedule:hover {
+    background-color: #e0435e;
+}

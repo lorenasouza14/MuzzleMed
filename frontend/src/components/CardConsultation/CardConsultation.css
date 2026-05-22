@@ -1,0 +1,29 @@
+h2{
+    margin: 0;
+    padding: 0;
+    color: #FF4F6C;
+    font-size: 1rem;
+}
+
+p{
+    margin: 0;
+    padding: 5px;
+    font-size: 0.8rem;
+}
+
+strong{
+    color: #21A3ED;
+}
+
+.background-card{
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 20px;
+    flex:1;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+}
+
+.row-card{
+    display: flex;
+    gap: 55px;
+}
