@@ -35,10 +35,6 @@
     transition: background-color 0.2s ease;
 }
 
-.muzzle-table tbody tr:hover {
-    background-color: #F7FCFF;
-}
-
 .muzzle-table tbody tr:last-child {
     border-bottom: none;
 }
@@ -64,7 +60,7 @@
 }
 
 .btn-delete:hover {
-    background-color: var(--rosa-escuro);
+    background-color: #ebc9d3;
     transform: translateY(-1px);
 }
 
@@ -74,7 +70,7 @@
 }
 
 .btn-edit:hover {
-    background-color: var(--azul-escuro);
+    background-color: #cdedfa;
     transform: translateY(-1px);
 }
 
@@ -113,4 +109,12 @@
     color: #1c7cb5;
     padding: 0 4px;
     font-weight: 500;
+}
+
+.muzzle-table tbody tr.empty-row {
+    border-bottom: none;
+}
+
+.muzzle-table tbody tr.empty-row:hover {
+    background-color: transparent;
 }
