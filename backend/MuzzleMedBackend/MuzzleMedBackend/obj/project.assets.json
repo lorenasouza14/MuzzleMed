@@ -2255,24 +2255,32 @@
     ]
   },
   "packageFolders": {
-    "/Users/lucashygidio/.nuget/packages/": {}
+    "C:\\Users\\souza\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/lucashygidio/RiderProjects/MuzzleMed/backend/MuzzleMedBackend/MuzzleMedBackend/MuzzleMedBackend.csproj",
+      "projectUniqueName": "C:\\Users\\souza\\MuzzleMed\\backend\\MuzzleMedBackend\\MuzzleMedBackend\\MuzzleMedBackend.csproj",
       "projectName": "MuzzleMedBackend",
-      "projectPath": "/Users/lucashygidio/RiderProjects/MuzzleMed/backend/MuzzleMedBackend/MuzzleMedBackend/MuzzleMedBackend.csproj",
-      "packagesPath": "/Users/lucashygidio/.nuget/packages/",
-      "outputPath": "/Users/lucashygidio/RiderProjects/MuzzleMed/backend/MuzzleMedBackend/MuzzleMedBackend/obj/",
+      "projectPath": "C:\\Users\\souza\\MuzzleMed\\backend\\MuzzleMedBackend\\MuzzleMedBackend\\MuzzleMedBackend.csproj",
+      "packagesPath": "C:\\Users\\souza\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\souza\\MuzzleMed\\backend\\MuzzleMedBackend\\MuzzleMedBackend\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "/Users/lucashygidio/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\souza\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net10.0"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -2341,7 +2349,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/10.0.202/PortableRuntimeIdentifierGraph.json",
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.201/PortableRuntimeIdentifierGraph.json",
         "packagesToPrune": {
           "Microsoft.AspNetCore": "(,10.0.32767]",
           "Microsoft.AspNetCore.Antiforgery": "(,10.0.32767]",
