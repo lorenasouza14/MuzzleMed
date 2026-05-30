@@ -7,6 +7,7 @@ using MuzzleMedBackend.Infrastructure.Contexts.Auth.Repositories;
 using MuzzleMedBackend.Infrastructure.Persistence;
 using MuzzleMedBackend.Infrastructure.Security;
 using MuzzleMedBackend.Domain.Contexts.Auth.ValueObjects;
+using MuzzleMedBackend.Infrastructure.Contexts.Schedule.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +21,10 @@ builder.Services.AddControllers();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<AuthDbContext>(options =>
+    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
+);
+
+builder.Services.AddDbContext<ScheduleDbContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
 );
 
