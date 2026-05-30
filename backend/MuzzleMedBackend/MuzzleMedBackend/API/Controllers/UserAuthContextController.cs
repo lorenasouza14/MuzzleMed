@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using MuzzleMedBackend.Core.Contexts.Auth.DTOs;
@@ -15,7 +16,7 @@ public class UserAuthContextController : ControllerBase
     {
         _loginUseCase = loginUseCase;
     }
-
+    [Authorize]
     [HttpPost("login")]
     public IActionResult Login([FromBody] LoginRequestDto request)
     {

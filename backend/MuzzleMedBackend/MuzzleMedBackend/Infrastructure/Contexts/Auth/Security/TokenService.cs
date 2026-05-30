@@ -20,7 +20,7 @@ public class TokenService : ITokenService
     {
         var _secretKey = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]);
         var handler = new JwtSecurityTokenHandler();
-         
+        
         var credentials = new SigningCredentials(new SymmetricSecurityKey(_secretKey), 
             SecurityAlgorithms.HmacSha256Signature);
 
