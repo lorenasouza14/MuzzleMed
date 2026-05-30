@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MuzzleMedBackend")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+92db7f8598afdc34c887b3328c8945153ca8c334")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a3d8d39bb358a5e8fd0cc1cc44bb85b40747f722")]
 [assembly: System.Reflection.AssemblyProductAttribute("MuzzleMedBackend")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MuzzleMedBackend")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
