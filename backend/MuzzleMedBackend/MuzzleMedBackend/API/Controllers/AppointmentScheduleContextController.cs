@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MuzzleMedBackend.Core.Contexts.Schedule.DTOs;
 using MuzzleMedBackend.Domain.Contexts.Schedule.Interfaces.IUseCases;
@@ -14,6 +15,7 @@ public class AppointmentScheduleContextController : ControllerBase
     {
         _createAppointmentUseCase = createAppointmentUseCase;
     }
+    [Authorize]
     [HttpPost("create")]
     public IActionResult Create(CreateAppointmentDto request)
     {
