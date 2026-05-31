@@ -3,6 +3,7 @@ using MuzzleMedBackend.Domain.Contexts.Veterinarians;
 using MuzzleMedBackend.Domain.Contexts.Veterinarians.Entities;
 using MuzzleMedBackend.Domain.Contexts.Veterinarians.Interfaces;
 using MuzzleMedBackend.Infrastructure.Persistence;
+using MuzzleMedBackend.Infrastructure.Contexts.Veterinarians.Persistence;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,9 +13,9 @@ namespace MuzzleMedBackend.Infrastructure.Contexts.Veterinarians.Repositories;
 
 public class VeterinarianRepository : IVetRepository
 {
-    private readonly MuzzleMedDbContext _context;
+    private readonly VeterinaryDbContext _context;
 
-    public VeterinarianRepository(MuzzleMedDbContext context)
+    public VeterinarianRepository(VeterinaryDbContext context)
     {
         _context = context;
     }

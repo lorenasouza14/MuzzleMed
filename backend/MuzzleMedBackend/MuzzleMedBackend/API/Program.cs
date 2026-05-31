@@ -19,28 +19,29 @@ using MuzzleMedBackend.Domain.Contexts.Auth.ValueObjects;
 using MuzzleMedBackend.Domain.Contexts.Schedule.Interfaces;
 using MuzzleMedBackend.Domain.Contexts.Schedule.Interfaces.IUseCases;
 using MuzzleMedBackend.Infrastructure.Contexts.Schedule.Persistence;
+using MuzzleMedBackend.Infrastructure.Contexts.Veterinarians.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//Configuracao para autorizar o token JWT
-var _secretKey = Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]);
+var _secretKey = Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"] ?? "ChaveSecretaDeDesenvolvimentoMuitoLongaEConfigurada123!");
+
 builder.Services.AddAuthentication(x =>
 {
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 })
-    .AddJwtBearer(x =>
+.AddJwtBearer(x =>
+{
+    x.RequireHttpsMetadata = false;
+    x.SaveToken = true;
+    x.TokenValidationParameters = new TokenValidationParameters
     {
-        x.RequireHttpsMetadata = false;
-        x.SaveToken = true;
-        x.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(_secretKey),
-            ValidateIssuer = false,
-            ValidateAudience = false,
-        };
-    });
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(_secretKey),
+        ValidateIssuer = false,
+        ValidateAudience = false,
+    };
+});
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options => {
@@ -58,48 +59,33 @@ builder.Services.AddSwaggerGen(options => {
 });
 
 builder.Services.AddAuthorization();
-
 builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-
 var serverVersion = new MySqlServerVersion(new Version(8, 0, 39));
 
-// Configuração do Banco AuthDbContext
 builder.Services.AddDbContext<AuthDbContext>(options =>
     options.UseMySql(connectionString, serverVersion));
 
-// Configuração do Banco ScheduleDbContext
 builder.Services.AddDbContext<ScheduleDbContext>(options =>
     options.UseMySql(connectionString, serverVersion));
 
-// Configuração do Banco VeterinarianDbContext
-builder.Services.AddDbContext<VeterinarianDbContext>(options =>
+builder.Services.AddDbContext<VeterinaryDbContext>(options =>
     options.UseMySql(connectionString, serverVersion));
 
-// =========================================================================
-// REGISTROS DO CONTEXTO DE AUTENTICAÇÃO (Já existentes)
-// =========================================================================
 builder.Services.AddTransient<ITokenService, TokenService>();
 builder.Services.AddScoped<IUserAuthContextRepository, UserAuthContextRepository>();
 builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
 builder.Services.AddTransient<LoginUseCase>();
 builder.Services.AddTransient<ICreateAppointmentUseCase, CreateAppointmentUseCase>();
 
-// =========================================================================
-// NOVO: REGISTROS DO CONTEXTO DE VETERINÁRIOS
-// =========================================================================
-// 1. Registro do Repositório de Veterinários
 builder.Services.AddScoped<IVetRepository, VeterinarianRepository>();
-
-// 2. Registro dos Use Cases de Veterinários
 builder.Services.AddScoped<GetVetsAllUseCase>();
 builder.Services.AddScoped<GetVetsByClinicIdUseCase>();
-builder.Services.AddScoped<PostVetsUseCase>(); // Esse cara ativa a sua rota POST!
-// =========================================================================
+builder.Services.AddScoped<PostVetsUseCase>();
 
 var app = builder.Build();
 
@@ -121,12 +107,11 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
     app.UseSwagger();
-    app.UseSwaggerUI(); // Isso garante que a interface visual do Swagger abra em /swagger
+    app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
