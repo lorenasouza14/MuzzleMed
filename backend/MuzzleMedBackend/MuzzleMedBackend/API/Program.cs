@@ -12,7 +12,6 @@ using MuzzleMedBackend.Domain.Contexts.Auth.Entities;
 using MuzzleMedBackend.Domain.Contexts.Auth.Interfaces.Repositories;
 using MuzzleMedBackend.Domain.Contexts.Auth.Interfaces.Services;
 using MuzzleMedBackend.Domain.Contexts.Veterinarians.Interfaces;
-using MuzzleMedBackend.Domain.Contexts.Auth.Interfaces.Services;
 using MuzzleMedBackend.Infrastructure.Contexts.Auth.Repositories;
 using MuzzleMedBackend.Infrastructure.Contexts.Veterinarians.Repositories;
 using MuzzleMedBackend.Infrastructure.Persistence;
@@ -26,28 +25,26 @@ var builder = WebApplication.CreateBuilder(args);
 
 //Configuracao para autorizar o token JWT
 var _secretKey = Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]);
-
 builder.Services.AddAuthentication(x =>
-    {
-        x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-        x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    })
+{
+    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
     .AddJwtBearer(x =>
     {
-        x.RequireHttpsMetadata = false; 
+        x.RequireHttpsMetadata = false;
         x.SaveToken = true;
         x.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuerSigningKey = true,
             IssuerSigningKey = new SymmetricSecurityKey(_secretKey),
-            ValidateIssuer = false,   
-            ValidateAudience = false, 
+            ValidateIssuer = false,
+            ValidateAudience = false,
         };
     });
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
-{
+builder.Services.AddSwaggerGen(options => {
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Type = SecuritySchemeType.Http,
@@ -60,7 +57,6 @@ builder.Services.AddSwaggerGen(options =>
         [new OpenApiSecuritySchemeReference("Bearer", document)] = []
     });
 });
-
 
 builder.Services.AddAuthorization();
 
@@ -77,13 +73,10 @@ var serverVersion = new MySqlServerVersion(new Version(8, 0, 39));
 
 // Configuração do Banco AuthDbContext
 builder.Services.AddDbContext<AuthDbContext>(options =>
-    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
-);
+    options.UseMySql(connectionString, serverVersion));
 
+// Configuração do Banco ScheduleDbContext
 builder.Services.AddDbContext<ScheduleDbContext>(options =>
-    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
-);
-
     options.UseMySql(connectionString, serverVersion));
 
 // Configuração do Banco MuzzleMedDbContext
@@ -116,17 +109,17 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<AuthDbContext>();
-    
+
     if (!dbContext.UsersAuth.Any())
     {
         var usuarioTeste = new UserAuthContext(
-            new Email("lucas@vet.com"), 
+            new Email("lucas@vet.com"),
             "senha123"
         );
-        
+
         dbContext.UsersAuth.Add(usuarioTeste);
         dbContext.SaveChanges();
-        
+
         Console.WriteLine("Usuário de teste 'lucas@vet.com' criado com sucesso!");
     }
 }
