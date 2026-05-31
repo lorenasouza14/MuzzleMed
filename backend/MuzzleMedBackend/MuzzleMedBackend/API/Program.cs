@@ -1,4 +1,7 @@
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using MuzzleMedBackend.Core.Contexts.Auth.UseCases;
 using MuzzleMedBackend.Domain.Contexts.Auth.Entities;
 using MuzzleMedBackend.Domain.Contexts.Auth.Interfaces.Repositories;
@@ -10,6 +13,33 @@ using MuzzleMedBackend.Domain.Contexts.Auth.ValueObjects;
 using MuzzleMedBackend.Infrastructure.Contexts.Schedule.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
+
+//Configuracao para autorizar o token JWT
+var jwtKey = builder.Configuration["Jwt:Key"];
+var keyBytes = Encoding.ASCII.GetBytes(jwtKey);
+
+builder.Services.AddAuthentication(x =>
+    {
+        x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
+    .AddJwtBearer(x =>
+    {
+        x.RequireHttpsMetadata = false; 
+        x.SaveToken = true;
+        x.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(keyBytes),
+            ValidateIssuer = false,   
+            ValidateAudience = false, 
+        };
+    });
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+builder.Services.AddAuthorization();
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi

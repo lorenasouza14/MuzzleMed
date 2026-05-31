@@ -16,7 +16,7 @@ public class UserAuthContextController : ControllerBase
     {
         _loginUseCase = loginUseCase;
     }
-    [Authorize]
+
     [HttpPost("login")]
     public IActionResult Login([FromBody] LoginRequestDto request)
     {
