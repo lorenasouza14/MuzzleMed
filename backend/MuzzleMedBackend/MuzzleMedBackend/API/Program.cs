@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using MuzzleMedBackend.Core.Contexts.Auth.UseCases;
-// ADICIONADOS: Usings do contexto de Veterinários
 using MuzzleMedBackend.Core.Contexts.Veterinarians.UseCases;
 using MuzzleMedBackend.Core.Contexts.Schedule.UseCases.AppointmentUseCases;
 using MuzzleMedBackend.Domain.Contexts.Auth.Entities;
@@ -60,7 +59,6 @@ builder.Services.AddSwaggerGen(options => {
 
 builder.Services.AddAuthorization();
 
-// Add services to the container.
 builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -68,7 +66,6 @@ builder.Services.AddControllers();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-// FIXADO: Definindo a versão do MySQL manualmente (8.0.39) para evitar erros de conexão em Design Time
 var serverVersion = new MySqlServerVersion(new Version(8, 0, 39));
 
 // Configuração do Banco AuthDbContext
@@ -79,8 +76,8 @@ builder.Services.AddDbContext<AuthDbContext>(options =>
 builder.Services.AddDbContext<ScheduleDbContext>(options =>
     options.UseMySql(connectionString, serverVersion));
 
-// Configuração do Banco MuzzleMedDbContext
-builder.Services.AddDbContext<MuzzleMedDbContext>(options =>
+// Configuração do Banco VeterinarianDbContext
+builder.Services.AddDbContext<VeterinarianDbContext>(options =>
     options.UseMySql(connectionString, serverVersion));
 
 // =========================================================================

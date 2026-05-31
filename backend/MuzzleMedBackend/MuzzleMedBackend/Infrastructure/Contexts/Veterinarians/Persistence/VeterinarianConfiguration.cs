@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using MuzzleMedBackend.Domain.Contexts.Veterinarians;
 using MuzzleMedBackend.Domain.Contexts.Veterinarians.Entities;
-using MuzzleMedBackend.Domain.Contexts.Veterinarians.ValueObjects; // ADICIONADO: para achar os VOs
+using MuzzleMedBackend.Domain.Contexts.Veterinarians.ValueObjects;
 
 namespace MuzzleMedBackend.Infrastructure.Contexts.Veterinarians.Persistence
 {
