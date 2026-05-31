@@ -5,11 +5,16 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using MuzzleMedBackend.Core.Contexts.Auth.UseCases;
+// ADICIONADOS: Usings do contexto de Veterinários
+using MuzzleMedBackend.Core.Contexts.Veterinarians.UseCases;
 using MuzzleMedBackend.Core.Contexts.Schedule.UseCases.AppointmentUseCases;
 using MuzzleMedBackend.Domain.Contexts.Auth.Entities;
 using MuzzleMedBackend.Domain.Contexts.Auth.Interfaces.Repositories;
 using MuzzleMedBackend.Domain.Contexts.Auth.Interfaces.Services;
+using MuzzleMedBackend.Domain.Contexts.Veterinarians.Interfaces;
+using MuzzleMedBackend.Domain.Contexts.Auth.Interfaces.Services;
 using MuzzleMedBackend.Infrastructure.Contexts.Auth.Repositories;
+using MuzzleMedBackend.Infrastructure.Contexts.Veterinarians.Repositories;
 using MuzzleMedBackend.Infrastructure.Persistence;
 using MuzzleMedBackend.Infrastructure.Security;
 using MuzzleMedBackend.Domain.Contexts.Auth.ValueObjects;
@@ -60,14 +65,17 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddAuthorization();
 
 // Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
-// Required for Swagger/OpenAPI to discover controller endpoints
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+// FIXADO: Definindo a versão do MySQL manualmente (8.0.39) para evitar erros de conexão em Design Time
+var serverVersion = new MySqlServerVersion(new Version(8, 0, 39));
+
+// Configuração do Banco AuthDbContext
 builder.Services.AddDbContext<AuthDbContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
 );
@@ -76,12 +84,32 @@ builder.Services.AddDbContext<ScheduleDbContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
 );
 
+    options.UseMySql(connectionString, serverVersion));
+
+// Configuração do Banco MuzzleMedDbContext
+builder.Services.AddDbContext<MuzzleMedDbContext>(options =>
+    options.UseMySql(connectionString, serverVersion));
+
+// =========================================================================
+// REGISTROS DO CONTEXTO DE AUTENTICAÇÃO (Já existentes)
+// =========================================================================
 builder.Services.AddTransient<ITokenService, TokenService>();
 builder.Services.AddScoped<IUserAuthContextRepository, UserAuthContextRepository>();
 builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
 builder.Services.AddTransient<LoginUseCase>();
 builder.Services.AddTransient<ICreateAppointmentUseCase, CreateAppointmentUseCase>();
 
+// =========================================================================
+// NOVO: REGISTROS DO CONTEXTO DE VETERINÁRIOS
+// =========================================================================
+// 1. Registro do Repositório de Veterinários
+builder.Services.AddScoped<IVetRepository, VeterinarianRepository>();
+
+// 2. Registro dos Use Cases de Veterinários
+builder.Services.AddScoped<GetVetsAllUseCase>();
+builder.Services.AddScoped<GetVetsByClinicIdUseCase>();
+builder.Services.AddScoped<PostVetsUseCase>(); // Esse cara ativa a sua rota POST!
+// =========================================================================
 
 var app = builder.Build();
 
@@ -108,15 +136,12 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(); // Isso garante que a interface visual do Swagger abra em /swagger
 }
 
 app.UseHttpsRedirection();
-
-
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
 app.MapGet("/", () => Results.Redirect("/swagger"));
 
