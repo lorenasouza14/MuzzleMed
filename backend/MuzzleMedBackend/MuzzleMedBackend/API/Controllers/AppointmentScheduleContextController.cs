@@ -29,4 +29,10 @@ public class AppointmentScheduleContextController : ControllerBase
             return BadRequest(new { message = ex.Message });
         }
     }
+    [Authorize]
+    [HttpGet("teste")]
+    public IActionResult teste()
+    {
+        return Ok("User logado");
+    }
 }

@@ -1,8 +1,11 @@
+using System.Reflection.Metadata;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi;
 using MuzzleMedBackend.Core.Contexts.Auth.UseCases;
+using MuzzleMedBackend.Core.Contexts.Schedule.UseCases.AppointmentUseCases;
 using MuzzleMedBackend.Domain.Contexts.Auth.Entities;
 using MuzzleMedBackend.Domain.Contexts.Auth.Interfaces.Repositories;
 using MuzzleMedBackend.Domain.Contexts.Auth.Interfaces.Services;
@@ -10,13 +13,14 @@ using MuzzleMedBackend.Infrastructure.Contexts.Auth.Repositories;
 using MuzzleMedBackend.Infrastructure.Persistence;
 using MuzzleMedBackend.Infrastructure.Security;
 using MuzzleMedBackend.Domain.Contexts.Auth.ValueObjects;
+using MuzzleMedBackend.Domain.Contexts.Schedule.Interfaces;
+using MuzzleMedBackend.Domain.Contexts.Schedule.Interfaces.IUseCases;
 using MuzzleMedBackend.Infrastructure.Contexts.Schedule.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
 //Configuracao para autorizar o token JWT
-var jwtKey = builder.Configuration["Jwt:Key"];
-var keyBytes = Encoding.ASCII.GetBytes(jwtKey);
+var _secretKey = Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]);
 
 builder.Services.AddAuthentication(x =>
     {
@@ -30,14 +34,28 @@ builder.Services.AddAuthentication(x =>
         x.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(keyBytes),
+            IssuerSigningKey = new SymmetricSecurityKey(_secretKey),
             ValidateIssuer = false,   
             ValidateAudience = false, 
         };
     });
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Type = SecuritySchemeType.Http,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        Description = "JWT Authorization header using the Bearer scheme."
+    });
+    options.AddSecurityRequirement(document => new OpenApiSecurityRequirement
+    {
+        [new OpenApiSecuritySchemeReference("Bearer", document)] = []
+    });
+});
+
 
 builder.Services.AddAuthorization();
 
@@ -60,7 +78,9 @@ builder.Services.AddDbContext<ScheduleDbContext>(options =>
 
 builder.Services.AddTransient<ITokenService, TokenService>();
 builder.Services.AddScoped<IUserAuthContextRepository, UserAuthContextRepository>();
+builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
 builder.Services.AddTransient<LoginUseCase>();
+builder.Services.AddTransient<ICreateAppointmentUseCase, CreateAppointmentUseCase>();
 
 
 var app = builder.Build();
