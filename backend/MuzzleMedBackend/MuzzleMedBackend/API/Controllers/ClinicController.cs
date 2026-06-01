@@ -2,7 +2,6 @@
 using MuzzleMedBackend.Core.Contexts.Schedule.DTOs;
 using MuzzleMedBackend.Domain.Contexts.Schedule.Entities;
 using MuzzleMedBackend.Domain.Contexts.Schedule.Interfaces;
-using static MuzzleMedBackend.Domain.Contexts.Schedule.ValueObjects.ClinicValueObject;
 
 namespace MuzzleMedBackend.Api.Controllers
 {

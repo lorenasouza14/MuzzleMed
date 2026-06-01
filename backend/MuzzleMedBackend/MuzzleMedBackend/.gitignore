@@ -11,8 +11,8 @@
 *.vsidx
 *.json
 
-bin/
-obj/
+[Bb]in/
+[Oo]bj/
 [Build]
 [Release]
 _ReSharper*/

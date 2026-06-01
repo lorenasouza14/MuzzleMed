@@ -25,6 +25,7 @@
 
     <ItemGroup>
       <Folder Include="Infrastructure\Contexts\Auth\" />
+      <Folder Include="Migrations\ClinicDb\" />
     </ItemGroup>
 
 </Project>

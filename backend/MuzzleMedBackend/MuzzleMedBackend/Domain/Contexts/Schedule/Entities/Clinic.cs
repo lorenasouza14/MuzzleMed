@@ -1,16 +1,14 @@
-﻿using static MuzzleMedBackend.Domain.Contexts.Schedule.ValueObjects.ClinicValueObject;
-
-namespace MuzzleMedBackend.Domain.Contexts.Schedule.Entities
+﻿namespace MuzzleMedBackend.Domain.Contexts.Schedule.Entities
 {
     public class Clinic
     {
-        public ClinicId Id { get; set; }
-        public string Name { get; set; }
-        public string Address { get; set; }
+        public Guid Id { get; private set; }
+        public string Name { get; private set; }
+        public string Address { get; private set; }
 
         public Clinic(string name, string address)
         {
-            Id = ClinicId.New();
+            Id = Guid.NewGuid();
             Name = name;
             Address = address;
         }

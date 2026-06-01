@@ -11,6 +11,7 @@ public class ScheduleDbContext : DbContext
     }
     
     public DbSet<AppointmentScheduleContext> AppointmentSchedules { get; set; }
+    public DbSet<Clinic> Clinics { get; set; }
         
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

@@ -20,6 +20,8 @@ using MuzzleMedBackend.Domain.Contexts.Schedule.Interfaces;
 using MuzzleMedBackend.Domain.Contexts.Schedule.Interfaces.IUseCases;
 using MuzzleMedBackend.Infrastructure.Contexts.Schedule.Persistence;
 using MuzzleMedBackend.Infrastructure.Contexts.Veterinarians.Persistence;
+using MuzzleMedBackend.Infrastructure.Contexts.Schedule.Repositories;
+using MuzzleMedBackend.Core.Contexts.Schedule.UseCases;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -86,6 +88,10 @@ builder.Services.AddScoped<IVetRepository, VeterinarianRepository>();
 builder.Services.AddScoped<GetVetsAllUseCase>();
 builder.Services.AddScoped<GetVetsByClinicIdUseCase>();
 builder.Services.AddScoped<PostVetsUseCase>();
+
+builder.Services.AddScoped<IClinicRepository, ClinicRepository>();
+builder.Services.AddScoped<GetAllClinicsUseCase>();
+builder.Services.AddScoped<CreateClinicUseCase>();
 
 var app = builder.Build();
 
