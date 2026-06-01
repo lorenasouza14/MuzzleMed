@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using Microsoft.EntityFrameworkCore;
 using MuzzleMedBackend.Domain.Contexts.Auth.ValueObjects;
 
 namespace MuzzleMedBackend.Domain.Contexts.Auth.Entities;
@@ -7,13 +6,16 @@ namespace MuzzleMedBackend.Domain.Contexts.Auth.Entities;
 public class UserAuthContext
 {
     public Guid Id { get; private set; }
-    public Email EmailAuthContext { get; set; }
-    public String PasswordHash { get; set; }
+    public Email EmailAuthContext { get; private set; }
+    public string PasswordHash { get; private set; }
     
     protected UserAuthContext() { }
-    public UserAuthContext(Email email, string password)
+    public UserAuthContext(Guid id, Email email, string password)
     {
-        Id = Guid.NewGuid();
+        if (id == Guid.Empty)
+            throw new ArgumentException("Id inválido");
+
+        Id = id; 
         EmailAuthContext = email;
         SetPasswordAsHash(password);
     }
