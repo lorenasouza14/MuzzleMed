@@ -6,6 +6,12 @@ using MuzzleMedBackend.Infrastructure.Persistence;
 using MuzzleMedBackend.Infrastructure.Security;
 using MuzzleMedBackend.Domain.Contexts.Auth.Interfaces.Services;
 
+//Heloisa
+using Domain.Contexts.Profile.Interfaces;
+using Infrastructure.Contexts.Profile.Repositories;
+using Infrastructure.Contexts.Profile.Persistence;
+using Core.Contexts.Profile.UseCases;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -16,6 +22,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 
+//Heloisa
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<AuthDbContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
@@ -24,6 +34,9 @@ builder.Services.AddDbContext<AuthDbContext>(options =>
 builder.Services.AddTransient<ITokenService, TokenService>();
 builder.Services.AddScoped<IUserAuthContextRepository, UserAuthContextRepository>();
 builder.Services.AddTransient<LoginUseCase>();
+
+//heloisa
+builder.Services.AddScoped<CreateUserUseCase>();
 
 var app = builder.Build();
 
