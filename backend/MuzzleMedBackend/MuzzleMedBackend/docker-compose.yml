@@ -4,16 +4,15 @@ services:
   db:
     image: mysql:8.0
     container_name: muzzlemed_mysql
+    env_file: .env
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     ports:
       - "${MYSQL_PORT}:3306"
     volumes:
-      - muzzlemed_data:/var/lib/mysql
+      - muzzlemed_data_v2:/var/lib/mysql
 
 volumes:
-  muzzlemed_data:
+  muzzlemed_data_v2:

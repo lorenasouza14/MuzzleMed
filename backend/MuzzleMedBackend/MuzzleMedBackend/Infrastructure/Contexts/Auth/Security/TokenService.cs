@@ -18,7 +18,7 @@ public class TokenService : ITokenService
     
     public string GenerateToken(UserAuthContext user)
     {
-        var _secretKey = Encoding.ASCII.GetBytes(_configuration["Jwt: Secret"]);
+        var _secretKey = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]);
         var handler = new JwtSecurityTokenHandler();
         
         var credentials = new SigningCredentials(new SymmetricSecurityKey(_secretKey), 
@@ -29,7 +29,7 @@ public class TokenService : ITokenService
             var ci = new ClaimsIdentity();
             ci.AddClaim(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()));
             
-            ci.AddClaim(new Claim(ClaimTypes.Email, user.EmailAuthContext.ToString()));
+            ci.AddClaim(new Claim(ClaimTypes.Email, user.EmailAuthContext.Address));
             
             return ci;
         }
