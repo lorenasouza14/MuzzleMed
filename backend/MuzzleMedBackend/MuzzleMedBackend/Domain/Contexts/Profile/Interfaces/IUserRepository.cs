@@ -3,5 +3,5 @@ using Domain.Contexts.Profile.Entities;
 
 public interface IUserRepository
 {
-    Task AddAsync(User user); //anotar o que é
+    Task AddAsync(User user); 
 }

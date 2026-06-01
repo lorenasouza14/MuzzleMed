@@ -3,7 +3,6 @@ using Domain.Contexts.Schedule.ValueObjects;
 
 public class PetSchedule
 {
-    // A chave primária é o PetId original
     public Guid PetId { get; private set; }
     public string Name { get; private set; }
     public SpecieEnum Species { get; private set; }

@@ -19,7 +19,6 @@ public class HistoricAppointmentConfiguration : IEntityTypeConfiguration<Histori
             .IsRequired()
             .HasMaxLength(500);
 
-        // O EF Core 8 suporta coleções primitivas nativamente (List<string>)
         builder.Property(h => h.Medication)
             .IsRequired();
     }

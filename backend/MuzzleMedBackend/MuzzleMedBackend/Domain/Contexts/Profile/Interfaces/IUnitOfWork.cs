@@ -1,6 +1,6 @@
 ﻿namespace MuzzleMedBackend.Domain.Contexts.Profile.Interfaces;
 
-// Serve para dar o "Commit" (SaveChanges) de tudo de uma vez no banco
+// SaveChages em tudo de uma vez
 public interface IUnitOfWork
 {
     Task CommitAsync();
