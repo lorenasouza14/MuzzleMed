@@ -28,18 +28,24 @@ public class CreateUserUseCase
 
     public async Task ExecuteAsync(CreateUserRequest request)
     {
+        // 1. Instanciar os Value Objects
         var email = new Email(request.Email);
         var cpf = new Cpf(request.Cpf);
         var phone = new Phone(request.Phone);
 
-        //Profile
+        // 2. Criar a Entidade de Profile
         var user = new User(request.FullName, email, cpf, phone, request.DateOfBirth);
 
+        // 3. Adicionar no Repositório de Profile
         await _userRepository.AddAsync(user);
-        await _scheduleUseCase.ExecuteAsync(user.Id, user.FullName, user.Phone.Number);
-        await _authUseCase.ExecuteAsync(user.Id, request.Email ,request.Password);
 
-        // Envia as informações no banco
+        // 4. Enviar dados para o contexto de Schedule
+        await _scheduleUseCase.ExecuteAsync(user.Id, user.FullName, user.Phone.Number);
+
+        // 5. Enviar dados para o contexto de Auth
+        await _authUseCase.ExecuteAsync(user.Id, request.Password);
+
+        // 6. Efetivar todas as transações no banco
         await _unitOfWork.CommitAsync();
     }
 }

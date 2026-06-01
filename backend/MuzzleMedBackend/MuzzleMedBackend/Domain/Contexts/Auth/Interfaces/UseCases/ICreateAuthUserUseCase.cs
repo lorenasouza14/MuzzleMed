@@ -2,5 +2,5 @@
 
 public interface ICreateAuthUserUseCase
 {
-    Task ExecuteAsync(Guid userId, string email, string password);
+    Task ExecuteAsync(Guid userId, string password);
 }

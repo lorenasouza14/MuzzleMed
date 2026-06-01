@@ -26,6 +26,7 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
         builder.Property(p => p.IsActive)
             .IsRequired();
 
+        // Salva o Enum como String no banco de dados em vez de Inteiro
         builder.Property(p => p.Specie)
             .IsRequired()
             .HasConversion<string>()
