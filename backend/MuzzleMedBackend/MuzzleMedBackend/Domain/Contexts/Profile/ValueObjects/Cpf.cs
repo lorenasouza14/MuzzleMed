@@ -11,10 +11,10 @@ public record Cpf
 
         var cleanCpf = number.Replace(".", "").Replace("-", "");
         
-        if (cleanCpf.Length != 11 || !long.TryParse(cleanCpf, out _)) //Verificar o que significa
+        if (cleanCpf.Length != 11 || !long.TryParse(cleanCpf, out _))
             throw new ArgumentException("O CPF deve conter 11 dígitos numéricos.");
 
-        // Nota: Para um projeto real, adicione aqui o cálculo de validação dos dígitos verificadores.
+        // Crio uma validação de CPF?
         Number = cleanCpf; 
     }
 }

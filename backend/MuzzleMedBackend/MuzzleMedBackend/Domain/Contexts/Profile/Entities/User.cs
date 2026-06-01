@@ -11,10 +11,8 @@ public class User
     public DateTime DateOfBirth { get; private set; }
     public List<Pet> Pets { get; private set; } = new();
 
-    // Construtor vazio necessário apenas para o EF Core fazer o mapeamento interno
     protected User() { }
 
-    // Construtor principal usado pela sua aplicação (UseCases)
     public User(string fullName, Email email, Cpf cpf, Phone phone, DateTime dateOfBirth)
     {
         if (string.IsNullOrWhiteSpace(fullName))

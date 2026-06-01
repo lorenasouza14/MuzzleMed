@@ -19,12 +19,10 @@ public class UserProfileContextController : ControllerBase
         {
             await useCase.ExecuteAsync(request);
             
-            // Retorna 201 Created quando o fluxo inteiro dá certo
             return StatusCode(201, new { Message = "Usuário criado com sucesso" });
         }
         catch (ArgumentException ex)
         {
-            // Se falhar alguma regra dos VOs (ex: CPF inválido), cai aqui e retorna 400
             return BadRequest(new { Error = ex.Message });
         }
     }

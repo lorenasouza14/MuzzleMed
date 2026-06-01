@@ -19,6 +19,12 @@ public class UserAuthContext
         EmailAuthContext = email;
         SetPasswordAsHash(password);
     }
+
+    public UserAuthContext(Email id, string senha123)
+    {
+        throw new NotImplementedException();
+    }
+
     private void SetPasswordAsHash(string password)
     {
         if (string.IsNullOrWhiteSpace(password) || password.Length < 6)

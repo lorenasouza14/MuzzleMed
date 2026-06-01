@@ -19,12 +19,11 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(u => u.DateOfBirth)
             .IsRequired();
 
-        // Mapeamento dos Value Objects (Owned Types)
-        // O EF Core entenderá que esses dados pertencem à mesma tabela "Users"
+
         builder.OwnsOne(u => u.ProfileEmail, email =>
         {
             email.Property(e => e.Address)
-                .HasColumnName("Email") // Nome da coluna no banco
+                .HasColumnName("Email") 
                 .IsRequired()
                 .HasMaxLength(100);
         });
@@ -45,7 +44,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
                 .HasMaxLength(15);
         });
 
-        // Relacionamento 1:N (Um Usuário tem muitos Pets)
+        // Relacionamento 1:N
         builder.HasMany(u => u.Pets)
             .WithOne(p => p.User)
             .HasForeignKey(p => p.UserId)
