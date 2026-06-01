@@ -1,6 +1,3 @@
-
-.env
-
 .vs/
 .idea/
 .vscode/
@@ -9,12 +6,15 @@
 *.userosscache
 *.sln.docstates
 *.vsidx
-*.json
+
 
 [Bb]in/
 [Oo]bj/
-[Build]
-[Release]
+[Bb]uild/
+[Rr]elease/
+*.json
+
+
 _ReSharper*/
 
 .db_data/
