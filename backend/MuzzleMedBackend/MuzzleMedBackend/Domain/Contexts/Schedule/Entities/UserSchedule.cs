@@ -2,7 +2,6 @@
 
 public class UserSchedule
 {
-    // A chave primária aqui é o próprio UserId gerado no Profile Context
     public Guid UserId { get; private set; }
     public string FullName { get; private set; }
     public string Phone { get; private set; } // Como já foi validado antes, não validei aqui tb
