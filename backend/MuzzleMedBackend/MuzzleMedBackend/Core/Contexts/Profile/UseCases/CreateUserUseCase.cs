@@ -43,7 +43,7 @@ public class CreateUserUseCase
         await _scheduleUseCase.ExecuteAsync(user.Id, user.FullName, user.Phone.Number);
 
         // 5. Enviar dados para o contexto de Auth
-        await _authUseCase.ExecuteAsync(user.Id, request.Password);
+        await _authUseCase.ExecuteAsync(user.Id, request.Email ,request.Password);
 
         // 6. Efetivar todas as transações no banco
         await _unitOfWork.CommitAsync();
