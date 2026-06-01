@@ -24,6 +24,6 @@ public class UserAuthContextRepository : IUserAuthContextRepository
     public void SaveNewUserAuthContext(UserAuthContext userAuthContext)
     {
         _context.UsersAuth.Add(userAuthContext);
-        _context.SaveChanges();
+        // O salvamento será feito pelo UnitOfWork no final do UseCase principal por isso tirei o Savechanges
     }
 }

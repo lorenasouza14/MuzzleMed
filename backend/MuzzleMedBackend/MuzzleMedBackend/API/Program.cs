@@ -24,10 +24,10 @@ using MuzzleMedBackend.Infrastructure.Contexts.Schedule.Repositories;
 using MuzzleMedBackend.Core.Contexts.Schedule.UseCases;
 
 //Heloisa
-using Domain.Contexts.Profile.Interfaces;
-using Infrastructure.Contexts.Profile.Repositories;
-using Infrastructure.Contexts.Profile.Persistence;
-using Core.Contexts.Profile.UseCases;
+using MuzzleMedBackend.Domain.Contexts.Profile.Interfaces;
+using MuzzleMedBackend.Infrastructure.Contexts.Profile.Repositories;
+using MuzzleMedBackend.Infrastructure.Contexts.Profile.Persistence;
+using MuzzleMedBackend.Core.Contexts.Profile.UseCases;
 
 var builder = WebApplication.CreateBuilder(args);
 
