@@ -23,6 +23,12 @@ using MuzzleMedBackend.Infrastructure.Contexts.Veterinarians.Persistence;
 using MuzzleMedBackend.Infrastructure.Contexts.Schedule.Repositories;
 using MuzzleMedBackend.Core.Contexts.Schedule.UseCases;
 
+//Heloisa
+using Domain.Contexts.Profile.Interfaces;
+using Infrastructure.Contexts.Profile.Repositories;
+using Infrastructure.Contexts.Profile.Persistence;
+using Core.Contexts.Profile.UseCases;
+
 var builder = WebApplication.CreateBuilder(args);
 
 var _secretKey = Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"] ?? "ChaveSecretaDeDesenvolvimentoMuitoLongaEConfigurada123!");
@@ -66,6 +72,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 
+//Heloisa
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 var serverVersion = new MySqlServerVersion(new Version(8, 0, 39));
 
@@ -92,6 +102,9 @@ builder.Services.AddScoped<PostVetsUseCase>();
 builder.Services.AddScoped<IClinicRepository, ClinicRepository>();
 builder.Services.AddScoped<GetAllClinicsUseCase>();
 builder.Services.AddScoped<CreateClinicUseCase>();
+
+//heloisa
+builder.Services.AddScoped<CreateUserUseCase>();
 
 var app = builder.Build();
 

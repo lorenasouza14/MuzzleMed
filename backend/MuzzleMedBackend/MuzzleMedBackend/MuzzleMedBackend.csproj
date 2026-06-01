@@ -10,13 +10,12 @@
         <PackageReference Include="BCrypt.Net-Next" Version="4.2.0" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.16" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.8" />
-        <PackageReference Include="StackExchange.Redis" Version="2.13.17" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.16">
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+          <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
         <PackageReference Include="Swashbuckle.AspNetCore" Version="10.1.7" />
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.16" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.16">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.16">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -25,12 +24,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Core\Contexts\BookTime\DTOs\" />
-      <Folder Include="Core\Contexts\BookTime\UseCases\" />
-      <Folder Include="Domain\Contexts\BookTime\Interfaces\" />
       <Folder Include="Infrastructure\Contexts\Auth\" />
-      <Folder Include="Migrations\ClinicDb\" />
-      <Folder Include="Infrastructure\Contexts\BookTime\Repository\" />
     </ItemGroup>
 
 </Project>
