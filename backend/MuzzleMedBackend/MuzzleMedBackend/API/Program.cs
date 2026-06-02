@@ -26,12 +26,6 @@ using MuzzleMedBackend.Infrastructure.Contexts.Profile.Repositories;
 using MuzzleMedBackend.Core.Contexts.Profile.UseCases;
 using MuzzleMedBackend.Infrastructure;
 
-//Heloisa
-using MuzzleMedBackend.Domain.Contexts.Profile.Interfaces;
-using MuzzleMedBackend.Infrastructure.Contexts.Profile.Repositories;
-using MuzzleMedBackend.Infrastructure.Contexts.Profile.Persistence;
-using MuzzleMedBackend.Core.Contexts.Profile.UseCases;
-
 var builder = WebApplication.CreateBuilder(args);
 
 var _secretKey = Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]);
@@ -100,9 +94,6 @@ builder.Services.AddScoped<PostVetsUseCase>();
 builder.Services.AddScoped<IClinicRepository, ClinicRepository>();
 builder.Services.AddScoped<GetAllClinicsUseCase>();
 builder.Services.AddScoped<CreateClinicUseCase>();
-
-//heloisa
-builder.Services.AddScoped<CreateUserUseCase>();
 
 //heloisa
 builder.Services.AddScoped<CreateUserUseCase>();
