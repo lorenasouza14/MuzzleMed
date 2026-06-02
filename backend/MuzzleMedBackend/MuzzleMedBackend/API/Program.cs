@@ -1,4 +1,3 @@
-using System.Reflection.Metadata;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -13,21 +12,19 @@ using MuzzleMedBackend.Domain.Contexts.Auth.Interfaces.Services;
 using MuzzleMedBackend.Domain.Contexts.Veterinarians.Interfaces;
 using MuzzleMedBackend.Infrastructure.Contexts.Auth.Repositories;
 using MuzzleMedBackend.Infrastructure.Contexts.Veterinarians.Repositories;
-using MuzzleMedBackend.Infrastructure.Persistence;
 using MuzzleMedBackend.Infrastructure.Security;
 using MuzzleMedBackend.Domain.Contexts.Auth.ValueObjects;
 using MuzzleMedBackend.Domain.Contexts.Schedule.Interfaces;
 using MuzzleMedBackend.Domain.Contexts.Schedule.Interfaces.IUseCases;
 using MuzzleMedBackend.Infrastructure.Contexts.Schedule.Persistence;
-using MuzzleMedBackend.Infrastructure.Contexts.Veterinarians.Persistence;
 using MuzzleMedBackend.Infrastructure.Contexts.Schedule.Repositories;
 using MuzzleMedBackend.Core.Contexts.Schedule.UseCases;
 
 //Heloisa
 using MuzzleMedBackend.Domain.Contexts.Profile.Interfaces;
 using MuzzleMedBackend.Infrastructure.Contexts.Profile.Repositories;
-using MuzzleMedBackend.Infrastructure.Contexts.Profile.Persistence;
 using MuzzleMedBackend.Core.Contexts.Profile.UseCases;
+using MuzzleMedBackend.Infrastructure;
 
 //Heloisa
 using MuzzleMedBackend.Domain.Contexts.Profile.Interfaces;
@@ -37,7 +34,7 @@ using MuzzleMedBackend.Core.Contexts.Profile.UseCases;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var _secretKey = Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"] ?? "ChaveSecretaDeDesenvolvimentoMuitoLongaEConfigurada123!");
+var _secretKey = Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]);
 
 builder.Services.AddAuthentication(x =>
 {
@@ -85,14 +82,9 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 var serverVersion = new MySqlServerVersion(new Version(8, 0, 39));
 
-builder.Services.AddDbContext<AuthDbContext>(options =>
+builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySql(connectionString, serverVersion));
 
-builder.Services.AddDbContext<ScheduleDbContext>(options =>
-    options.UseMySql(connectionString, serverVersion));
-
-builder.Services.AddDbContext<VeterinaryDbContext>(options =>
-    options.UseMySql(connectionString, serverVersion));
 
 builder.Services.AddTransient<ITokenService, TokenService>();
 builder.Services.AddScoped<IUserAuthContextRepository, UserAuthContextRepository>();
@@ -119,7 +111,7 @@ var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
-    var dbContext = scope.ServiceProvider.GetRequiredService<AuthDbContext>();
+    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
     if (!dbContext.UsersAuth.Any())
     {

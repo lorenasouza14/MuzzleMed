@@ -5,8 +5,8 @@ namespace MuzzleMedBackend.Infrastructure.Contexts.Schedule.Persistence;
 
 public class AppointmentRepository : IAppointmentRepository
 {
-    private readonly ScheduleDbContext _context;
-    public AppointmentRepository(ScheduleDbContext context)
+    private readonly AppDbContext _context;
+    public AppointmentRepository(AppDbContext context)
     {
         _context = context;
     }

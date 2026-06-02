@@ -7,9 +7,9 @@ namespace MuzzleMedBackend.Infrastructure.Contexts.Schedule.Repositories
 {
     public class ClinicRepository : IClinicRepository
     {
-        private readonly ScheduleDbContext _context;
+        private readonly AppDbContext _context;
 
-        public ClinicRepository(ScheduleDbContext context)
+        public ClinicRepository(AppDbContext context)
         {
             _context = context;
         }
