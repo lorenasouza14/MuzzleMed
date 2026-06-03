@@ -31,6 +31,8 @@ using MuzzleMedBackend.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
+Console.WriteLine($"JWT Key: '{builder.Configuration["Jwt:Key"]}'");
+
 var _secretKey = Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]);
 
 builder.Services.AddAuthentication(x =>
@@ -68,8 +70,6 @@ builder.Services.AddSwaggerGen(options => {
 
 builder.Services.AddAuthorization();
 builder.Services.AddOpenApi();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 
 //Heloisa
@@ -107,30 +107,14 @@ builder.Services.AddScoped<CreateUserUseCase>();
 
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
-{
-    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-
-    if (!dbContext.UsersAuth.Any())
-    {
-        var usuarioTeste = new UserAuthContext(
-            new Email("lucas@vet.com"),
-            "senha123"
-        );
-
-        dbContext.UsersAuth.Add(usuarioTeste);
-        dbContext.SaveChanges();
-
-        Console.WriteLine("Usuário de teste 'lucas@vet.com' criado com sucesso!");
-    }
-}
-
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
     app.UseSwagger();
     app.UseSwaggerUI();
+
 }
+
 
 app.UseHttpsRedirection();
 app.UseAuthentication();
