@@ -8,7 +8,7 @@ public class UserScheduleConfiguration : IEntityTypeConfiguration<UserSchedule>
 {
     public void Configure(EntityTypeBuilder<UserSchedule> builder)
     {
-        builder.ToTable("Users", "Schedule"); // Schema diferente
+        builder.ToTable("UsersSchedule"); // Schema diferente
         
         builder.HasKey(u => u.UserId); // PK mapeada diretamente para o Id vindo do Profile
         

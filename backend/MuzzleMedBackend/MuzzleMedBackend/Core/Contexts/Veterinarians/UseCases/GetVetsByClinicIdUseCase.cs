@@ -19,13 +19,13 @@ namespace MuzzleMedBackend.Core.Contexts.Veterinarians.UseCases
 
         public async Task<IEnumerable<VetDropdownOutputDto>> ExecuteGetVetsByClinicId(VetByClinicInputDto input)
         {
-            var clinicIdVo = new ClinicIdValueObject(input.ClinicId);
+            var clinicIdVo = input.ClinicId;
             var vets = await _veterinarianRepository.GetVetsByClinicId(clinicIdVo);
 
             return vets.Select(vet => new VetDropdownOutputDto
             {
             
-                Id = vet.Id.VetId,
+                Id = vet.Id,
                 FullName = vet.Name.FullName
             });
         }

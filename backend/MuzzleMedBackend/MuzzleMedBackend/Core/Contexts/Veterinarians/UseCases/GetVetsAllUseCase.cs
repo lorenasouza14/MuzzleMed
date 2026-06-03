@@ -21,7 +21,7 @@ namespace MuzzleMedBackend.Core.Contexts.Veterinarians.UseCases
 
             return vets.Select(v => new VetDropdownOutputDto
             {
-                Id = v.Id.VetId,
+                Id = v.Id,
                 FullName = v.Name.FullName
             });
         }

@@ -1,8 +1,10 @@
 ﻿using MuzzleMedBackend.Domain.Contexts.Auth.Entities;
 using MuzzleMedBackend.Domain.Contexts.Veterinarians.Entities;
+using MuzzleMedBackend.Domain.Contexts.Veterinarians.ValueObjects;
 using MuzzleMedBackend.Infrastructure.Contexts.Auth.Persistence;
 using MuzzleMedBackend.Infrastructure.Contexts.Profile.Persistence;
 using MuzzleMedBackend.Infrastructure.Contexts.Schedule.Persistence;
+using MuzzleMedBackend.Infrastructure.Contexts.Veterinarians.Persistence;
 
 namespace MuzzleMedBackend.Infrastructure;
 
@@ -43,6 +45,10 @@ public class AppDbContext : DbContext
         modelBuilder.ApplyConfiguration(new PetScheduleConfiguration());
         modelBuilder.ApplyConfiguration(new UserAuthConfiguration());
         modelBuilder.ApplyConfiguration(new AppointmentConfiguration());
+        modelBuilder.ApplyConfiguration(new VeterinarianConfiguration());
+        
+        //ignorando vos
+        modelBuilder.Ignore<VetFullNameValueObject>();
 
     }
     

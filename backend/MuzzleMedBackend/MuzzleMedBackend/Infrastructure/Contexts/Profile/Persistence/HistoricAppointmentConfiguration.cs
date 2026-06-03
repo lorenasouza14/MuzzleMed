@@ -8,7 +8,7 @@ public class HistoricAppointmentConfiguration : IEntityTypeConfiguration<Histori
 {
     public void Configure(EntityTypeBuilder<HistoricAppointment> builder)
     {
-        builder.ToTable("HistoricAppointments", "Profile");
+        builder.ToTable("HistoricAppointments");
         
         builder.HasKey(h => h.Id);
         

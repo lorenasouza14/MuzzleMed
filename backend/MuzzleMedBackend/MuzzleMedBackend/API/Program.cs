@@ -24,6 +24,9 @@ using MuzzleMedBackend.Core.Contexts.Schedule.UseCases;
 using MuzzleMedBackend.Domain.Contexts.Profile.Interfaces;
 using MuzzleMedBackend.Infrastructure.Contexts.Profile.Repositories;
 using MuzzleMedBackend.Core.Contexts.Profile.UseCases;
+using MuzzleMedBackend.Domain.Contexts.Auth.Interfaces.UseCases;
+using MuzzleMedBackend.Domain.Contexts.Schedule.Interfaces.Repositories;
+using MuzzleMedBackend.Domain.Contexts.Schedule.Interfaces.UseCases;
 using MuzzleMedBackend.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -72,6 +75,10 @@ builder.Services.AddControllers();
 //Heloisa
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<ICreateAuthUserUseCase, CreateAuthUserUseCase>();
+builder.Services.AddScoped<ICreateUserScheduleUseCase, CreateUserScheduleUseCase>();
+builder.Services.AddScoped<IUserScheduleRepository, UserScheduleRepository>();
+builder.Services.AddScoped<ICreateUserScheduleUseCase, CreateUserScheduleUseCase>();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 var serverVersion = new MySqlServerVersion(new Version(8, 0, 39));

@@ -12,16 +12,23 @@ public class AppointmentConfiguration : IEntityTypeConfiguration<AppointmentSche
         
         builder.HasKey(a => a.Id);
         builder.Property(a => a.Id);
+        
         builder.HasIndex(a => a.UserId);
         builder.Property(a => a.UserId).IsRequired();
+        
         builder.HasIndex(a => a.PetId);
         builder.Property(a => a.PetId).IsRequired();
+        
         builder.HasIndex(a => a.VetId);
         builder.Property(a => a.VetId).IsRequired();
+        
         builder.HasIndex(a => a.ClinicId);
         builder.Property(a => a.ClinicId).IsRequired();
+        
         builder.Property(a => a.Date).IsRequired();
+        
         builder.Property(a => a.Time).IsRequired();
+        
         builder.Property(a => a.Status).IsRequired();
 
 

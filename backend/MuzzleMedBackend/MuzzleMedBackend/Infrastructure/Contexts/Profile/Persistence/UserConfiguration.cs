@@ -8,7 +8,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
 {
     public void Configure(EntityTypeBuilder<User> builder)
     {
-        builder.ToTable("Users", "Profile"); // Define a tabela e o Schema
+        builder.ToTable("UsersProfile"); 
         
         builder.HasKey(u => u.Id);
         
