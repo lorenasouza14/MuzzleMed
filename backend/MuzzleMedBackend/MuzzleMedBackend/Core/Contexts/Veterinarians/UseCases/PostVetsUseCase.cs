@@ -19,10 +19,10 @@ namespace MuzzleMedBackend.Core.Contexts.Veterinarians.UseCases
         public async Task ExecuteRegisterVeterinary(VetRegisterInputDto input)
         {
           
-            var clinicIdVo = new ClinicIdValueObject(input.ClinicId);
-            var vetIdVo = new VetIdValueObject(Guid.NewGuid());
+            var clinicId = input.ClinicId;
+            var vetId = new Guid();
             var nameVo = new VetFullNameValueObject(input.FullName);
-            var veterinary = new Veterinary(vetIdVo, nameVo, clinicIdVo);
+            var veterinary = new Veterinary(vetId, nameVo, clinicId);
             await _vetRepository.RegisterVeterinary(veterinary);
         }
     }

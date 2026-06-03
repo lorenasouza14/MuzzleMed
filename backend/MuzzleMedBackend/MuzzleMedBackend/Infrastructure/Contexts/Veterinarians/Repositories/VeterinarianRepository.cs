@@ -22,9 +22,9 @@ public class VeterinarianRepository : IVetRepository
     }
 
 
-    public async Task<IEnumerable<Veterinary>> GetVetsByClinicId(ClinicIdValueObject clinicId)
+    public async Task<IEnumerable<Veterinary>> GetVetsByClinicId(Guid clinicId)
     {
-        var vetsByClinic = await _context.Veterinarians.Where(v => v.ClinicId.ClinicId == clinicId.ClinicId)
+        var vetsByClinic = await _context.Veterinarians.Where(v => v.ClinicId == clinicId)
             .ToListAsync();
         
         return vetsByClinic;

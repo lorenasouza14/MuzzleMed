@@ -14,10 +14,7 @@ namespace MuzzleMedBackend.Infrastructure.Contexts.Veterinarians.Persistence
 
           
             builder.HasKey(v => v.Id);
-            builder.Property(v => v.Id)
-                .HasConversion(
-                    vo => vo.VetId,                        
-                    guid => new VetIdValueObject(guid)); 
+            builder.Property(v => v.Id).IsRequired();
 
             
             builder.Property(v => v.Name)
@@ -27,11 +24,8 @@ namespace MuzzleMedBackend.Infrastructure.Contexts.Veterinarians.Persistence
                 .HasMaxLength(150)
                 .IsRequired();
 
-   
+            builder.HasIndex(v => v.ClinicId);
             builder.Property(v => v.ClinicId)
-                .HasConversion(
-                    vo => vo.ClinicId,
-                    guid => new ClinicIdValueObject(guid))  
                 .IsRequired();
         }
     }

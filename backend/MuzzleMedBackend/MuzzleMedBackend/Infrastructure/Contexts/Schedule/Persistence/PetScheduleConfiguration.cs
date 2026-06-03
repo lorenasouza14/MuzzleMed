@@ -8,7 +8,7 @@ public class PetScheduleConfiguration : IEntityTypeConfiguration<PetSchedule>
 {
     public void Configure(EntityTypeBuilder<PetSchedule> builder)
     {
-        builder.ToTable("Pets", "Schedule");
+        builder.ToTable("PetsSchedule");
         
         builder.HasKey(p => p.PetId);
         
