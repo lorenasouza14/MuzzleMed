@@ -6,4 +6,5 @@ public interface IPetRepository
 {
     Task AddAsync(Pet pet);
     Task<IEnumerable<Pet>> GetActivePetsByUserIdAsync(Guid userId);
+    Task<Pet?> GetByIdTrackingAsync(Guid id);
 }

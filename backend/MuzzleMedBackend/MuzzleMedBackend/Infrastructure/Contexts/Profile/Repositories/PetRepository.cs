@@ -25,4 +25,9 @@ public class PetRepository : IPetRepository
             .Where(p => p.UserId == userId && p.IsActive)
             .ToListAsync();
     }
+    
+    public async Task<Pet?> GetByIdTrackingAsync(Guid id)
+    {
+        return await _context.Pets.FirstOrDefaultAsync(p => p.Id == id);
+    }
 }
