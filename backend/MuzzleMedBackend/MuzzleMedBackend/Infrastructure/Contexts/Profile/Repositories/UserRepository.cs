@@ -23,4 +23,11 @@ public class UserRepository : IUserRepository
         // Verifica se algum usuário no banco tem esse número exato
         return await _context.Users.AnyAsync(u => u.Cpf.Number == cpf);
     }
+    
+    public async Task<User?> GetByIdAsync(Guid id)
+    {
+        return await _context.Users
+            .AsNoTracking()
+            .FirstOrDefaultAsync(u => u.Id == id);
+    }
 }
