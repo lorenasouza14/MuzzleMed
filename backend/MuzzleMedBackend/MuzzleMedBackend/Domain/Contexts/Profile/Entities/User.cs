@@ -28,4 +28,17 @@ public class User
         Phone = phone;
         DateOfBirth = dateOfBirth;
     }
+    
+    public void UpdateProfile(string fullName, Phone phone, DateOnly dateOfBirth)
+    {
+        if (string.IsNullOrWhiteSpace(fullName))
+            throw new ArgumentException("O nome não pode ser vazio.");
+
+        if (dateOfBirth > DateOnly.FromDateTime(DateTime.UtcNow))
+            throw new ArgumentException("A data de nascimento não pode estar no futuro.");
+
+        FullName = fullName;
+        Phone = phone;
+        DateOfBirth = dateOfBirth;
+    }
 }

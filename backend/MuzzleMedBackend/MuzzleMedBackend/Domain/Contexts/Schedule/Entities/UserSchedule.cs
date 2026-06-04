@@ -23,4 +23,9 @@ public class UserSchedule
         FullName = fullName;
         Phone = phone;
     }
+    public void UpdateDetails(string fullName, string phone)
+    {
+        FullName = fullName;
+        Phone = phone;
+    }
 }

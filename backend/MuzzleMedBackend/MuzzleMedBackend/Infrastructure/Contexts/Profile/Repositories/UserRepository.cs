@@ -30,4 +30,9 @@ public class UserRepository : IUserRepository
             .AsNoTracking()
             .FirstOrDefaultAsync(u => u.Id == id);
     }
+    
+    public async Task<User?> GetByIdTrackingAsync(Guid id)
+    {
+        return await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+    }
 }
