@@ -31,6 +31,11 @@ public class CreateUserUseCase
         var email = new Email(request.Email);
         var cpf = new Cpf(request.Cpf);
         var phone = new Phone(request.Phone);
+        
+        if (await _userRepository.ExistsByCpfAsync(cpf.Number))
+        {
+            throw new ArgumentException("Este CPF já está cadastrado no sistema.");
+        }
 
         //Profile
         var user = new User(request.FullName, email, cpf, phone, request.DateOfBirth);

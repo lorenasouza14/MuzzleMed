@@ -1,8 +1,8 @@
 ﻿namespace MuzzleMedBackend.Domain.Contexts.Profile.Interfaces;
+
 using Domain.Contexts.Profile.Entities;
 
-public interface IUserRepository
+public interface IPetRepository
 {
-    Task AddAsync(User user); 
-    Task<bool> ExistsByCpfAsync(string cpf);
+    Task AddAsync(Pet pet);
 }

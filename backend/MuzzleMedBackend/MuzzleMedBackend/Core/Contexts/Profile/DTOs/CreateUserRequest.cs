@@ -5,6 +5,6 @@ public record CreateUserRequest(
     string Email,
     string Cpf,
     string Phone,
-    DateTime DateOfBirth,
+    DateOnly DateOfBirth,
     string Password 
 );

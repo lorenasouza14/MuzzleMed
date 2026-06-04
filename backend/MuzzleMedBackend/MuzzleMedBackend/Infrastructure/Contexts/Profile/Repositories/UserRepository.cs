@@ -2,6 +2,7 @@
 
 using Domain.Contexts.Profile.Entities;
 using Domain.Contexts.Profile.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 public class UserRepository : IUserRepository
 {
@@ -15,5 +16,11 @@ public class UserRepository : IUserRepository
     public async Task AddAsync(User user)
     {
         await _context.Users.AddAsync(user);
+    }
+    
+    public async Task<bool> ExistsByCpfAsync(string cpf)
+    {
+        // Verifica se algum usuário no banco tem esse número exato
+        return await _context.Users.AnyAsync(u => u.Cpf.Number == cpf);
     }
 }

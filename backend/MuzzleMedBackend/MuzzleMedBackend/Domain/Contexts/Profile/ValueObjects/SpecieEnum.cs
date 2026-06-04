@@ -3,7 +3,5 @@
 public enum SpecieEnum
 {
     Dog,
-    Cat,
-    Bird,
-    Other
+    Cat
 }
