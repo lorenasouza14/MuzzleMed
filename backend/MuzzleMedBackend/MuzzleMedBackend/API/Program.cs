@@ -121,7 +121,9 @@ builder.Services.AddScoped<ICreateAuthUserUseCase, CreateAuthUserUseCase>();
 
 builder.Services.AddScoped<IUserScheduleRepository, UserScheduleRepository>();
 builder.Services.AddScoped<ICreateUserScheduleUseCase, CreateUserScheduleUseCase>();
+builder.Services.AddScoped<IUpdateUserScheduleUseCase, UpdateUserScheduleUseCase>();
 builder.Services.AddScoped<GetUserProfileUseCase>();
+builder.Services.AddScoped<UpdateUserUseCase>();
 
 builder.Services.AddScoped<IPetScheduleRepository, PetScheduleRepository>();
 builder.Services.AddScoped<ICreatePetScheduleUseCase, CreatePetScheduleUseCase>();

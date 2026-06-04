@@ -47,4 +47,27 @@ public class UserProfileContextController : ControllerBase
             return NotFound(new { Error = ex.Message });
         }
     }
+    
+    [HttpPut("user")]
+    [Authorize]
+    public async Task<IActionResult> UpdateProfile(
+        [FromBody] UpdateUserRequest request,
+        [FromServices] UpdateUserUseCase useCase)
+    {
+        try
+        {
+            var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            
+            if (string.IsNullOrEmpty(userIdClaim) || !Guid.TryParse(userIdClaim, out var userId))
+                return Unauthorized(new { Error = "Token inválido ou ID de usuário não encontrado." });
+
+            await useCase.ExecuteAsync(userId, request);
+            
+            return NoContent(); // HTTP 204: Sucesso, sem conteúdo para retornar no corpo
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(new { Error = ex.Message });
+        }
+    }
 }
