@@ -35,4 +35,17 @@ public class PetProfileContextController : ControllerBase
             return BadRequest(new { Error = ex.Message });
         }
     }
+    
+    [HttpGet]
+    public async Task<IActionResult> GetAllByUser([FromServices] GetPetsByUserUseCase useCase)
+    {
+        var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        
+        if (string.IsNullOrEmpty(userIdClaim) || !Guid.TryParse(userIdClaim, out var userId))
+            return Unauthorized(new { Error = "Token inválido ou ID de usuário não encontrado." });
+
+        var pets = await useCase.ExecuteAsync(userId);
+
+        return Ok(pets);
+    }
 }

@@ -124,6 +124,7 @@ builder.Services.AddScoped<ICreateUserScheduleUseCase, CreateUserScheduleUseCase
 
 builder.Services.AddScoped<IPetScheduleRepository, PetScheduleRepository>();
 builder.Services.AddScoped<ICreatePetScheduleUseCase, CreatePetScheduleUseCase>();
+builder.Services.AddScoped<GetPetsByUserUseCase>();
 
 
 // MIDDLEWARES E PIPELINE DA APLICAÇÃO
