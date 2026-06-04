@@ -128,6 +128,8 @@ builder.Services.AddScoped<UpdateUserUseCase>();
 builder.Services.AddScoped<IPetScheduleRepository, PetScheduleRepository>();
 builder.Services.AddScoped<ICreatePetScheduleUseCase, CreatePetScheduleUseCase>();
 builder.Services.AddScoped<GetPetsByUserUseCase>();
+builder.Services.AddScoped<IHistoricAppointmentRepository, HistoricAppointmentRepository>();
+builder.Services.AddScoped<GetPetHistoryUseCase>();
 
 
 // MIDDLEWARES E PIPELINE DA APLICAÇÃO
