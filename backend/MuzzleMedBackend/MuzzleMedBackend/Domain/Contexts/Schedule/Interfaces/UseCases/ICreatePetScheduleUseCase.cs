@@ -4,5 +4,5 @@ using Domain.Contexts.Schedule.ValueObjects;
 
 public interface ICreatePetScheduleUseCase
 {
-    Task ExecuteAsync(Guid petId, string name, string species, Guid userId); //por causa de erro
+    Task ExecuteAsync(Guid petId, string name, string species); //por causa de erro
 }

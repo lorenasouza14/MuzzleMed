@@ -4,12 +4,15 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using System.Text.Json.Serialization;
+
 using MuzzleMedBackend.Core.Contexts.Auth.UseCases;
 using MuzzleMedBackend.Core.Contexts.Schedule.UseCases;
 using MuzzleMedBackend.Core.Contexts.Schedule.UseCases.AppointmentUseCases;
 using MuzzleMedBackend.Core.Contexts.Veterinarians.UseCases;
+using MuzzleMedBackend.Domain.Contexts.Auth.Entities;
 using MuzzleMedBackend.Domain.Contexts.Auth.Interfaces.Repositories;
 using MuzzleMedBackend.Domain.Contexts.Auth.Interfaces.Services;
+using MuzzleMedBackend.Domain.Contexts.Auth.ValueObjects;
 using MuzzleMedBackend.Domain.Contexts.Schedule.Interfaces;
 using MuzzleMedBackend.Domain.Contexts.Schedule.Interfaces.IUseCases;
 using MuzzleMedBackend.Domain.Contexts.Veterinarians.Interfaces;
@@ -19,6 +22,7 @@ using MuzzleMedBackend.Infrastructure.Contexts.Schedule.Persistence;
 using MuzzleMedBackend.Infrastructure.Contexts.Schedule.Repositories;
 using MuzzleMedBackend.Infrastructure.Contexts.Veterinarians.Repositories;
 using MuzzleMedBackend.Infrastructure.Security;
+
 using MuzzleMedBackend.Core.Contexts.Profile.UseCases;
 using MuzzleMedBackend.Core.Contexts.Schedule.UseCases.PetScheduleUseCases;
 using MuzzleMedBackend.Domain.Contexts.Auth.Interfaces.UseCases;
@@ -117,15 +121,9 @@ builder.Services.AddScoped<ICreateAuthUserUseCase, CreateAuthUserUseCase>();
 
 builder.Services.AddScoped<IUserScheduleRepository, UserScheduleRepository>();
 builder.Services.AddScoped<ICreateUserScheduleUseCase, CreateUserScheduleUseCase>();
-builder.Services.AddScoped<IUpdateUserScheduleUseCase, UpdateUserScheduleUseCase>();
-builder.Services.AddScoped<GetUserProfileUseCase>();
-builder.Services.AddScoped<UpdateUserUseCase>();
 
 builder.Services.AddScoped<IPetScheduleRepository, PetScheduleRepository>();
 builder.Services.AddScoped<ICreatePetScheduleUseCase, CreatePetScheduleUseCase>();
-builder.Services.AddScoped<GetPetsByUserUseCase>();
-builder.Services.AddScoped<IHistoricAppointmentRepository, HistoricAppointmentRepository>();
-builder.Services.AddScoped<GetPetHistoryUseCase>();
 
 
 // MIDDLEWARES E PIPELINE DA APLICAÇÃO
