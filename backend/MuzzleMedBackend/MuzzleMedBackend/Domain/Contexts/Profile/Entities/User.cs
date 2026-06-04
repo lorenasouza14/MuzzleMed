@@ -8,17 +8,17 @@ public class User
     public Email ProfileEmail { get; private set; }
     public Cpf Cpf { get; private set; }
     public Phone Phone { get; private set; }
-    public DateTime DateOfBirth { get; private set; }
+    public DateOnly DateOfBirth { get; private set; }
     public List<Pet> Pets { get; private set; } = new();
 
     protected User() { }
 
-    public User(string fullName, Email email, Cpf cpf, Phone phone, DateTime dateOfBirth)
+    public User(string fullName, Email email, Cpf cpf, Phone phone, DateOnly dateOfBirth)
     {
         if (string.IsNullOrWhiteSpace(fullName))
             throw new ArgumentException("O nome completo é obrigatório.");
 
-        if (dateOfBirth > DateTime.UtcNow)
+        if (dateOfBirth > DateOnly.FromDateTime(DateTime.UtcNow))
             throw new ArgumentException("A data de nascimento não pode estar no futuro.");
 
         Id = Guid.NewGuid();
