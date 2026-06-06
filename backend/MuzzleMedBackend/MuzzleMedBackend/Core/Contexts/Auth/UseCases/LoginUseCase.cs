@@ -19,7 +19,7 @@ public class LoginUseCase
     {
         var user = _userAuthContextRepository.GetByEmail(request.Email);
 
-        if (user == null || !user.ValidatePassword(request.Password)) //validate password foi definid na classe de user
+        if (user == null || !user.ValidatePassword(request.Password))
         {
             throw new Exception("Invalid email or password");
         }
