@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Core.Contexts.Profile.UseCases;
 using Core.Contexts.Profile.DTOs;
 
+[Authorize]
 [ApiController]
 [Route("api/v1/pets")]
 

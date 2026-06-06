@@ -13,7 +13,8 @@ public class AppointmentScheduleContext
     public DateOnly Date { get; set; }
     public TimeOnly Time { get; set; }
     public StatusEnum Status { get; set; }
-    
+    public string Symptoms { get; set; }
+
     public AppointmentScheduleContext(Guid userId, Guid petId, Guid clinicId, Guid vetId, DateOnly date, TimeOnly time)
     {
         Id = Guid.NewGuid();

@@ -8,8 +8,12 @@ public class CreateAppointmentDto
     public Guid VetId { get; set; }
     public DateOnly Date { get; set; }
     public TimeOnly Time { get; set; }
-    
-    public CreateAppointmentDto(Guid userId, Guid petId, Guid clinicId, Guid vetId, DateOnly date, TimeOnly time)
+    public string SymptomsDescription { get; set; }
+
+    public CreateAppointmentDto() { }
+
+
+    public CreateAppointmentDto(Guid userId, Guid petId, Guid clinicId, Guid vetId, DateOnly date, TimeOnly time, string symptomsDescription)
     {
         UserId = userId;
         PetId = petId;
@@ -17,5 +21,6 @@ public class CreateAppointmentDto
         VetId = vetId;
         Date = date;
         Time = time;
+        SymptomsDescription = symptomsDescription;
     }
 }
