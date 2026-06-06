@@ -94,8 +94,8 @@ builder.Services.AddTransient<LoginUseCase>();
 // Schedule
 builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
 builder.Services.AddTransient<ICreateAppointmentUseCase, CreateAppointmentUseCase>();
-builder.Services.AddScoped<IGetAppointmentsByUser, GetAppointmentsByUser>();
-builder.Services.AddScoped<IGetAppointmentById, GetAppointmentById>();
+builder.Services.AddScoped<IGetAppointmentsByUser, GetAppointmentsByUserUseCase>();
+builder.Services.AddScoped<IGetAppointmentById, GetAppointmentByIdUseCase>();
 
 // Veterinarians
 builder.Services.AddScoped<IVetRepository, VeterinarianRepository>();

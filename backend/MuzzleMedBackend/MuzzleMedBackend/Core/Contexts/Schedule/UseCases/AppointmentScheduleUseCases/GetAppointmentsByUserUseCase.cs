@@ -4,10 +4,10 @@ using MuzzleMedBackend.Domain.Contexts.Schedule.Interfaces.UseCases;
 
 namespace MuzzleMedBackend.Core.Contexts.Schedule.UseCases.AppointmentScheduleUseCases;
 
-public class GetAppointmentsByUser : IGetAppointmentsByUser
+public class GetAppointmentsByUserUseCase : IGetAppointmentsByUser
 {
     private readonly IAppointmentRepository _appointmentRepository;
-    public GetAppointmentsByUser(IAppointmentRepository appointmentRepository)
+    public GetAppointmentsByUserUseCase(IAppointmentRepository appointmentRepository)
     {
         _appointmentRepository = appointmentRepository;
     }
