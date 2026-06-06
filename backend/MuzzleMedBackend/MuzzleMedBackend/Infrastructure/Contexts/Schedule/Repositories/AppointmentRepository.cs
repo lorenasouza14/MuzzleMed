@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using MuzzleMedBackend.Domain.Contexts.Schedule.Entities;
 using MuzzleMedBackend.Domain.Contexts.Schedule.Interfaces;
 
@@ -23,7 +24,7 @@ public class AppointmentRepository : IAppointmentRepository
         return appointmentSchedule;
     }
 
-    public List<AppointmentScheduleContext>? GetAppointmentSchedules(Guid userId)
+    public List<AppointmentScheduleContext>? GetAppointmentByUserIdSchedules(Guid userId)
     {
         var appointments  = _context.AppointmentSchedules.Where(x => x.UserId == userId).ToList();
         return appointments;

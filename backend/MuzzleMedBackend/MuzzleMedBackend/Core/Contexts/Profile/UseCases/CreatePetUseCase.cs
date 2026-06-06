@@ -29,8 +29,8 @@ public class CreatePetUseCase
             request.Specie, 
             request.Breed, 
             request.DateOfBirth, 
-            request.Gender, 
-            userId 
+            request.Gender,
+            userId
         );
         
         await _petRepository.AddAsync(pet);
