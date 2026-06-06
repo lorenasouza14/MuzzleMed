@@ -3,7 +3,7 @@ using MuzzleMedBackend.Domain.Contexts.Schedule.Entities;
 using MuzzleMedBackend.Domain.Contexts.Schedule.Interfaces;
 using MuzzleMedBackend.Domain.Contexts.Schedule.Interfaces.IUseCases;
 
-namespace MuzzleMedBackend.Core.Contexts.Schedule.UseCases.AppointmentUseCases;
+namespace MuzzleMedBackend.Core.Contexts.Schedule.UseCases.AppointmentScheduleUseCases;
 
 public class CreateAppointmentUseCase : ICreateAppointmentUseCase
 {
@@ -20,7 +20,7 @@ public class CreateAppointmentUseCase : ICreateAppointmentUseCase
             ArgumentNullException.ThrowIfNull(dto, nameof(dto));
             if(_appointmentRepository.FindAppointmentByDateAndTime(dto.Date, dto.Time) != null)
             {
-                throw new Exception("An appointment already exists at the specified date and time.");
+                throw new Exception("Uma consulta ja existe nesse dia e horario");
             }
 
             var appointment = new AppointmentScheduleContext
