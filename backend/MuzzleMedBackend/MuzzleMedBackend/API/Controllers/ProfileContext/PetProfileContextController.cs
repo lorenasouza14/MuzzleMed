@@ -8,7 +8,7 @@ using Core.Contexts.Profile.DTOs;
 
 [ApiController]
 [Route("api/v1/pets")]
-[Authorize] // EXIGE TOKEN JWT PARA ACESSAR QUALQUER ROTA DESTA CONTROLLER
+
 public class PetProfileContextController : ControllerBase
 {
     [HttpPost]

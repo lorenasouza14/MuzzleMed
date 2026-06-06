@@ -1,43 +1,46 @@
-using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
-using System.Text.Json.Serialization;
 
 using MuzzleMedBackend.Core.Contexts.Auth.UseCases;
+using MuzzleMedBackend.Core.Contexts.Profile.UseCases;
 using MuzzleMedBackend.Core.Contexts.Schedule.UseCases;
 using MuzzleMedBackend.Core.Contexts.Schedule.UseCases.AppointmentUseCases;
+using MuzzleMedBackend.Core.Contexts.Schedule.UseCases.PetScheduleUseCases;
 using MuzzleMedBackend.Core.Contexts.Veterinarians.UseCases;
-using MuzzleMedBackend.Domain.Contexts.Auth.Entities;
 using MuzzleMedBackend.Domain.Contexts.Auth.Interfaces.Repositories;
 using MuzzleMedBackend.Domain.Contexts.Auth.Interfaces.Services;
-using MuzzleMedBackend.Domain.Contexts.Auth.ValueObjects;
+using MuzzleMedBackend.Domain.Contexts.Auth.Interfaces.UseCases;
+using MuzzleMedBackend.Domain.Contexts.Profile.Interfaces;
 using MuzzleMedBackend.Domain.Contexts.Schedule.Interfaces;
 using MuzzleMedBackend.Domain.Contexts.Schedule.Interfaces.IUseCases;
+using MuzzleMedBackend.Domain.Contexts.Schedule.Interfaces.Repositories;
+using MuzzleMedBackend.Domain.Contexts.Schedule.Interfaces.UseCases;
 using MuzzleMedBackend.Domain.Contexts.Veterinarians.Interfaces;
 using MuzzleMedBackend.Infrastructure;
 using MuzzleMedBackend.Infrastructure.Contexts.Auth.Repositories;
+using MuzzleMedBackend.Infrastructure.Contexts.Profile.Repositories;
 using MuzzleMedBackend.Infrastructure.Contexts.Schedule.Persistence;
 using MuzzleMedBackend.Infrastructure.Contexts.Schedule.Repositories;
 using MuzzleMedBackend.Infrastructure.Contexts.Veterinarians.Repositories;
 using MuzzleMedBackend.Infrastructure.Security;
+using System.Text;
+using System.Text.Json.Serialization;
 
-using MuzzleMedBackend.Core.Contexts.Profile.UseCases;
-using MuzzleMedBackend.Core.Contexts.Schedule.UseCases.PetScheduleUseCases;
-using MuzzleMedBackend.Domain.Contexts.Auth.Interfaces.UseCases;
-using MuzzleMedBackend.Domain.Contexts.Profile.Interfaces;
-using MuzzleMedBackend.Domain.Contexts.Schedule.Interfaces.Repositories;
-using MuzzleMedBackend.Domain.Contexts.Schedule.Interfaces.UseCases;
-using MuzzleMedBackend.Infrastructure.Contexts.Profile.Repositories;
-
-//Configs
 var builder = WebApplication.CreateBuilder(args);
 
-Console.WriteLine($"JWT Key: '{builder.Configuration["Jwt:Key"]}'");
+// Configuração de CORS (Essencial para o seu React rodar sem erro)
+builder.Services.AddCors(options => {
+    options.AddPolicy("AllowAll", policy => {
+        policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+    });
+});
 
-var _secretKey = Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]);
-
+// Configuração de JWT
+var _secretKey = Encoding.UTF8.GetBytes( "muzzlemed-chave-secreta-super-segura-2026-producao");
+string keyBase64 = Convert.ToBase64String(_secretKey);
+Console.WriteLine($"TESTE: {keyBase64}");
 builder.Services.AddAuthentication(x =>
 {
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -57,7 +60,10 @@ builder.Services.AddAuthentication(x =>
 });
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options => {
+
+// Configuração do Swagger corrigida
+builder.Services.AddSwaggerGen(options =>
+{
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Type = SecuritySchemeType.Http,
@@ -65,84 +71,61 @@ builder.Services.AddSwaggerGen(options => {
         BearerFormat = "JWT",
         Description = "JWT Authorization header using the Bearer scheme."
     });
-    options.AddSecurityRequirement(document => new OpenApiSecurityRequirement
-    {
-        [new OpenApiSecuritySchemeReference("Bearer", document)] = []
-    });
+
+    
 });
 
 builder.Services.AddAuthorization();
-builder.Services.AddOpenApi();
-builder.Services.AddControllers() 
+builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
-        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()); //Converter os enums
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     });
 
-//Configs do Banco de dados
+// Configuração do Banco de dados
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 var serverVersion = new MySqlServerVersion(new Version(8, 0, 39));
-
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySql(connectionString, serverVersion));
 
-//Injeção de dependencia
-
-// Auth
+// Injeção de Dependência
 builder.Services.AddTransient<ITokenService, TokenService>();
 builder.Services.AddScoped<IUserAuthContextRepository, UserAuthContextRepository>();
 builder.Services.AddTransient<LoginUseCase>();
-
-// Schedule
 builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
 builder.Services.AddTransient<ICreateAppointmentUseCase, CreateAppointmentUseCase>();
-
-// Veterinarians
 builder.Services.AddScoped<IVetRepository, VeterinarianRepository>();
 builder.Services.AddScoped<GetVetsAllUseCase>();
 builder.Services.AddScoped<GetVetsByClinicIdUseCase>();
 builder.Services.AddScoped<PostVetsUseCase>();
-
-// Clinics
 builder.Services.AddScoped<IClinicRepository, ClinicRepository>();
 builder.Services.AddScoped<GetAllClinicsUseCase>();
 builder.Services.AddScoped<CreateClinicUseCase>();
-
-// Profile, Schedule Projections Auth Integration
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<CreateUserUseCase>();
-
 builder.Services.AddScoped<IPetRepository, PetRepository>();
 builder.Services.AddScoped<CreatePetUseCase>();
-
 builder.Services.AddScoped<ICreateAuthUserUseCase, CreateAuthUserUseCase>();
-
 builder.Services.AddScoped<IUserScheduleRepository, UserScheduleRepository>();
 builder.Services.AddScoped<ICreateUserScheduleUseCase, CreateUserScheduleUseCase>();
 builder.Services.AddScoped<IUpdateUserScheduleUseCase, UpdateUserScheduleUseCase>();
 builder.Services.AddScoped<GetUserProfileUseCase>();
 builder.Services.AddScoped<UpdateUserUseCase>();
-
 builder.Services.AddScoped<IPetScheduleRepository, PetScheduleRepository>();
 builder.Services.AddScoped<ICreatePetScheduleUseCase, CreatePetScheduleUseCase>();
 builder.Services.AddScoped<GetPetsByUserUseCase>();
 builder.Services.AddScoped<IHistoricAppointmentRepository, HistoricAppointmentRepository>();
 builder.Services.AddScoped<GetPetHistoryUseCase>();
 
-
-// MIDDLEWARES E PIPELINE DA APLICAÇÃO
 var app = builder.Build();
 
-//if (app.Environment.IsDevelopment())
-//{
-    app.MapOpenApi();
-    app.UseSwagger();
-    app.UseSwaggerUI();
-//}
-
+app.UseSwagger();
+app.UseSwaggerUI();
 app.UseHttpsRedirection();
+
+app.UseCors("AllowAll");
+
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
