@@ -16,13 +16,15 @@ public class AppointmentScheduleContextController : ControllerBase
     private readonly ICreateAppointmentUseCase _createAppointmentUseCase;
     private readonly IGetAppointmentsByUser _getAppointmentsByUserUseCase;
     private readonly IGetAppointmentById _getAppointmentByIdUseCase;
+    private readonly IDeleteAppointmentScheduleUseCase _deleteAppointmentScheduleUseCase;
 
-    public AppointmentScheduleContextController(ICreateAppointmentUseCase createAppointmentUseCase, IGetAppointmentsByUser getAppointmentsByUserUseCase, IGetUserIdService getUserIdService, IGetAppointmentById getAppointmentByIdUseCase)
+    public AppointmentScheduleContextController(ICreateAppointmentUseCase createAppointmentUseCase, IGetAppointmentsByUser getAppointmentsByUserUseCase, IGetUserIdService getUserIdService, IGetAppointmentById getAppointmentByIdUseCase, IDeleteAppointmentScheduleUseCase deleteAppointmentScheduleUseCase)
     {
         _createAppointmentUseCase = createAppointmentUseCase;
         _getAppointmentsByUserUseCase = getAppointmentsByUserUseCase;
         _getUserIdService = getUserIdService;
         _getAppointmentByIdUseCase = getAppointmentByIdUseCase;
+        _deleteAppointmentScheduleUseCase = deleteAppointmentScheduleUseCase;
     }
     [HttpPost("create")]
     public IActionResult Create(CreateAppointmentDto request)
@@ -48,10 +50,17 @@ public class AppointmentScheduleContextController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public IActionResult GetAppointmentById(Guid id)
+    public IActionResult GetAppointmentById(GetApointmentByIdDto dto)
     {
-        var appointment = _getAppointmentByIdUseCase.Execute(id);
+        var appointment = _getAppointmentByIdUseCase.Execute(dto);
         return Ok(appointment);
     }
-    
+
+    [HttpDelete("/delete/{id}")]
+
+    public IActionResult DeleteAppointmentById(DeleteAppointmentDto dto)
+    {
+        var user = _deleteAppointmentScheduleUseCase.Execute(dto);
+        return Ok(user);
+    }
 }

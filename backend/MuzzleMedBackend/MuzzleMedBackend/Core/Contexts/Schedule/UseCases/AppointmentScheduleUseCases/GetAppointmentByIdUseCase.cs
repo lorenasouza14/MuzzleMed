@@ -1,14 +1,15 @@
+using MuzzleMedBackend.Core.Contexts.Schedule.DTOs;
 using MuzzleMedBackend.Domain.Contexts.Schedule.Entities;
 using MuzzleMedBackend.Domain.Contexts.Schedule.Interfaces;
 using MuzzleMedBackend.Domain.Contexts.Schedule.Interfaces.UseCases;
 
 namespace MuzzleMedBackend.Core.Contexts.Schedule.UseCases.AppointmentScheduleUseCases;
 
-public class GetAppointmentById : IGetAppointmentById
+public class GetAppointmentByIdUseCase : IGetAppointmentById
 {
     private readonly IAppointmentRepository _appointmentRepository;
 
-    public GetAppointmentById(IAppointmentRepository appointmentRepository)
+    public GetAppointmentByIdUseCase(IAppointmentRepository appointmentRepository)
     {
         try
         {
@@ -23,8 +24,13 @@ public class GetAppointmentById : IGetAppointmentById
     }
 
 
-    public AppointmentScheduleContext? Execute(Guid id)
+    public AppointmentScheduleContext? Execute(GetApointmentByIdDto dto)
     {
+        ArgumentNullException.ThrowIfNull(dto);
+        
+        var id = dto.Id;
+        
         return _appointmentRepository.GetAppointmentById(id);
     }
+
 }
