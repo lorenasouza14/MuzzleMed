@@ -3,7 +3,7 @@ using MuzzleMedBackend.Domain.Contexts.Schedule.Entities;
 
 namespace MuzzleMedBackend.Domain.Contexts.Schedule.Interfaces.UseCases;
 
-public interface IDeleteAppointmentScheduleUseCase
+public interface IGetAppointmentByIdUseCase
 {
-    public AppointmentScheduleContext Execute(DeleteAppointmentDto dto);
+    Task <AppointmentScheduleContext?> ExecuteAsync(Guid id);
 }
