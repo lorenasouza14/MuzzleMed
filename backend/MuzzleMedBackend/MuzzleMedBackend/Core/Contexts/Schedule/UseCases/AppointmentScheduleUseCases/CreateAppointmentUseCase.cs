@@ -32,7 +32,8 @@ public class CreateAppointmentUseCase : ICreateAppointmentUseCase
         {
             throw new InvalidOperationException("Data de agendamento nao pode ser menor que a data atual");
         }
-        var appointment = await _appointmentRepository.GetByDateAndTimeAsync(dto.Date, dto.Time);
+        
+        var appointment = await _appointmentRepository.GetAppointmentByClinicDateAndTime(dto.ClinicId, dto.VetId, dto.Date, dto.Time);
         
         if (appointment != null)
         {
@@ -40,11 +41,8 @@ public class CreateAppointmentUseCase : ICreateAppointmentUseCase
             {
                 throw new InvalidOperationException("Consulta já cancelada ou completa");
             }
-            throw new InvalidOperationException("Uma consulta ja existe nesse dia e horario.");
+            throw new InvalidOperationException("Uma consulta ja existe nesse dia e horario para esse veterinario.");
         }
-        
-        
-        
         
         var userId = _getUserIdService.GetUserId(); 
         
