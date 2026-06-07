@@ -18,7 +18,6 @@ public class GetPetHistoryUseCase
 
     public async Task<IEnumerable<HistoricResponse>> ExecuteAsync(Guid petId, Guid userId)
     {
-        // Validação de segurança: O pet existe e pertence a este tutor?
         var pet = await _petRepository.GetByIdTrackingAsync(petId);
         
         if (pet == null || pet.UserId != userId)

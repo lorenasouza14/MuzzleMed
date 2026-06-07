@@ -79,14 +79,13 @@ public class PetProfileContextController : ControllerBase
 
             await useCase.ExecuteAsync(petId, userId);
 
-            // ALTERAÇÃO AQUI: Troca de NoContent() para Ok() com corpo JSON
             return Ok(new { Message = "Pet removido com sucesso." }); 
         }
         catch (UnauthorizedAccessException ex)
         {
             return Unauthorized(new { Error = ex.Message });
         }
-        catch (InvalidOperationException ex) // É este erro que a regra do Appointment dispara
+        catch (InvalidOperationException ex) 
         {
             return BadRequest(new { Error = ex.Message }); 
         }
