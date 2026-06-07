@@ -1,21 +1,47 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import FormsInput from "../components/FormsInput/FormsInput";
 import "../styles/OwnerRegister.css";
 import ButtonSaveCancel from "../components/ButtonSaveCancel/ButtonSaveCancel";
 import { useNavigate } from "react-router-dom";
 import logo from '../assets/images/logo.png';
+import { createUser } from "../services/routes/user";
 
 function OwnerRegister() {
 
     const navigate = useNavigate();
 
     const [dateOfBirth, setDateOfBirth] = useState("");
-    const [name, setName] = useState("");
+    const [fullName, setName] = useState("");
     const [email, setEmail] = useState("");
     const [cpf, setCpf] = useState("");
     const [phone, setPhone] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+
+    const handleSave = async () => {
+        if (password !== confirmPassword) {
+            alert("As senhas não coincidem. Por favor, tente novamente.");
+            return;
+        }
+        try {
+            const newUser = {
+                fullName,
+                email,
+                cpf,
+                phone,
+                dateOfBirth,
+                password
+            };
+            console.log("Dados do usuário:", newUser);
+            await createUser(newUser);
+            alert("Usuário cadastrado com sucesso!");
+            navigate("/");
+            
+        } catch (error) {
+            console.error("Erro ao criar usuário:", error);
+            alert("Erro ao cadastrar usuário. Por favor, tente novamente.");
+        }
+    };
 
     return (
         <main className="container">
@@ -37,7 +63,7 @@ function OwnerRegister() {
                             type="text"
                             name="name"
                             placeholder="Digite seu nome completo"
-                            value={name}
+                            value={fullName}
                             onChange={(e) => setName(e.target.value)}
                         />
                         <FormsInput
@@ -100,7 +126,7 @@ function OwnerRegister() {
                         </div>
 
                         <ButtonSaveCancel 
-                        onSave={() => {}} 
+                        onSave={handleSave} 
                         onCancel={() => navigate('/')} 
                         />
                     </div>

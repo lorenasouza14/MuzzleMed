@@ -30,7 +30,7 @@ function DropdownButton({ label, options = [], onSelectData, defaultOptionText =
         {/* Mapeia a lista genérica que veio por prop */}
         {options.map((option) => (
           <option key={option.id} value={option.id}>
-            {option.name}
+            {option.fullName || option.name} 
           </option>
         ))}
       </select>

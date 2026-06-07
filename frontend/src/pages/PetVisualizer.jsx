@@ -8,6 +8,12 @@ import PetTable from "../components/PetTable/PetTable";
 function PetVisualizer() {
 
     const [isModalOpen, setModalOpen] = useState(false);
+    const [refreshKey, setRefreshKey] = useState(0);
+
+    const handleSaveAndRefresh = () => {
+        setModalOpen(false);
+        setRefreshKey((prevKey) => prevKey + 1);
+    }
 
     return (
 
@@ -21,7 +27,7 @@ function PetVisualizer() {
                 }} showButton={true} />
 
                 <div>
-                    <PetTable />
+                    <PetTable key={refreshKey} />
                 </div>
 
             </div>
@@ -31,7 +37,7 @@ function PetVisualizer() {
                     title={"Cadastro de Pet"}
                     isOpen={isModalOpen}
                     onClose={() => setModalOpen(false)}>
-                    <PetForms onSave={() => setModalOpen(false)} onCancel={() => setModalOpen(false)} />
+                    <PetForms onSave={handleSaveAndRefresh}onCancel={() => setModalOpen(false)} />
                 </Modal>
             </div>
         </main>
