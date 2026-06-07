@@ -43,4 +43,17 @@ public class AppointmentRepository : IAppointmentRepository
         _context.AppointmentSchedules.Update(appointment);
         await _context.SaveChangesAsync();
     }
+
+    public async Task<AppointmentScheduleContext?> GetAppointmentByClinicDateAndTime(Guid clinicId, Guid vetId,
+        DateOnly date, TimeOnly time)
+    {
+        var appointment = await _context.AppointmentSchedules
+            .FirstOrDefaultAsync(x => x.ClinicId == clinicId 
+                                      && x.Date == date 
+                                      && x.Time == time && x.VetId == vetId);
+        
+        return appointment;
+        
+    }
+    
 }

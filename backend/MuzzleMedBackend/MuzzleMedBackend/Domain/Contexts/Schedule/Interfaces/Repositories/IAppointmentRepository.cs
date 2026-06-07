@@ -10,5 +10,5 @@ public interface IAppointmentRepository
     Task<List<AppointmentScheduleContext>> GetByUserIdAsync(Guid userId);
     Task CreateAsync(AppointmentScheduleContext appointment);
     Task UpdateAsync(AppointmentScheduleContext appointment);
-    
+    Task<AppointmentScheduleContext?> GetAppointmentByClinicDateAndTime(Guid clinicId, Guid vetId, DateOnly date, TimeOnly time);
 }
