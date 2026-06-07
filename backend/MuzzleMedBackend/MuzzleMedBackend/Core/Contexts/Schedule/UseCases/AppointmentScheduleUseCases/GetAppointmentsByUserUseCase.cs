@@ -1,20 +1,28 @@
 using MuzzleMedBackend.Domain.Contexts.Schedule.Entities;
 using MuzzleMedBackend.Domain.Contexts.Schedule.Interfaces;
-using MuzzleMedBackend.Domain.Contexts.Schedule.Interfaces.UseCases;
+using MuzzleMedBackend.Domain.Contexts.Schedule.Interfaces.UseCases; 
+using MuzzleMedBackend.Services.Interfaces;
 
 namespace MuzzleMedBackend.Core.Contexts.Schedule.UseCases.AppointmentScheduleUseCases;
 
-public class GetAppointmentsByUserUseCase : IGetAppointmentsByUser
+public class GetAppointmentsByUserUseCase : IGetAppointmentsByUserUseCase 
 {
     private readonly IAppointmentRepository _appointmentRepository;
-    public GetAppointmentsByUserUseCase(IAppointmentRepository appointmentRepository)
+    private readonly IGetUserIdService _getUserIdService;
+    
+    public GetAppointmentsByUserUseCase(
+        IAppointmentRepository appointmentRepository, 
+        IGetUserIdService getUserIdService)
     {
         _appointmentRepository = appointmentRepository;
+        _getUserIdService = getUserIdService;
     }
-    
-
-    public List<AppointmentScheduleContext> ExecuteAsync(Guid userId)
+    public async Task<List<AppointmentScheduleContext>?> ExecuteAsync()
     {
-        return _appointmentRepository.GetAppointmentByUserIdSchedules(userId);
+        var userId = _getUserIdService.GetUserId();
+        
+        var appointments = await _appointmentRepository.GetByUserIdAsync(userId);
+        
+        return appointments;
     }
 }

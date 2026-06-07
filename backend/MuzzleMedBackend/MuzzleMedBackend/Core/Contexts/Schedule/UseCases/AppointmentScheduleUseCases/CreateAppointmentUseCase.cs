@@ -2,44 +2,56 @@ using MuzzleMedBackend.Core.Contexts.Schedule.DTOs;
 using MuzzleMedBackend.Domain.Contexts.Schedule.Entities;
 using MuzzleMedBackend.Domain.Contexts.Schedule.Interfaces;
 using MuzzleMedBackend.Domain.Contexts.Schedule.Interfaces.IUseCases;
+using MuzzleMedBackend.Domain.Contexts.Schedule.Interfaces.Repositories;
+using MuzzleMedBackend.Domain.Contexts.Schedule.ValueObjects.Enums;
+using MuzzleMedBackend.Services.Interfaces;
 
 namespace MuzzleMedBackend.Core.Contexts.Schedule.UseCases.AppointmentScheduleUseCases;
 
 public class CreateAppointmentUseCase : ICreateAppointmentUseCase
 {
     private readonly IAppointmentRepository _appointmentRepository;
+    private readonly IGetUserIdService _getUserIdService;
+    private readonly IPetScheduleRepository _petScheduleRepository;
+    private readonly IUserScheduleRepository _userScheduleRepository;
 
-    public CreateAppointmentUseCase(IAppointmentRepository  appointmentRepository)
+    public CreateAppointmentUseCase(IAppointmentRepository appointmentRepository, IGetUserIdService getUserIdService, IPetScheduleRepository petScheduleRepository, IUserScheduleRepository userScheduleRepository)
     {
         _appointmentRepository = appointmentRepository;
+        _getUserIdService = getUserIdService;
+        _petScheduleRepository = petScheduleRepository;
+        _userScheduleRepository = userScheduleRepository;
     }
-    public AppointmentScheduleContext Execute(CreateAppointmentDto dto)
+    public async Task<AppointmentScheduleContext> ExecuteAsync(CreateAppointmentDto dto)
     {
-        try
+        ArgumentNullException.ThrowIfNull(dto);
+        
+        var existingAppointment = await _appointmentRepository.GetByDateAndTimeAsync(dto.Date, dto.Time);
+        
+        if (existingAppointment != null)
         {
-            ArgumentNullException.ThrowIfNull(dto, nameof(dto));
-            if(_appointmentRepository.FindAppointmentByDateAndTime(dto.Date, dto.Time) != null)
-            {
-                throw new Exception("Uma consulta ja existe nesse dia e horario");
-            }
-
-            var appointment = new AppointmentScheduleContext
-            {
-                ClinicId = dto.ClinicId,
-                Date = dto.Date,
-                Time = dto.Time,
-                UserId = dto.UserId,
-                VetId = dto.VetId,
-                PetId = dto.PetId
-            };
-            
-            _appointmentRepository.CreateAppointmentSchedule(appointment);
-            return appointment;
-
+            throw new InvalidOperationException("Uma consulta ja existe nesse dia e horario.");
         }
-        catch (Exception ex)
+
+        if (existingAppointment.Status == StatusEnum.Canceled || existingAppointment.Status == StatusEnum.Completed)
         {
-            throw new Exception(ex.Message);
+            throw new InvalidOperationException("Consulta já cancelada ou completa");
         }
+        
+        var userId = _getUserIdService.GetUserId(); 
+        
+        var appointment = new AppointmentScheduleContext(
+            userId, 
+            dto.PetId, 
+            dto.ClinicId, 
+            dto.VetId, 
+            dto.Date, 
+            dto.Time, 
+            dto.SymptomDescription
+        );
+        
+        await _appointmentRepository.CreateAsync(appointment);
+        
+        return appointment; 
     }
 }
