@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using MuzzleMedBackend.Domain.Contexts.Schedule.Entities;
 using MuzzleMedBackend.Domain.Contexts.Schedule.Interfaces;
+using MuzzleMedBackend.Domain.Contexts.Schedule.ValueObjects.Enums;
 
 namespace MuzzleMedBackend.Infrastructure.Contexts.Schedule.Persistence;
 
@@ -56,4 +57,11 @@ public class AppointmentRepository : IAppointmentRepository
         
     }
     
+    public async Task<bool> HasFutureAppointmentsByPetIdAsync(Guid petId, DateOnly currentDate, TimeOnly currentTime)
+    {
+        return await _context.Set<AppointmentScheduleContext>()
+            .AnyAsync(a => a.PetId == petId && 
+                           a.Status == StatusEnum.Scheduled && 
+                           (a.Date > currentDate || (a.Date == currentDate && a.Time > currentTime)));
+    }
 }

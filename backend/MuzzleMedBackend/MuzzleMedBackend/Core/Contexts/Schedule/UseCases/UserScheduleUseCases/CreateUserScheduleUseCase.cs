@@ -15,10 +15,8 @@ public class CreateUserScheduleUseCase : ICreateUserScheduleUseCase
 
     public async Task ExecuteAsync(Guid userId, string fullName, string phone)
     {
-        // Instancia a projeção de leitura do Schedule (validando os dados novamente pelo construtor)
         var userSchedule = new UserSchedule(userId, fullName, phone);
 
-        // Deixa em espera no Entity Framework
         await _repository.AddAsync(userSchedule);
     }
 }

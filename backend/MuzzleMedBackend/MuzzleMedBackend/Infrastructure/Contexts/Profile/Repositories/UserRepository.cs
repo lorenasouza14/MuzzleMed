@@ -20,7 +20,6 @@ public class UserRepository : IUserRepository
     
     public async Task<bool> ExistsByCpfAsync(string cpf)
     {
-        // Verifica se algum usuário no banco tem esse número exato
         return await _context.Users.AnyAsync(u => u.Cpf.Number == cpf);
     }
     
