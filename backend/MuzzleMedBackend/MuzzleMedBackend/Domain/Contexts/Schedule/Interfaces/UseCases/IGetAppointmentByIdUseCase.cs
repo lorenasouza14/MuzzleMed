@@ -5,5 +5,5 @@ namespace MuzzleMedBackend.Domain.Contexts.Schedule.Interfaces.UseCases;
 
 public interface IGetAppointmentByIdUseCase
 {
-    Task <AppointmentScheduleContext?> ExecuteAsync(Guid id);
+    Task <AppointmentScheduleResponseDto?> ExecuteAsync(Guid id);
 }
