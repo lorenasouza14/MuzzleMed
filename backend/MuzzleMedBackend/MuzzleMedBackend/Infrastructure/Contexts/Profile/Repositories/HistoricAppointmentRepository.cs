@@ -13,7 +13,13 @@ public class HistoricAppointmentRepository : IHistoricAppointmentRepository
         _context = context;
     }
 
-    public async Task<IEnumerable<HistoricAppointment>> GetByPetIdAsync(Guid petId)
+    public async Task<HistoricAppointment?> GetByIdAsync(Guid id)
+    {
+        return await _context.HistoricAppointments
+            .FirstOrDefaultAsync(x => x.Id == id);
+    }
+
+    public async Task<List<HistoricAppointment>> GetByPetIdAsync(Guid petId)
     {
         return await _context.Set<HistoricAppointment>()
             .AsNoTracking()
@@ -21,4 +27,11 @@ public class HistoricAppointmentRepository : IHistoricAppointmentRepository
             .OrderByDescending(h => h.Date)
             .ToListAsync();
     }
+
+    public async Task CreateAsync(HistoricAppointment historic)
+    {
+        await _context.HistoricAppointments.AddAsync(historic);
+        await _context.SaveChangesAsync();
+    }
+    
 }
