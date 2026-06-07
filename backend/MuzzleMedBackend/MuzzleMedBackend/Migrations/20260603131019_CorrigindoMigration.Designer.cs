@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MuzzleMedBackend.Infrastructure;
 
@@ -11,9 +12,11 @@ using MuzzleMedBackend.Infrastructure;
 namespace MuzzleMedBackend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260603131019_CorrigindoMigration")]
+    partial class CorrigindoMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -53,9 +56,6 @@ namespace MuzzleMedBackend.Migrations
                     b.Property<Guid>("AppointmentId")
                         .HasColumnType("char(36)");
 
-                    b.Property<DateOnly>("Date")
-                        .HasColumnType("date");
-
                     b.Property<string>("Diagnostic")
                         .IsRequired()
                         .HasMaxLength(500)
@@ -64,9 +64,6 @@ namespace MuzzleMedBackend.Migrations
                     b.PrimitiveCollection<string>("Medication")
                         .IsRequired()
                         .HasColumnType("longtext");
-
-                    b.Property<Guid>("PetId")
-                        .HasColumnType("char(36)");
 
                     b.HasKey("Id");
 
@@ -84,8 +81,8 @@ namespace MuzzleMedBackend.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
-                    b.Property<DateOnly>("DateOfBirth")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("DateOfBirth")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Gender")
                         .IsRequired()
@@ -121,8 +118,8 @@ namespace MuzzleMedBackend.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<DateOnly>("DateOfBirth")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("DateOfBirth")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("FullName")
                         .IsRequired()
@@ -209,12 +206,7 @@ namespace MuzzleMedBackend.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("varchar(30)");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("char(36)");
-
                     b.HasKey("PetId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("PetsSchedule", (string)null);
                 });

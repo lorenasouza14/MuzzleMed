@@ -20,5 +20,8 @@ public class PetScheduleConfiguration : IEntityTypeConfiguration<PetSchedule>
             .IsRequired()
             .HasConversion<string>()
             .HasMaxLength(30);
+        
+        builder.HasIndex(p => p.UserId);
+        builder.Property(p => p.UserId).IsRequired();
     }
 }

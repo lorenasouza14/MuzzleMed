@@ -9,3 +9,4 @@ public record CreatePetRequest(
     DateOnly DateOfBirth,
     GenderEnum Gender
 );
+

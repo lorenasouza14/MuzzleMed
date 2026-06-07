@@ -6,10 +6,11 @@ public class PetSchedule
     public Guid PetId { get; private set; }
     public string Name { get; private set; }
     public SpecieEnum Species { get; private set; }
+    public Guid UserId { get; set; }
 
     protected PetSchedule() { }
 
-    public PetSchedule(Guid petId, string name, SpecieEnum species)
+    public PetSchedule(Guid petId, string name, SpecieEnum species, Guid userId)
     {
         if (petId == Guid.Empty)
             throw new ArgumentException("O ID do pet é inválido.");
@@ -20,5 +21,6 @@ public class PetSchedule
         PetId = petId;
         Name = name;
         Species = species;
+        UserId = userId;
     }
 }
