@@ -12,9 +12,11 @@ public class AppointmentScheduleContext
     public Guid VetId { get; set; }
     public DateOnly Date { get; set; }
     public TimeOnly Time { get; set; }
-    public StatusEnum Status { get; set; }
+    public String SymptomDescription { get; set; }
+    public StatusEnum Status { get; private set; }
     
-    public AppointmentScheduleContext(Guid userId, Guid petId, Guid clinicId, Guid vetId, DateOnly date, TimeOnly time)
+    public AppointmentScheduleContext(Guid userId, Guid petId, Guid clinicId, Guid vetId,
+        DateOnly date, TimeOnly time, String symptomDescription)
     {
         Id = Guid.NewGuid();
         UserId = userId;
@@ -23,10 +25,27 @@ public class AppointmentScheduleContext
         VetId = vetId;
         Date = date;
         Time = time;
-        Status = StatusEnum.Scheduled;
+        SymptomDescription = symptomDescription;
+        Schedule();
     }
 
     public AppointmentScheduleContext()
     {
+    }
+
+    public StatusEnum Schedule()
+    {
+        Status = StatusEnum.Scheduled;
+        return Status;
+    }
+    public StatusEnum Completed()
+    {   
+        Status = StatusEnum.Completed;
+        return Status;   
+    }
+    public StatusEnum Cancel()
+    {
+        Status = StatusEnum.Canceled;
+        return Status;
     }
 }

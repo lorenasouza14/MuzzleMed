@@ -5,12 +5,10 @@ namespace MuzzleMedBackend.Domain.Contexts.Schedule.Interfaces;
 
 public interface IAppointmentRepository
 {
-    public AppointmentScheduleContext? GetAppointmentById(Guid id);
-    public AppointmentScheduleContext? FindAppointmentByDateAndTime(DateOnly date, TimeOnly time);
-    public List<AppointmentScheduleContext>? GetAppointmentByUserIdSchedules(Guid userId);
-    public AppointmentScheduleContext CreateAppointmentSchedule(AppointmentScheduleContext request);
-    public AppointmentScheduleContext UpdateAppointmentSchedule(Guid id, AppointmentScheduleContext request);
-    public AppointmentScheduleContext DeleteAppointmentSchedule(Guid dto);
-    public Task<bool> HasFutureAppointmentsByPetIdAsync(Guid petId, DateOnly currentDate, TimeOnly currentTime);
+    Task<AppointmentScheduleContext?> GetByIdAsync(Guid id);
+    Task<AppointmentScheduleContext?> GetByDateAndTimeAsync(DateOnly date, TimeOnly time);
+    Task<List<AppointmentScheduleContext>> GetByUserIdAsync(Guid userId);
+    Task CreateAsync(AppointmentScheduleContext appointment);
+    Task UpdateAsync(AppointmentScheduleContext appointment);
     
 }
