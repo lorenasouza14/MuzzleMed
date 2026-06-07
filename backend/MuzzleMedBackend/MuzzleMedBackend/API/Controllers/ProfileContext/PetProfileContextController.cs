@@ -67,4 +67,32 @@ public class PetProfileContextController : ControllerBase
             return Forbid(ex.Message);
         }
     }
+    
+    [HttpDelete("{petId}")]
+    public async Task<IActionResult> Delete(
+        [FromRoute] Guid petId,
+        [FromServices] DeletePetUseCase useCase)
+    {
+        try
+        {
+            Guid userId = _getUserIdService.GetUserId();
+
+            await useCase.ExecuteAsync(petId, userId);
+
+            // ALTERAÇÃO AQUI: Troca de NoContent() para Ok() com corpo JSON
+            return Ok(new { Message = "Pet removido com sucesso." }); 
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            return Unauthorized(new { Error = ex.Message });
+        }
+        catch (InvalidOperationException ex) // É este erro que a regra do Appointment dispara
+        {
+            return BadRequest(new { Error = ex.Message }); 
+        }
+        catch (ArgumentException ex)
+        {
+            return NotFound(new { Error = ex.Message }); 
+        }
+    }
 }

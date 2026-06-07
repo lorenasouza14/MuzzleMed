@@ -11,5 +11,6 @@ public interface IAppointmentRepository
     public AppointmentScheduleContext CreateAppointmentSchedule(AppointmentScheduleContext request);
     public AppointmentScheduleContext UpdateAppointmentSchedule(Guid id, AppointmentScheduleContext request);
     public AppointmentScheduleContext DeleteAppointmentSchedule(Guid dto);
+    public Task<bool> HasFutureAppointmentsByPetIdAsync(Guid petId, DateOnly currentDate, TimeOnly currentTime);
     
 }

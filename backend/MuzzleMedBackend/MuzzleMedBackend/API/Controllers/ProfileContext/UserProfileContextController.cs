@@ -1,17 +1,25 @@
 ﻿namespace MuzzleMedBackend.API.Controllers;
 
-using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Core.Contexts.Profile.UseCases;
 using Core.Contexts.Profile.DTOs;
+using MuzzleMedBackend.Services.Interfaces; 
 
 [ApiController]
 [Route("api/v1/users")]
 public class UserProfileContextController : ControllerBase
 {
+    private readonly IGetUserIdService _getUserIdService;
+
+    // Injeção do serviço via construtor
+    public UserProfileContextController(IGetUserIdService getUserIdService)
+    {
+        _getUserIdService = getUserIdService;
+    }
+
     [HttpPost]
-    [AllowAnonymous] // Indica que não precisa de token JWT para esta rota
+    [AllowAnonymous]
     public async Task<IActionResult> Create(
         [FromBody] CreateUserRequest request,
         [FromServices] CreateUserUseCase useCase)
@@ -34,13 +42,14 @@ public class UserProfileContextController : ControllerBase
     {
         try
         {
-            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            
-            if (string.IsNullOrEmpty(userIdClaim) || !Guid.TryParse(userIdClaim, out var userId))
-                return Unauthorized(new { Error = "Token inválido ou ID de usuário não encontrado." });
+            Guid userId = _getUserIdService.GetUserId();
 
             var userProfile = await useCase.ExecuteAsync(userId);
             return Ok(userProfile);
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            return Unauthorized(new { Error = ex.Message });
         }
         catch (ArgumentException ex)
         {
@@ -56,14 +65,15 @@ public class UserProfileContextController : ControllerBase
     {
         try
         {
-            var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
-            
-            if (string.IsNullOrEmpty(userIdClaim) || !Guid.TryParse(userIdClaim, out var userId))
-                return Unauthorized(new { Error = "Token inválido ou ID de usuário não encontrado." });
+            Guid userId = _getUserIdService.GetUserId();
 
             await useCase.ExecuteAsync(userId, request);
             
-            return NoContent(); // HTTP 204: Sucesso, sem conteúdo para retornar no corpo
+            return NoContent(); 
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            return Unauthorized(new { Error = ex.Message });
         }
         catch (ArgumentException ex)
         {

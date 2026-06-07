@@ -96,6 +96,7 @@ builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
 builder.Services.AddTransient<ICreateAppointmentUseCase, CreateAppointmentUseCase>();
 builder.Services.AddScoped<IGetAppointmentsByUser, GetAppointmentsByUserUseCase>();
 builder.Services.AddScoped<IGetAppointmentById, GetAppointmentByIdUseCase>();
+builder.Services.AddScoped<ICheckFutureAppointmentsScheduleUseCase, CheckFutureAppointmentsUseCase>();
 
 // Veterinarians
 builder.Services.AddScoped<IVetRepository, VeterinarianRepository>();
@@ -125,11 +126,14 @@ builder.Services.AddScoped<IUpdateUserScheduleUseCase, UpdateUserScheduleUseCase
 builder.Services.AddScoped<GetUserProfileUseCase>();
 builder.Services.AddScoped<UpdateUserUseCase>();
 
+
 builder.Services.AddScoped<IPetScheduleRepository, PetScheduleRepository>();
 builder.Services.AddScoped<ICreatePetScheduleUseCase, CreatePetScheduleUseCase>();
 builder.Services.AddScoped<GetPetsByUserUseCase>();
 builder.Services.AddScoped<IHistoricAppointmentRepository, HistoricAppointmentRepository>();
 builder.Services.AddScoped<GetPetHistoryUseCase>();
+builder.Services.AddScoped<DeletePetUseCase>();
+builder.Services.AddScoped<IDeleteAppointmentScheduleUseCase, DeleteAppointmentScheduleUseCase>();
 
 //Services
 //service para nos pegarmos o id do usuario pelo jwt
