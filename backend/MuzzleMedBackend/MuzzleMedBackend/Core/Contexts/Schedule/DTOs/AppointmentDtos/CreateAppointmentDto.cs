@@ -9,6 +9,8 @@ public class CreateAppointmentDto
     public DateOnly Date { get; set; }
     public TimeOnly Time { get; set; }
     
+    public CreateAppointmentDto() { }
+    
     public CreateAppointmentDto(Guid userId, Guid petId, Guid clinicId, Guid vetId, DateOnly date, TimeOnly time)
     {
         UserId = userId;
