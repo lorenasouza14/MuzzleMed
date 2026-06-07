@@ -26,29 +26,21 @@ public class CreateAppointmentUseCase : ICreateAppointmentUseCase
     {
         ArgumentNullException.ThrowIfNull(dto);
         
-        var appointmentDateTime = dto.Date.ToDateTime(dto.Time);
-
-        if (appointmentDateTime < DateTime.Now)
-        {
-            throw new InvalidOperationException("Data de agendamento nao pode ser menor que a data atual");
-        }
-        var appointment = await _appointmentRepository.GetByDateAndTimeAsync(dto.Date, dto.Time);
+        var existingAppointment = await _appointmentRepository.GetByDateAndTimeAsync(dto.Date, dto.Time);
         
-        if (appointment != null)
+        if (existingAppointment != null)
         {
-            if (appointment.Status == StatusEnum.Canceled || appointment.Status == StatusEnum.Completed)
-            {
-                throw new InvalidOperationException("Consulta já cancelada ou completa");
-            }
             throw new InvalidOperationException("Uma consulta ja existe nesse dia e horario.");
         }
-        
-        
-        
+
+        if (existingAppointment.Status == StatusEnum.Canceled || existingAppointment.Status == StatusEnum.Completed)
+        {
+            throw new InvalidOperationException("Consulta já cancelada ou completa");
+        }
         
         var userId = _getUserIdService.GetUserId(); 
         
-        var newAppointment = new AppointmentScheduleContext(
+        var appointment = new AppointmentScheduleContext(
             userId, 
             dto.PetId, 
             dto.ClinicId, 
@@ -58,8 +50,8 @@ public class CreateAppointmentUseCase : ICreateAppointmentUseCase
             dto.SymptomDescription
         );
         
-        await _appointmentRepository.CreateAsync(newAppointment);
+        await _appointmentRepository.CreateAsync(appointment);
         
-        return newAppointment; 
+        return appointment; 
     }
 }
