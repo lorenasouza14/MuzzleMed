@@ -8,6 +8,7 @@ public interface IAppointmentRepository
     Task<AppointmentScheduleContext?> GetByIdAsync(Guid id);
     Task<AppointmentScheduleContext?> GetByDateAndTimeAsync(DateOnly date, TimeOnly time);
     Task<List<AppointmentScheduleContext>> GetByUserIdAsync(Guid userId);
+    Task<AppointmentScheduleContext?> GetByPetAndDateAsync(Guid petId, DateOnly date);
     Task CreateAsync(AppointmentScheduleContext appointment);
     Task UpdateAsync(AppointmentScheduleContext appointment);
     Task<AppointmentScheduleContext?> GetAppointmentByClinicDateAndTime(Guid clinicId, Guid vetId, DateOnly date, TimeOnly time);

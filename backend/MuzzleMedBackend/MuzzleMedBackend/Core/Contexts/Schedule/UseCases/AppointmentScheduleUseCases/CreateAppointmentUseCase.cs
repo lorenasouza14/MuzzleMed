@@ -68,6 +68,12 @@ public class CreateAppointmentUseCase : ICreateAppointmentUseCase
             }
         }
         
+        var appointmentByPet = await _appointmentRepository.GetByPetAndDateAsync(requestDto.PetId, requestDto.Date);
+        if (appointmentByPet != null && appointmentByPet.Status == StatusEnum.Scheduled)
+        {
+            throw new InvalidOperationException("O pet já possui um agendamento para essa data.");
+        }
+        
         var newAppointment = new AppointmentScheduleContext(
             userId, 
             requestDto.PetId, 
