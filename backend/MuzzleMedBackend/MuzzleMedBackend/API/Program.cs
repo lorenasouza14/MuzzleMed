@@ -20,9 +20,11 @@ using MuzzleMedBackend.Infrastructure.Contexts.Veterinarians.Repositories;
 using MuzzleMedBackend.Infrastructure.Security;
 using MuzzleMedBackend.Core.Contexts.Profile.UseCases;
 using MuzzleMedBackend.Core.Contexts.Schedule.UseCases.AppointmentScheduleUseCases;
+using MuzzleMedBackend.Core.Contexts.Schedule.UseCases.HistoricAppointmentsUseCases;
 using MuzzleMedBackend.Core.Contexts.Schedule.UseCases.PetScheduleUseCases;
 using MuzzleMedBackend.Domain.Contexts.Auth.Interfaces.UseCases;
 using MuzzleMedBackend.Domain.Contexts.Profile.Interfaces;
+using MuzzleMedBackend.Domain.Contexts.Profile.Interfaces.UseCases;
 using MuzzleMedBackend.Domain.Contexts.Schedule.Interfaces.Repositories;
 using MuzzleMedBackend.Domain.Contexts.Schedule.Interfaces.UseCases;
 using MuzzleMedBackend.Infrastructure.Contexts.Profile.Repositories;
@@ -31,8 +33,6 @@ using MuzzleMedBackend.Services.Interfaces;
 
 //Configs
 var builder = WebApplication.CreateBuilder(args);
-
-Console.WriteLine($"JWT Key: '{builder.Configuration["Jwt:Key"]}'");
 
 var _secretKey = Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]);
 
@@ -132,6 +132,12 @@ builder.Services.AddScoped<ICreatePetScheduleUseCase, CreatePetScheduleUseCase>(
 builder.Services.AddScoped<GetPetsByUserUseCase>();
 builder.Services.AddScoped<IHistoricAppointmentRepository, HistoricAppointmentRepository>();
 builder.Services.AddScoped<GetPetHistoryUseCase>();
+
+builder.Services.AddScoped<IFinalizeAppointmentUseCase, FinalizeAppointmentUseCase>();
+builder.Services.AddScoped<ICreateHistoricUseCase, CreateHistoricUseCase>();
+builder.Services.AddScoped<IGetHistoricByIdUseCase, GetHistoricByIdUseCase>();
+builder.Services.AddScoped<IGetHistoricByPetUseCase, GetHistoricByPetUseCase>();
+builder.Services.AddScoped<IHistoricAppointmentRepository, HistoricAppointmentRepository>();
 
 //Services
 //service para nos pegarmos o id do usuario pelo jwt

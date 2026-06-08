@@ -1,7 +1,5 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MuzzleMedBackend.Core.Contexts.Profile.DTOs;
-using MuzzleMedBackend.Core.Contexts.Schedule.DTOs.HistoricAppointment;
 using MuzzleMedBackend.Domain.Contexts.Profile.Interfaces.UseCases;
 
 namespace MuzzleMedBackend.API.Controllers;
@@ -24,24 +22,7 @@ public class HistoricAppointmentController : ControllerBase
         _getHistoricByIdUseCase = getHistoricByIdUseCase;
         _getHistoricByPetUseCase = getHistoricByPetUseCase;
     }
-
-    [HttpPost]
-    public async Task<IActionResult> Create([FromBody] CreateHistoricDto dto)
-    {
-        try
-        {
-            var historic = await _createHistoricUseCase.ExecuteAsync(dto);
-
-            // Retorna 201 Created (Padrão ouro do REST para POST)
-            return CreatedAtAction(nameof(GetById), new { id = historic.Id }, historic);
-        }
-        catch (InvalidOperationException ex) // Captura falhas de regras de negócio
-        {
-            return BadRequest(new { message = ex.Message });
-        }
-    }
-
-
+    
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById([FromRoute] Guid id)
     {
