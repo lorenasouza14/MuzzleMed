@@ -33,8 +33,19 @@ public class AppointmentScheduleContextController : ControllerBase
     [HttpPost("create")]
     public async Task<IActionResult> Create([FromBody] CreateAppointmentDto request)
     {
-        var appointment = await _createAppointmentUseCase.ExecuteAsync(request);
-        return Ok(appointment);
+        try
+        {
+            await _createAppointmentUseCase.ExecuteAsync(request);
+            return Ok(new { message = "Agendamento criado com sucesso!" });
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = "Erro interno no servidor." });
+        }
     }
 
     [HttpGet]
@@ -55,8 +66,20 @@ public class AppointmentScheduleContextController : ControllerBase
     [HttpPut("cancel/{id}")]
     public async Task<IActionResult> CancelAppointmentById([FromRoute] Guid id)
     {
-        var appointment = await _cancelAppointmentScheduleUseCase.ExecuteAsync(id);
-        return Ok("Agendamento cancelado com sucesso");
+        try
+        {
+            var result = await _cancelAppointmentScheduleUseCase.ExecuteAsync(id);
+
+            return Ok(new { message = "Agendamento cancelado com sucesso!", data = result });
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = "Erro interno ao cancelar o agendamento." });
+        }
     }
 
     [HttpPut("finalize/{id}")]

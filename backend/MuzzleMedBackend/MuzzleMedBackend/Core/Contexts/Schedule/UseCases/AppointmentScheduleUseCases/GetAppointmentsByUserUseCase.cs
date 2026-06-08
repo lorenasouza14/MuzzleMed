@@ -50,7 +50,8 @@ public class GetAppointmentsByUserUseCase : IGetAppointmentsByUserUseCase
                 Date = a.Date,
                 Time = a.Time,
                 Status = a.Status.ToString(),
-                
+                SymptomDescription = a.SymptomDescription,
+
                 ClinicId = a.ClinicId,
                 ClinicName = clinic.Name,
 

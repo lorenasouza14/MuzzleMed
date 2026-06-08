@@ -50,7 +50,7 @@ public class FinalizeAppointmentUseCase : IFinalizeAppointmentUseCase
             Medication = dto.Medications,
             Date = appointment.Date,
             VetId =  appointment.VetId,
-            VetName = vet.Name,
+            VetName = vet.Name.FullName,
             ClinicId = appointment.ClinicId,
             ClinicName = clinic.Name,
             PetId = appointment.PetId,

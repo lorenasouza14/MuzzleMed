@@ -13,7 +13,6 @@ function Login() {
 
     const handleLogin = async () => {
         try{
-            console.log("TENTANDO ACESSAR: ",{ email, password });
             const response = await api.post("/api/UserAuthContext/login", { 
                 email: email,
                 password: password 

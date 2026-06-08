@@ -1,12 +1,11 @@
 import { useState } from 'react';
 import './CardConsultation.css';
 
-function CardConsultation({ namePet, date, time, symptoms, location, veterinarian, onDelete }) {
+function CardConsultation({ id, namePet, date, time, symptoms, location, veterinarian, onDelete }) {
     const [menuOpen, setMenuOpen] = useState(false);
 
     return (
         <div className='background-card'>
-            {/* Botão de três pontinhos */}
             <div className="card-menu-container">
                 <button className="menu-btn" onClick={() => setMenuOpen(!menuOpen)}>
                     ⋮
@@ -14,10 +13,10 @@ function CardConsultation({ namePet, date, time, symptoms, location, veterinaria
                 {menuOpen && (
                     <div className="menu-dropdown">
                         <button className="delete-btn" onClick={() => {
-                            onDelete();
+                            onDelete(id); 
                             setMenuOpen(false);
                         }}>
-                            Deletar
+                            Cancelar
                         </button>
                     </div>
                 )}

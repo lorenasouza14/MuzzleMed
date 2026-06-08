@@ -11,7 +11,7 @@ public class HistoricAppointment
     public Guid ClinicId { get; private set; }
     public String  ClinicName { get; private set; }
     public Guid VetId { get; private set; }
-    public VetFullNameValueObject VetName { get; private set; }
+    public string VetName { get; private set; }
     
     public DateOnly Date { get; private set; }
     
@@ -22,7 +22,7 @@ public class HistoricAppointment
     protected HistoricAppointment() { }
 
     public HistoricAppointment(Guid appointmentId, Guid petId, DateOnly date, string diagnostic, List<string> medication,
-        Guid clinicId, Guid vetId,  string symptomDescription, String petName, String clinicName, VetFullNameValueObject vetName)
+        Guid clinicId, Guid vetId,  string symptomDescription, String petName, String clinicName, string vetName)
     {
         Id = Guid.NewGuid();
         AppointmentId = appointmentId;

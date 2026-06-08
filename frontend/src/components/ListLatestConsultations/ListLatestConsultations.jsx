@@ -1,35 +1,6 @@
-// import 'react';
-// import './ListLatestConsultations.css';
-
-
-// function ListLatestConsultations({namePet, dateConsultation, symptoms, medication, location, veterinarian, status}) {
-//     return (
-//         <div className='card-history-lt'>
-//             <div className="row-header-lt">
-//                 <h2>{namePet}</h2>
-//                 <p>{status}<br/>{dateConsultation}</p>
-//             </div>
-
-//             <div className="row-consultation-history-lt">
-//                 <p><strong>Diagnostico</strong></p>
-//                 <p><strong>Medicação:</strong></p>
-//             </div>
-//             <div className="row-consultation-history-lt">
-//                 <p>{symptoms}</p>
-//                 <p>{medication}</p>
-//             </div>
-//             <div className="row-locale-lt">
-//                 <i className="fas fa-map-marker-alt"></i>
-//                 <p>{location}</p>
-//                 <p>{veterinarian}</p>
-//             </div>
-//         </div>
-//     );
-// }
-// export default ListLatestConsultations;
-
 import 'react';
 import './ListLatestConsultations.css';
+import { HiMapPin } from "react-icons/hi2";
 
 function ListLatestConsultations({namePet, dateConsultation, symptoms, medication, location, veterinarian, status}) {
     return (
@@ -49,12 +20,12 @@ function ListLatestConsultations({namePet, dateConsultation, symptoms, medicatio
                 </div>
                 <div className="info-block-lt">
                     <p><strong>Medicação:</strong></p>
-                    <p className="desc-text">• {medication}</p>
+                    <p className="desc-text"> {medication}</p>
                 </div>
             </div>
             
             <div className="row-footer-lt">
-                <span>📍 {location}</span>
+                <span> <HiMapPin color="var(--rosa-escuro)" /> {location}</span>
                 <span>• <strong>Doutor:</strong> {veterinarian}</span>
             </div>
         </div>

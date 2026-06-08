@@ -1,4 +1,3 @@
-
 import '../styles/Home.css';
 import Title from "../components/Title/Title";
 import Navbar from "../components/NavBar/NavBar";
@@ -6,32 +5,99 @@ import CarouselConsultation from '../components/CarouselConsultation/CarouselCon
 import ListLatestConsultations from "../components/ListLatestConsultations/ListLatestConsultations";
 import BranchList from "../components/BranchList/BranchList"; 
 import { getUser } from "../services/routes/user";
-import { useState } from 'react';
-
+import { getSchedules, cancelSchedule, getHistoricByPetId } from "../services/routes/schedule";
+import { useState, useEffect } from 'react';
+import { getPets } from "../services/routes/pet";
 
 function Home() {
     const [user, setUser] = useState("");
+    const [consultations, setConsultations] = useState([]);
+    const [historyList, setHistoryList] = useState([]);
 
-        useState(() => {
-            const fetchUser = async () => {
-                try {
-                    const data = await getUser();
-                    setUser(data);
-                } catch (error) {
-                    console.error("Erro ao buscar usuário:", error);
+    useEffect(() => {
+        const fetchHomeData = async () => {
+            try {
+                const userData = await getUser();
+                setUser(userData);
+
+                const schedulesData = await getSchedules();
+
+                const listaSegura = Array.isArray(schedulesData) ? schedulesData : [];
+
+                const formattedSchedules = listaSegura.map(schedule => {
+                const dataRaw = schedule.date || schedule.Date || "";
+                const vetData = schedule.vetName || schedule.VetName;
+                let dataFormatada = "Data a definir";
+
+                if (dataRaw) {
+                    const apenasData = dataRaw.split('T')[0]; 
+                    if (apenasData.includes('-')) {
+                        const [ano, mes, dia] = apenasData.split('-');
+                        dataFormatada = `${dia}/${mes}/${ano}`;
+                    } else {
+                        dataFormatada = dataRaw;
+                    }
                 }
-            };
+                const horaRaw = schedule.time || schedule.Time || "";
+                let horaFormatada = "Horário a definir";
 
-            fetchUser();
-        }, []);
+                if (horaRaw) {
+                    const partesHora = horaRaw.split(':');
+                    if (partesHora.length >= 2) {
+                        horaFormatada = `${partesHora[0]}:${partesHora[1]}`;
+                    } else {
+                        horaFormatada = horaRaw;
+                    }
+                }
 
-    const mockConsultations = [
-        { namePet: "Pituffinho", date: "19/05/2026", time: "09:30", symptoms: "Coceira intensa nas costas...Coceira intensa nas costas..Coceira intensa nas costas..", location: "Clínica LevaAUqui", veterinarian: "Roberto Caulos" },
-        { namePet: "Pituffinho", date: "19/05/2026", time: "10:30", symptoms: "Tosse e espirro constante", location: "Clínica LevaAUqui", veterinarian: "Roberto Caulos" },
-        { namePet: "Pituffinho", date: "19/05/2026", time: "11:30", symptoms: "Febre baixa", location: "Clínica LevaAUqui", veterinarian: "Roberto Caulos" },
-        { namePet: "Pituffinho", date: "19/05/2026", time: "14:00", symptoms: "Revisão geral", location: "Clínica LevaAUqui", veterinarian: "Roberto Caulos" },
-        { namePet: "Pituffinho", date: "19/05/2026", time: "16:00", symptoms: "Vacinação", location: "Clínica LevaAUqui", veterinarian: "Roberto Caulos" },
-    ];
+                return {
+                    id: schedule.id || schedule.Id,    
+                    namePet: schedule.petName || schedule.PetName || "Pet cadastrado", 
+                    date: dataFormatada, 
+                    time: horaFormatada,
+                    symptoms: schedule.symptomDescription || schedule.SymptomDescription || "Sem sintomas descritos",
+                    location: schedule.clinicName || schedule.ClinicName || "Unidade selecionada",
+                    veterinarian: vetData?.fullName || (typeof vetData === 'string' ? vetData : "Profissional"),
+                    status: schedule.status || schedule.Status || "aberto"
+                    
+                };
+            });
+
+            const consultasAtivas = formattedSchedules.filter(consulta => {
+                    const status = consulta.status?.toLowerCase() || "";
+                    return status !== "canceled" && status !== "completed" && status !== "concluido";
+                });
+
+                setConsultations(consultasAtivas);
+
+            const petsData = await getPets();
+                const petsArray = Array.isArray(petsData) ? petsData : [];
+                const historicosPromises = petsArray.map(pet => getHistoricByPetId(pet.id));
+                const historicosResultados = await Promise.all(historicosPromises);
+                const todosHistoricos = historicosResultados.flat();
+                setHistoryList(todosHistoricos);
+
+            } catch (error) {
+                console.error("Erro ao carregar dados da Home:", error);
+            }
+        };
+
+        fetchHomeData();
+    }, []);
+
+    const handleCancelAppointment = async (id) => {
+        if (window.confirm("Tem certeza que deseja cancelar este agendamento?")) {
+            try {
+                await cancelSchedule(id);
+                setConsultations(prevConsultations => prevConsultations.filter(c => c.id !== id));
+                
+                alert("Agendamento cancelado com sucesso!");
+            } catch (error) {
+                console.error(error);
+                alert("Erro ao cancelar agendamento. Tente novamente.");
+            }
+        }
+    };
 
     return (
         <main className="container-hm">
@@ -45,9 +111,10 @@ function Home() {
                         showCloseButton={false}
                     />
 
-                    <CarouselConsultation consultations={mockConsultations} />
-
-                   
+                    <CarouselConsultation 
+                        consultations={consultations} 
+                        onCancelAppointment={handleCancelAppointment} 
+                    />
 
                     <Title
                         title="Histórico Veterinário"
@@ -56,20 +123,53 @@ function Home() {
                     />
 
                     <div className="history-list-wrapper">
-                        <ListLatestConsultations namePet="Pituffinho" dateConsultation="01/02/2026" symptoms="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever sin" medication="1 pastilha Agemoxi CL por dia" location="São Paulo" veterinarian="Fernado Reis" status="Concluido" />
+                        {historyList.length > 0 ? (
+                            historyList.map((hist, index) => {
+                                const dataRaw = hist.date || hist.Date || "";
+                                const apenasData = dataRaw.split('T')[0];
+                                const dataFormatada = apenasData.includes('-') 
+                                    ? apenasData.split('-').reverse().join('/') 
+                                    : apenasData;
+                                const vetData = hist.vetName || hist.VetName;
+                                const nomeVet = vetData?.fullName || (typeof vetData === 'string' ? vetData : "Profissional");
+                                const medData = hist.medication || hist.Medication;
+                                let medFormatada = "Sem medicação informada";
+                                
+                                if (Array.isArray(medData) && medData.length > 0) {
+                                    // Em vez de texto, montamos tags HTML (display: block força a pular linha)
+                                    medFormatada = medData.map((medicamento, i) => (
+                                        <span key={i} style={{ display: "block", marginBottom: "4px" }}>
+                                            • {medicamento}
+                                        </span>
+                                    )); 
+                                } else if (typeof medData === 'string') {
+                                    medFormatada = <span style={{ display: "block" }}>• {medData}</span>;
+                                }
 
-                        <ListLatestConsultations namePet="Pituffinho" dateConsultation="01/02/2026" symptoms="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever sin" medication="1 pastilha Agemoxi CL por dia" location="São Carlos" veterinarian="Fernado Reis" status="Concluido" />
-
-                        <ListLatestConsultations namePet="Pituffinho" dateConsultation="01/02/2026" symptoms="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever sin" medication="1 pastilha Agemoxi CL por dia" location="São Carlos" veterinarian="Fernado Reis" status="Concluido" />
+                                return (
+                                    <ListLatestConsultations 
+                                        key={hist.id || index} 
+                                        namePet={hist.petName || hist.PetName || "Pet cadastrado"} 
+                                        dateConsultation={dataFormatada} 
+                                        symptoms={hist.diagnostic || hist.Diagnostic || "Sem diagnóstico"} 
+                                        medication={medFormatada} s
+                                        location={hist.clinicName || hist.ClinicName || "Unidade não informada"} 
+                                        
+                                        // Passando apenas o texto blindado para o componente
+                                        veterinarian={nomeVet} 
+                                        
+                                        status={hist.status || hist.Status || "Concluído"} 
+                                    />
+                                );
+                            })
+                        ) : (
+                            <p style={{ textAlign: "center", color: "#666" }}>Nenhum histórico encontrado para os seus pets.</p>
+                        )}
                     </div>
                 </div>
 
                 <BranchList />
-
             </div>
-
-           
-            
         </main>
     );
 }

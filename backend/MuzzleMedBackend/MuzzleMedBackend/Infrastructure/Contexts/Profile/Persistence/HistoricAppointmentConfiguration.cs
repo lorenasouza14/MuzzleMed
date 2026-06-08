@@ -28,10 +28,7 @@ public class HistoricAppointmentConfiguration : IEntityTypeConfiguration<Histori
             .HasMaxLength(200);
         
         builder.Property(h => h.VetName)
-            .HasConversion(
-                vo => vo.ToString(), 
-                str => new VetFullNameValueObject(str) 
-            )
+            .IsRequired()
             .HasColumnName("VetName")
             .IsRequired()
             .HasMaxLength(150);

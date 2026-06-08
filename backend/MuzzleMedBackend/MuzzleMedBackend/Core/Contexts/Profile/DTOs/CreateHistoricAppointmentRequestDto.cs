@@ -12,7 +12,7 @@ public class CreateHistoricAppointmentRequestDto
     public Guid ClinicId { get; set; }
     public String ClinicName { get; set; }
     public Guid VetId { get; set; }
-    public VetFullNameValueObject VetName { get; set; }
+    public string VetName { get; set; }
     public DateOnly Date { get; set; }
     public String SymptomDescription { get; set; }
     public string Diagnostic { get; set; }
