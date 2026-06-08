@@ -20,13 +20,13 @@ public class BuildAppointmentResponseUseCase : IBuildAppointmentResponseUseCase
         _petScheduleRepository = petScheduleRepository;
     }
 
-    public async Task<AppointmentResponseDto> ExecuteAsync(AppointmentScheduleContext appointment)
+    public async Task<AppointmentScheduleResponseDto> ExecuteAsync(AppointmentScheduleContext appointment)
     {
         var clinic = await _clinicRepository.GetClinicById(appointment.ClinicId);
         var vet = await _vetRepository.GetVeterinaryById(appointment.VetId);
         var pet = await _petScheduleRepository.GetByIdAsync(appointment.PetId);
         
-        return new AppointmentResponseDto
+        return new AppointmentScheduleResponseDto
         {
             Id = appointment.Id,
             Date = appointment.Date,
