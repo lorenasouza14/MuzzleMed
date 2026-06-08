@@ -27,10 +27,10 @@ public class CreateAppointmentUseCase : ICreateAppointmentUseCase
     {
         ArgumentNullException.ThrowIfNull(requestDto);
         
-        var appointmentDateTime = requestDto.Date.ToDateTime(requestDto.Time);
-        if (appointmentDateTime < DateTime.Now)
+        var today = DateOnly.FromDateTime(DateTime.Now);
+        if (requestDto.Date <= today)
         {
-            throw new InvalidOperationException("Data de agendamento nao pode ser menor que a data atual");
+            throw new InvalidOperationException("Data de agendamento não pode ser menor ou igual a data atual");
         }
         
         var userId =  _getUserIdService.GetUserId();
