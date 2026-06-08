@@ -3,18 +3,15 @@ using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi;
+using Microsoft.OpenApi.Models;
 using StackExchange.Redis; // IMPORTANTE: Namespace do Redis
 using MuzzleMedBackend.Core.Contexts.Auth.UseCases;
 using MuzzleMedBackend.Core.Contexts.Profile.UseCases;
+using MuzzleMedBackend.Core.Contexts.Schedule.UseCases.AppointmentScheduleUseCases;
 using MuzzleMedBackend.Core.Contexts.Schedule.UseCases;
-using MuzzleMedBackend.Core.Contexts.Schedule.UseCases.AppointmentUseCases;
 using MuzzleMedBackend.Core.Contexts.Schedule.UseCases.PetScheduleUseCases;
 using MuzzleMedBackend.Core.Contexts.Veterinarians.UseCases;
-using MuzzleMedBackend.Core.Contexts.Profile.UseCases;
-using MuzzleMedBackend.Core.Contexts.Schedule.UseCases.AppointmentScheduleUseCases;
 using MuzzleMedBackend.Core.Contexts.Schedule.UseCases.HistoricAppointmentsUseCases;
-using MuzzleMedBackend.Core.Contexts.Schedule.UseCases.PetScheduleUseCases;
 using MuzzleMedBackend.Core.Contexts.BookTime.UseCases;
 using MuzzleMedBackend.Domain.Contexts.BookTime.Interfaces;
 using MuzzleMedBackend.Infrastructure.Contexts.BookTime.Repository;
@@ -34,16 +31,10 @@ using MuzzleMedBackend.Infrastructure.Contexts.Schedule.Persistence;
 using MuzzleMedBackend.Infrastructure.Contexts.Schedule.Repositories;
 using MuzzleMedBackend.Infrastructure.Contexts.Veterinarians.Repositories;
 using MuzzleMedBackend.Infrastructure.Security;
-using MuzzleMedBackend.Domain.Contexts.Auth.Interfaces.UseCases;
-using MuzzleMedBackend.Domain.Contexts.Profile.Interfaces;
 using MuzzleMedBackend.Domain.Contexts.Profile.Interfaces.UseCases;
-using MuzzleMedBackend.Domain.Contexts.Schedule.Interfaces.Repositories;
-using MuzzleMedBackend.Domain.Contexts.Schedule.Interfaces.UseCases;
 using MuzzleMedBackend.Infrastructure.Contexts.Profile.Repositories;
 using MuzzleMedBackend.Services;
 using MuzzleMedBackend.Services.Interfaces;
-using System.Text;
-using System.Text.Json.Serialization;
 
 // Configs
 var builder = WebApplication.CreateBuilder(args);
@@ -77,13 +68,19 @@ builder.Services.AddSwaggerGen(options =>
         Scheme = "Bearer",
         BearerFormat = "JWT",
         In = ParameterLocation.Header,
-        Description = "Insira o token JWT: Bearer {seu token}"
+        Description = "Bearer"
     });
 
    
     options.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
-        [new OpenApiSecuritySchemeReference("Bearer", document)] = []
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
+            },
+            Array.Empty<string>()
+        }
     });
 });
 
@@ -114,7 +111,11 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySql(connectionString, serverVersion));
 
 // CONFIGURAÇÃO DO REDIS (Adicionado para o BookTime)
-var redisConnection = ConnectionMultiplexer.Connect("localhost:6379");
+
+var redisConnectionString = builder.Configuration.GetValue<string>("Redis:Connection") ?? "localhost:6379";
+var redisOptions = StackExchange.Redis.ConfigurationOptions.Parse(redisConnectionString);
+redisOptions.AbortOnConnectFail = false;
+var redisConnection = ConnectionMultiplexer.Connect(redisOptions);
 builder.Services.AddSingleton<IConnectionMultiplexer>(redisConnection);
 
 builder.Services.AddTransient<ITokenService, TokenService>();
