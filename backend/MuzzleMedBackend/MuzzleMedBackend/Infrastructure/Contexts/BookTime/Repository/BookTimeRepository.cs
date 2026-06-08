@@ -68,35 +68,48 @@ namespace MuzzleMedBackend.Infrastructure.Contexts.BookTime.Repository
             await _redisDb.KeyDeleteAsync(userKey);
         }
 
-
         public async Task<bool> RegisterBookTime(Guid userId, string dateSchedule, string timeSchedule)
         {
-            //Armaza os dois tipos de chaves para facilitar a busca
-            string timeKey = $"book_time:{dateSchedule}:{timeSchedule}";
-            string userKey = $"user_lock:{userId}";
+            try
+            {
+                // Armazena os dois tipos de chaves para facilitar a busca
+                string timeKey = $"book_time:{dateSchedule}:{timeSchedule}";
+                string userKey = $"user_lock:{userId}";
 
-            string redisValue = userId.ToString();
-            string timeValue = $"{dateSchedule}:{timeSchedule}";
+                string redisValue = userId.ToString();
+                string timeValue = $"{dateSchedule}:{timeSchedule}";
 
-            // Bloqueia o horario caso alguem tenha reservado.
-            bool timeLocked = await _redisDb.StringSetAsync(timeKey, redisValue, TimeSpan.FromMinutes(10), When.NotExists);
-            if (!timeLocked) return false;
+                // Bloqueia o horário caso alguém já tenha reservado (Trava do Horário)
+                bool timeLocked = await _redisDb.StringSetAsync(timeKey, redisValue, TimeSpan.FromMinutes(10), When.NotExists);
+                if (!timeLocked) return false;
 
-           
-            // Verifica se o usuario ja possui algum horario salvo
-            var oldTimeValue = await _redisDb.StringGetAsync(userKey);
+                // Verifica se o usuário já possui alguma reserva antiga pendente (Trava do Usuário)
+                RedisValue oldTimeValue = await _redisDb.StringGetAsync(userKey);
 
-            if (oldTimeValue.HasValue){
-                string oldTimeKey = $"book_time:{oldTimeValue}";
+                if (oldTimeValue.HasValue && !oldTimeValue.IsNullOrEmpty)
+                {
+                    // Conversão para string 
+                    string oldTimeKey = $"book_time:{oldTimeValue.ToString()}";
 
-                // Deletamos a reserva se ele clicar em outro horario e o antigo ficara livre
-                await _redisDb.KeyDeleteAsync(oldTimeKey);
+                    // Deleta a reserva antiga se ele escolher outro horário
+                    await _redisDb.KeyDeleteAsync(oldTimeKey);
+                }
+
+                // Atualiza a trava do usuário com o novo horário. Também expira em 10 min
+                await _redisDb.StringSetAsync(userKey, timeValue, TimeSpan.FromMinutes(10));
+
+                return true;
             }
-           
-            // atualiza o novo horario do usuario para ser reservado. Ela tambem ira expirar em 10 min
-            await _redisDb.StringSetAsync(userKey, timeValue, TimeSpan.FromMinutes(10));
-
-            return true;
+            catch (RedisConnectionException ex)
+            {
+                // Erro de comunicação com o Redis
+                throw new Exception("Não foi possível conectar ao servidor Redis. Verifique se ele está rodando.", ex);
+            }
+            catch (Exception ex)
+            {
+                // Outros erros 
+                throw new Exception($"Erro interno ao registrar agendamento: {ex.Message}", ex);
+            }
         }
 
         /*

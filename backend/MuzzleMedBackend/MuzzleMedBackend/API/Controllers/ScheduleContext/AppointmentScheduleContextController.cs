@@ -16,6 +16,7 @@ public class AppointmentScheduleContextController : ControllerBase
     private readonly IGetAppointmentByIdUseCase _getAppointmentByIdUseCase;
     private readonly ICancelAppointmentScheduleUseCase _cancelAppointmentScheduleUseCase;
     private readonly IFinalizeAppointmentUseCase _finalizeAppointmentUseCase;
+    
 
     public AppointmentScheduleContextController(ICreateAppointmentUseCase createAppointmentUseCase,
         IGetAppointmentsByUserUseCase getAppointmentsByUserUseCase,

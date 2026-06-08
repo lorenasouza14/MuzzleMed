@@ -13,6 +13,13 @@ services:
       - "${MYSQL_PORT}:3306"
     volumes:
       - muzzlemed_data_v2:/var/lib/mysql
+  
+  redis:
+    image: redis:alpine
+    container_name: muzzlemed_redis
+    restart: always
+    ports:
+      - "6379:6379"
 
 volumes:
   muzzlemed_data_v2:

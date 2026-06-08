@@ -18,10 +18,11 @@ namespace MuzzleMedBackend.Core.Contexts.BookTime.UseCases
             _bookTimeRepository = bookTimeRepository;
         }
 
-        public async Task<bool> RegisterBookTime(BookTimeInputDto bookTimeInput)
+        public async Task<bool> RegisterBookTime(Guid userId, BookTimeInputDto bookTimeInput)
         {
+            
             return await _bookTimeRepository.RegisterBookTime(
-                bookTimeInput.UserId,
+                userId,
                 bookTimeInput.DateSchedule,
                 bookTimeInput.TimeSchedule
             );

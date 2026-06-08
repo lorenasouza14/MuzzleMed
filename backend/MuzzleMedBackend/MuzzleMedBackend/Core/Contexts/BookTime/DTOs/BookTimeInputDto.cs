@@ -2,7 +2,6 @@
 {
     public class BookTimeInputDto
     {
-        public Guid UserId { get; set; }
         public string DateSchedule { get; set; }
         public string TimeSchedule { get; set; }
     }
