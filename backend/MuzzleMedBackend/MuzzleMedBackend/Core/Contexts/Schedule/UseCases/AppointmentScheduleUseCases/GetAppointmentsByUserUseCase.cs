@@ -15,54 +15,35 @@ public class GetAppointmentsByUserUseCase : IGetAppointmentsByUserUseCase
     private readonly IVetRepository _vetRepository;
     private readonly IClinicRepository _clinicRepository;
     private readonly IPetScheduleRepository _petScheduleRepository;
+    private readonly IBuildAppointmentResponseUseCase _buildAppointmentResponseUseCase;
     
     public GetAppointmentsByUserUseCase(
         IAppointmentRepository appointmentRepository, 
-        IGetUserIdService getUserIdService, IVetRepository vetRepository, IClinicRepository clinicRepository, IPetScheduleRepository petScheduleRepository)
+        IGetUserIdService getUserIdService, IVetRepository vetRepository, IClinicRepository clinicRepository, IPetScheduleRepository petScheduleRepository, IBuildAppointmentResponseUseCase buildAppointmentResponseUseCase)
     {
         _appointmentRepository = appointmentRepository;
         _getUserIdService = getUserIdService;
         _vetRepository = vetRepository;
         _clinicRepository = clinicRepository;
         _petScheduleRepository = petScheduleRepository;
+        _buildAppointmentResponseUseCase = buildAppointmentResponseUseCase;
     }
 
-    public async Task<List<AppointmentScheduleResponseDto>?> ExecuteAsync()
+    public async Task<List<AppointmentResponseDto>?> ExecuteAsync()
     {
         var userId = _getUserIdService.GetUserId();
         
         var appointments = await _appointmentRepository.GetByUserIdAsync(userId);
         
-        var responseList = new List<AppointmentScheduleResponseDto>();
+        var responseList = new List<AppointmentResponseDto>();
 
         if (appointments == null)
             return responseList;
         
         foreach (var a in appointments)
         {
-            var clinic = await _clinicRepository.GetClinicById(a.ClinicId);
-            var vet = await _vetRepository.GetVeterinaryById(a.VetId);
-            var pet = await _petScheduleRepository.GetByIdAsync(a.PetId);
-            
-            var dto = new AppointmentScheduleResponseDto
-            {
-                Id = a.Id,
-                Date = a.Date,
-                Time = a.Time,
-                Status = a.Status.ToString(),
-                SymptomDescription = a.SymptomDescription,
-
-                ClinicId = a.ClinicId,
-                ClinicName = clinic.Name,
-
-                VetId = a.VetId,
-                VetName = vet.Name,
-
-                PetId = a.PetId,
-                PetName = pet.Name
-            };
-
-            responseList.Add(dto);
+            var app = await _buildAppointmentResponseUseCase.ExecuteAsync(a);
+            responseList.Add(app);
         }
         return responseList;
     }

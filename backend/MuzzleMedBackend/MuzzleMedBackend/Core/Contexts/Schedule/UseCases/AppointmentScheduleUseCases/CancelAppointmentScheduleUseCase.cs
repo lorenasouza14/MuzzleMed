@@ -3,16 +3,19 @@ using MuzzleMedBackend.Domain.Contexts.Schedule.Entities;
 using MuzzleMedBackend.Domain.Contexts.Schedule.Interfaces;
 using MuzzleMedBackend.Domain.Contexts.Schedule.Interfaces.UseCases; 
 using MuzzleMedBackend.Domain.Contexts.Schedule.ValueObjects.Enums;
+using MuzzleMedBackend.Services.Interfaces;
 
 namespace MuzzleMedBackend.Core.Contexts.Schedule.UseCases.AppointmentScheduleUseCases;
 
 public class CancelAppointmentScheduleUseCase : ICancelAppointmentScheduleUseCase 
 {
     private readonly IAppointmentRepository _appointmentRepository;
+    private readonly IGetUserIdService _getUserIdService;
 
-    public CancelAppointmentScheduleUseCase(IAppointmentRepository appointmentRepository)
+    public CancelAppointmentScheduleUseCase(IAppointmentRepository appointmentRepository, IGetUserIdService getUserIdService)
     {
         _appointmentRepository = appointmentRepository;
+        _getUserIdService = getUserIdService;
     }
     public async Task<AppointmentScheduleContext> ExecuteAsync(Guid id)
     {
@@ -29,7 +32,11 @@ public class CancelAppointmentScheduleUseCase : ICancelAppointmentScheduleUseCas
         {
             throw new InvalidOperationException("agendamento ja concluído ou cancelado.");
         }
-        
+
+        if (appointment.UserId != _getUserIdService.GetUserId())
+        {
+            throw new InvalidOperationException("agendamento não pertence ao usuário logado");
+        }
         appointment.Cancel();
         
         await _appointmentRepository.UpdateAsync(appointment);

@@ -29,4 +29,9 @@ public class PetScheduleRepository : IPetScheduleRepository
         var pets = await  _context.PetSchedules.Where(p => p.UserId == userId).ToListAsync();
         return pets; 
     }
+
+    public void UpdateWithOutSave(PetSchedule petSchedule)
+    {
+        _context.PetSchedules.Update(petSchedule);
+    }
 }

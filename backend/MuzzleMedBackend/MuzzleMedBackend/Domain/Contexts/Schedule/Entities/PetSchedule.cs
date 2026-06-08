@@ -7,6 +7,8 @@ public class PetSchedule
     public string Name { get; private set; }
     public SpecieEnum Species { get; private set; }
     public Guid UserId { get; set; }
+    
+    public bool IsActive { get; set; }
 
     protected PetSchedule() { }
 
@@ -22,5 +24,10 @@ public class PetSchedule
         Name = name;
         Species = species;
         UserId = userId;
+        IsActive = true;
+    }
+    public void Deactivate()
+    {
+        IsActive = false;
     }
 }

@@ -64,4 +64,9 @@ public class AppointmentRepository : IAppointmentRepository
                            a.Status == StatusEnum.Scheduled && 
                            (a.Date > currentDate || (a.Date == currentDate && a.Time > currentTime)));
     }
+
+    public void UpdateWithOutSave(AppointmentScheduleContext appointment)
+    {
+        _context.Update(appointment);
+    }
 }

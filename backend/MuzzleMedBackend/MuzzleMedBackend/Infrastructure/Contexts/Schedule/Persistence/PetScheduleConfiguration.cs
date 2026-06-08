@@ -23,5 +23,7 @@ public class PetScheduleConfiguration : IEntityTypeConfiguration<PetSchedule>
         
         builder.HasIndex(p => p.UserId);
         builder.Property(p => p.UserId).IsRequired();
+        
+        builder.Property(p => p.IsActive).IsRequired();
     }
 }
