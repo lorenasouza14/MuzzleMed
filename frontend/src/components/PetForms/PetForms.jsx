@@ -3,45 +3,66 @@ import FormsInput from "../FormsInput/FormsInput";
 import ButtonSaveCancel from "../ButtonSaveCancel/ButtonSaveCancel";
 import ToggleInput from "../ToggleInput/ToggleInput";
 import "./PetForms.css";
-import {createPet} from "../../services/routes/pet";
+import { createPet } from "../../services/routes/pet";
+import Swal from "sweetalert2"; 
 
 function PetForms({ onSave, onCancel }) {
-
     const [name, setName] = useState("");
-    const [specie, setSpecie] = useState("Cachorro");
+    const [specie, setSpecie] = useState("Dog"); 
     const [breed, setBreed] = useState("");
     const [dateOfBirth, setDateOfBirth] = useState("");
-    const [gender, setGender] = useState("Macho");
-
+    const [gender, setGender] = useState("Male"); 
 
     const handleSave = async () => {
+        if (!name.trim()) {
+            Swal.fire({
+                title: "Campo obrigatório",
+                text: "Por favor, insira o nome do pet.",
+                icon: "warning",
+                confirmButtonColor: "var(--azul-escuro)"
+            });
+            return;
+        }
+
         try {
-           
-        const newPet = {
-            name,
-            specie,
-            breed,
-            dateOfBirth,
-            gender,
-            descriptionSymtoms: "Nenhum sintoma descrito", 
-           
-        };
+            const newPet = {
+                name,
+                specie,
+                breed,
+                dateOfBirth,
+                gender,
+                descriptionSymtoms: "Nenhum sintoma descrito", 
+            };
+
             console.log("JSON enviado para a API:", JSON.stringify(newPet));
             await createPet(newPet);
-            onSave();
 
-            if (onSave) onSave();
+            // 🎉 Pop-up de sucesso antes de fechar ou redirecionar
+            Swal.fire({
+                title: 'Cadastrado com sucesso!',
+                text: `${name} foi adicionado aos seus pets.`,
+                icon: 'success',
+                confirmButtonColor: 'var(--azul-escuro)'
+            }).then(() => {
+                // Executa o onSave do componente pai apenas após o usuário fechar o alerta
+                if (onSave) onSave();
+            });
 
         } catch (error) {
             console.error("Erro ao salvar pet:", error);
+            
+            // Pop-up de erro caso a API falhe
+            Swal.fire({
+                title: 'Erro ao cadastrar',
+                text: error.response?.data?.message || 'Não foi possível salvar o pet no momento. Tente novamente.',
+                icon: 'error',
+                confirmButtonColor: 'var(--rosa-escuro)'
+            });
         }
     };
 
-
     return (
-
         <main className="container">
-
             <FormsInput
                 label="Nome"
                 type="text"
@@ -52,7 +73,6 @@ function PetForms({ onSave, onCancel }) {
             />
 
             <div className="pet-row">
-
                 <ToggleInput
                     label="Espécie"
                     options={[
@@ -74,7 +94,6 @@ function PetForms({ onSave, onCancel }) {
             </div>
 
             <div className="pet-row" >
-
                 <FormsInput
                     label="Data de Nascimento"
                     type="date"
@@ -94,13 +113,14 @@ function PetForms({ onSave, onCancel }) {
                     onChange={setGender}
                 />
             </div>
+            
             <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
                 <div style={{ width: "50%", marginTop: "50px" }} >
                     <ButtonSaveCancel onSave={handleSave} onCancel={onCancel} />
                 </div>
             </div>
         </main>
-    )
-};
+    );
+}
 
 export default PetForms;

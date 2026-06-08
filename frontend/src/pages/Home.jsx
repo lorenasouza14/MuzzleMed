@@ -25,21 +25,21 @@ function Home() {
                 const listaSegura = Array.isArray(schedulesData) ? schedulesData : [];
 
                 const formattedSchedules = listaSegura.map(schedule => {
-                const dataRaw = schedule.date || schedule.Date || "";
-                const vetData = schedule.vetName || schedule.VetName;
-                let dataFormatada = "Data a definir";
+                    const dataRaw = schedule.date || schedule.Date || "";
+                    const vetData = schedule.vetName || schedule.VetName;
+                    let dataFormatada = "Data a definir";
 
-                if (dataRaw) {
-                    const apenasData = dataRaw.split('T')[0]; 
-                    if (apenasData.includes('-')) {
-                        const [ano, mes, dia] = apenasData.split('-');
-                        dataFormatada = `${dia}/${mes}/${ano}`;
-                    } else {
-                        dataFormatada = dataRaw;
+                    if (dataRaw) {
+                        const apenasData = dataRaw.split('T')[0]; 
+                        if (apenasData.includes('-')) {
+                            const [ano, mes, dia] = apenasData.split('-');
+                            dataFormatada = `${dia}/${mes}/${ano}`;
+                        } else {
+                            dataFormatada = dataRaw;
+                        }
                     }
-                }
-                const horaRaw = schedule.time || schedule.Time || "";
-                let horaFormatada = "Horário a definir";
+                    const horaRaw = schedule.time || schedule.Time || "";
+                    let horaFormatada = "Horário a definir";
 
                 if (horaRaw) {
                     const partesHora = horaRaw.split(':');
@@ -64,14 +64,14 @@ function Home() {
                 };
             });
 
-            const consultasAtivas = formattedSchedules.filter(consulta => {
+                const consultasAtivas = formattedSchedules.filter(consulta => {
                     const status = consulta.status?.toLowerCase() || "";
                     return status !== "canceled" && status !== "completed" && status !== "concluido";
                 });
 
                 setConsultations(consultasAtivas);
 
-            const petsData = await getPets();
+                const petsData = await getPets();
                 const petsArray = Array.isArray(petsData) ? petsData : [];
                 const historicosPromises = petsArray.map(pet => getHistoricByPetId(pet.id));
                 const historicosResultados = await Promise.all(historicosPromises);
@@ -112,10 +112,29 @@ function Home() {
                         showCloseButton={false}
                     />
 
-                    <CarouselConsultation 
-                        consultations={consultations} 
-                        onCancelAppointment={handleCancelAppointment} 
-                    />
+                    {/* Verificação condicional para renderizar o carrossel ou a mensagem */}
+                    {consultations.length > 0 ? (
+                        <CarouselConsultation 
+                            consultations={consultations} 
+                            onCancelAppointment={handleCancelAppointment} 
+                        />
+                    ) : (
+                        // Esta é a parte que mudou: adicionamos um container azul para a mensagem
+                        <div 
+                            style={{ 
+                                backgroundColor: "#e6f7ff", // <--- COR DE FUNDO AZUL (pode alterar o hexadecimal)
+                                padding: "40px",              // Espaçamento interno para a mensagem não ficar colada na borda
+                                borderRadius: "10px",        // Arredonda as bordas para combinar com outros elementos
+                                textAlign: "center",         // Centraliza o texto
+                                marginTop: "20px",           // Espaçamento superior
+                                marginBottom: "20px"         // Espaçamento inferior
+                            }}
+                        >
+                            <p style={{ color: "#666", fontSize: "16px", margin: 0 }}>
+                                Não há consultas agendadas.
+                            </p>
+                        </div>
+                    )}
 
                     <Title
                         title="Histórico Veterinário"
