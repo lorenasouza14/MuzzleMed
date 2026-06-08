@@ -10,7 +10,6 @@ const PetTable = () => {
 
     const ITEMS_PER_PAGE = 5;
 
-    // Carrega os pets toda vez que a página atual muda (e também na montagem inicial)
     useEffect(() => {
         const fetchPets = async () => {
             try {
@@ -50,9 +49,7 @@ const PetTable = () => {
                     .catch((error) => {
                         console.error("Erro ao deletar pet:", error);
                         
-                        const errorMessage = error.response?.data?.message || 
-                                             error.response?.data || 
-                                             "Não foi possível remover o pet no momento, pois existem consultas futuras agendadas. Por favor, cancele essas consultas antes de tentar excluir o pet.";
+                        const errorMessage = "Não foi possível remover o pet no momento, pois existem consultas futuras agendadas. Por favor, cancele essas consultas antes de tentar excluir o pet.";
 
                         Swal.fire({
                             title: 'Não foi possível excluir',
@@ -65,7 +62,7 @@ const PetTable = () => {
         });
     };
 
-    // 🛠️ FUNÇÃO DE EDIÇÃO CORRIGIDA COM POPUP DE MANUTENÇÃO
+
     const handleEdit = (id) => {
         console.log(`Tentativa de editar o ID: ${id} - Funcionalidade em manutenção.`);
         
