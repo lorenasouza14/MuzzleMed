@@ -12,17 +12,13 @@ public class FinalizeAppointmentUseCase : IFinalizeAppointmentUseCase
 {
     private readonly IAppointmentRepository _appointmentRepository;
     private readonly ICreateHistoricUseCase _historicAppointmentCreateUseCase;
-    private readonly IVetRepository _vetRepository;
-    private readonly IClinicRepository _clinicRepository;
-    private readonly IPetScheduleRepository _petScheduleRepository;
+    private readonly IBuildAppointmentResponseUseCase _buildAppointmentResponseUseCase;
 
-    public FinalizeAppointmentUseCase(IAppointmentRepository appointmentRepository, ICreateHistoricUseCase historicAppointmentCreateUseCase, IVetRepository vetRepository, IClinicRepository clinicRepository, IPetScheduleRepository petScheduleRepository)
+    public FinalizeAppointmentUseCase(IAppointmentRepository appointmentRepository, ICreateHistoricUseCase historicAppointmentCreateUseCase, IVetRepository vetRepository, IClinicRepository clinicRepository, IPetScheduleRepository petScheduleRepository, IBuildAppointmentResponseUseCase buildAppointmentResponseUseCase)
     {
         _appointmentRepository = appointmentRepository;
         _historicAppointmentCreateUseCase = historicAppointmentCreateUseCase;
-        _vetRepository = vetRepository;
-        _clinicRepository = clinicRepository;
-        _petScheduleRepository = petScheduleRepository;
+        _buildAppointmentResponseUseCase = buildAppointmentResponseUseCase;
     }
 
     public async Task<FinalizeAppointmentResponse> ExecuteAsync(Guid appointmentId, FinalizeAppointmentRequestDto dto)
@@ -39,6 +35,7 @@ public class FinalizeAppointmentUseCase : IFinalizeAppointmentUseCase
         appointment.Completed();
         await _appointmentRepository.UpdateAsync(appointment);
         
+        /*
         var clinic = await _clinicRepository.GetClinicById(appointment.ClinicId);
         var vet = await _vetRepository.GetVeterinaryById(appointment.VetId);
         var pet = await _petScheduleRepository.GetByIdAsync(appointment.PetId);
@@ -55,6 +52,25 @@ public class FinalizeAppointmentUseCase : IFinalizeAppointmentUseCase
             ClinicName = clinic.Name,
             PetId = appointment.PetId,
             PetName = pet.Name,
+            SymptomDescription =  appointment.SymptomDescription,
+            UserId = appointment.UserId,
+        };
+        */
+        
+        var appointmenteNames = await _buildAppointmentResponseUseCase.ExecuteAsync(appointment);
+        
+        var historicAppointmentDto = new CreateHistoricAppointmentRequestDto
+        {
+            AppointmentId = appointmentId,
+            Diagnostic = dto.Diagnostic,
+            Medication = dto.Medications,
+            Date = appointment.Date,
+            VetId =  appointment.VetId,
+            VetName = appointmenteNames.VetName,
+            ClinicId = appointment.ClinicId,
+            ClinicName = appointmenteNames.ClinicName,
+            PetId = appointment.PetId,
+            PetName = appointmenteNames.PetName,
             SymptomDescription =  appointment.SymptomDescription,
             UserId = appointment.UserId,
         };
