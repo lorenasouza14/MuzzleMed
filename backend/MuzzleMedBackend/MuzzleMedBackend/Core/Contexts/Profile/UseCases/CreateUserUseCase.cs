@@ -37,14 +37,12 @@ public class CreateUserUseCase
             throw new ArgumentException("Este CPF já está cadastrado no sistema.");
         }
 
-        //Profile
         var user = new User(request.FullName, email, cpf, phone, request.DateOfBirth);
 
         await _userRepository.AddAsync(user);
         await _scheduleUseCase.ExecuteAsync(user.Id, user.FullName, user.Phone.Number);
         await _authUseCase.ExecuteAsync(user.Id, request.Email ,request.Password);
 
-        // Envia as informações no banco
         await _unitOfWork.CommitAsync();
     }
 }

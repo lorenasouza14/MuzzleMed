@@ -8,8 +8,7 @@ namespace MuzzleMedBackend.Domain.Contexts.Veterinarians.Interfaces
         Task<IEnumerable<Veterinary>> GetVetsByClinicId(Guid clinicId);
         Task<IEnumerable<Veterinary>> GetAll();
         Task RegisterVeterinary(Veterinary veterinarian);
-
-
+        Task<Veterinary> GetVeterinaryById(Guid id);
     }
        
 }

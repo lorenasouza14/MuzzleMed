@@ -1,29 +1,61 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import FormsInput from "../FormsInput/FormsInput";
 import ButtonSaveCancel from "../ButtonSaveCancel/ButtonSaveCancel";
 import DropdownButton from "../DropdownButton/DropdownButton";
 import TimeSlotSelector from "../TimeSlotSelector/TimeSlotSelector"; 
+import TextareaButton from "../TextareaButton/TextareaButton";
 import "../PetForms/PetForms.css";
+import { getClinics } from "../../services/routes/clinic";
+import { getVetById } from "../../services/routes/veterinary";
+import { getPets } from "../../services/routes/pet";
+// import { createSchedule } from "../../services/routes/schedule";
+
 
 function ScheduleForms({ onSave, onCancel }) {
-
-    const [name, setName] = useState("");
+    const [selectedClinicId, setSelectedClinicId] = useState(null);
+    // 
+    const [pets, setPets] = useState([]);
     const [dateSchedule, setDateSchedule] = useState("");
-    const [timeSchedule, setTimeSchedule] = useState(""); // 2. Trocou gender por timeSchedule
+    const [timeSchedule, setTimeSchedule] = useState("");
+    const [clinics, setClinics] = useState([]);
+    const [vets, setVets ] = useState([]);
 
-    const listaClinicas = [
-        { id: "1", name: "Clínica LevaAUqui - Centro" },
-        { id: "2", name: "Clínica LevaAUqui - Zona Sul" }
-    ];
-
-    const listaVeterinarios = [
-        { id: "10", name: "Dr. Roberto Caulos" },
-        { id: "11", name: "Dra. Fernanda Reis" }
-    ];
-
-    const handleClinicaSelecionada = (id) => {
-        console.log("ID da clínica escolhida:", id);
+    useEffect(() => {
+        const fetchClinics = async () => {
+        const data = await getClinics();
+        setClinics(Array.isArray(data) ? data : []);
     };
+    fetchClinics();
+}, []);
+            
+
+    useEffect(() => {
+        if (selectedClinicId) {
+            const fetchVetsByClinic = async () => {
+                try {
+                    const data = await getVetById(selectedClinicId); // Passa o ID na busca
+                    setVets(Array.isArray(data) ? data : []);
+                } catch (error) {
+                    console.error("Erro ao carregar veterinários:", error);
+                }
+            };
+            fetchVetsByClinic();
+        }
+    }, [selectedClinicId]);
+
+    useEffect(() => {
+        const fetchPets = async () => {
+            try {
+                const data = await getPets();
+                setPets(Array.isArray(data) ? data : []);
+            }
+            catch (error) {
+                console.error("Erro ao carregar pets:", error);
+            }
+        };
+        fetchPets();
+    }, []);
+
 
     const handleVeterinarioSelecionado = (id) => {
         console.log("ID do veterinário escolhido:", id);
@@ -31,10 +63,9 @@ function ScheduleForms({ onSave, onCancel }) {
 
     const getTomorrowDateString = () => {
         const tomorrow = new Date();
-        tomorrow.setDate(tomorrow.getDate() + 1); // Soma 1 dia à data atual
+        tomorrow.setDate(tomorrow.getDate() + 1); 
         
         const year = tomorrow.getFullYear();
-        // O mês começa em 0, então somamos 1. O padStart garante que tenha 2 dígitos (ex: 05)
         const month = String(tomorrow.getMonth() + 1).padStart(2, "0");
         const day = String(tomorrow.getDate()).padStart(2, "0");
         
@@ -44,26 +75,30 @@ function ScheduleForms({ onSave, onCancel }) {
     return (
         <main className="container">
 
-            <FormsInput
-                label="Nome"
-                type="text"
-                name="name"
-                placeholder="Nome do pet"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+            <DropdownButton
+                label="Selecione o seu Pet:"
+                options={[
+                    ...pets.map(pet => ({ id: pet.id, name: pet.name }))
+                ]}
+                defaultOptionText="-- Selecione um pet --"
+                onSelectData={(id) => {
+                    console.log("ID do pet selecionado:", id);
+                }}
             />
 
             <div className="pet-row">
                 <DropdownButton
-                    label="Escolha a Clínica:"
-                    options={listaClinicas}
-                    defaultOptionText="-- Selecione uma unidade --"
-                    onSelectData={handleClinicaSelecionada}
-                />
-
+    label="Escolha a Clínica:"
+    options={clinics.map(clinic => ({ id: clinic.id, name: clinic.name }))}
+    defaultOptionText="-- Selecione uma unidade --"
+    onSelectData={(id) => {
+        setSelectedClinicId(id); 
+        console.log("ID da clínica selecionada:", id);
+    }}
+/>
                 <DropdownButton
                     label="Escolha o Veterinário:"
-                    options={listaVeterinarios}
+                    options={vets.map(vet => ({ fullName: vet.fullName }))}
                     defaultOptionText="-- Selecione um profissional --"
                     onSelectData={handleVeterinarioSelecionado}
                 />
@@ -90,7 +125,15 @@ function ScheduleForms({ onSave, onCancel }) {
                     isDateSelected={!!dateSchedule}
                     dateSchedule={dateSchedule}
                 />
+
             </div>
+                <TextareaButton
+                    label="Descrição dos Sintomas"
+                    name="descriptionSymtoms"
+                    
+                    placeholder="Descreva os sintomas do seu pet..."
+                    
+                />
 
             <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
                 <div style={{ width: "50%", marginTop: "50px" }} >

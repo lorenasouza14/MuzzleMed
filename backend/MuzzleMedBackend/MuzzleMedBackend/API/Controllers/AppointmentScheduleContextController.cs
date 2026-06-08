@@ -2,37 +2,55 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MuzzleMedBackend.Core.Contexts.Schedule.DTOs;
 using MuzzleMedBackend.Domain.Contexts.Schedule.Interfaces.IUseCases;
+using MuzzleMedBackend.Domain.Contexts.Schedule.Interfaces.UseCases;
 
 namespace MuzzleMedBackend.API.Controllers;
 
-[Controller]
+[Controller] 
+[Authorize]
 [Route("api/[controller]")]
 public class AppointmentScheduleContextController : ControllerBase
 {
     private readonly ICreateAppointmentUseCase _createAppointmentUseCase;
+    private readonly IGetAppointmentsByUserUseCase _getAppointmentsByUserUseCase;
+    private readonly IGetAppointmentByIdUseCase _getAppointmentByIdUseCase;
+    private readonly ICancelAppointmentScheduleUseCase _cancelAppointmentScheduleUseCase;
 
-    public AppointmentScheduleContextController(ICreateAppointmentUseCase createAppointmentUseCase)
+    public AppointmentScheduleContextController(ICreateAppointmentUseCase createAppointmentUseCase, IGetAppointmentsByUserUseCase getAppointmentsByUserUseCase, IGetAppointmentByIdUseCase getAppointmentByIdUseCase, 
+        ICancelAppointmentScheduleUseCase cancelAppointmentScheduleUseCase)
     {
         _createAppointmentUseCase = createAppointmentUseCase;
+        _getAppointmentsByUserUseCase = getAppointmentsByUserUseCase;
+        _getAppointmentByIdUseCase = getAppointmentByIdUseCase;
+        _cancelAppointmentScheduleUseCase = cancelAppointmentScheduleUseCase;
     }
-    [Authorize]
+
     [HttpPost("create")]
-    public IActionResult Create(CreateAppointmentDto request)
+    public async Task<IActionResult> Create([FromBody] CreateAppointmentDto request)
     {
-        try
-        {
-            var appointment = _createAppointmentUseCase.Execute(request);
+            var appointment = await _createAppointmentUseCase.ExecuteAsync(request);
             return Ok(appointment);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
     }
-    [Authorize]
-    [HttpGet("teste")]
-    public IActionResult teste()
+
+    [HttpGet]
+    public async Task<IActionResult> GetAppointmentsByUser()
     {
-        return Ok("User logado");
+        var appointments = await _getAppointmentsByUserUseCase.ExecuteAsync();
+        return Ok(appointments);
+    }
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetAppointmentById([FromRoute] Guid id)
+    {
+        var appointment = await _getAppointmentByIdUseCase.ExecuteAsync(id);
+
+        return Ok(appointment);
+    }
+
+    [HttpPut("cancel/{id}")] 
+    public async Task<IActionResult> CancelAppointmentById([FromRoute] Guid id)
+    {
+        var appointment = await _cancelAppointmentScheduleUseCase.ExecuteAsync(id);
+        return Ok(appointment);
     }
 }

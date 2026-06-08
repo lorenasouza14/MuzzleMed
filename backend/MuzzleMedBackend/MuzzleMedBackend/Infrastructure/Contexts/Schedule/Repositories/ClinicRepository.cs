@@ -23,5 +23,11 @@ namespace MuzzleMedBackend.Infrastructure.Contexts.Schedule.Repositories
         {
             return _context.Clinics.ToList();
         }
+
+        public async Task<Clinic> GetClinicById(Guid clinicId)
+        {
+            var clinic = await _context.Clinics.FirstOrDefaultAsync(x => x.Id == clinicId);
+            return clinic;
+        }
     }
 }

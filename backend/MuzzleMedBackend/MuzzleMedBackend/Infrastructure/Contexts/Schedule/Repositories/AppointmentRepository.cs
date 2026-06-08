@@ -1,55 +1,67 @@
+using Microsoft.EntityFrameworkCore;
 using MuzzleMedBackend.Domain.Contexts.Schedule.Entities;
 using MuzzleMedBackend.Domain.Contexts.Schedule.Interfaces;
+using MuzzleMedBackend.Domain.Contexts.Schedule.ValueObjects.Enums;
 
 namespace MuzzleMedBackend.Infrastructure.Contexts.Schedule.Persistence;
 
 public class AppointmentRepository : IAppointmentRepository
 {
     private readonly AppDbContext _context;
+    
     public AppointmentRepository(AppDbContext context)
     {
         _context = context;
     }
     
-    public AppointmentScheduleContext? GetAppointmentById(Guid id)
+    public async Task<AppointmentScheduleContext?> GetByIdAsync(Guid id)
     {
-        var appointmentSchedule = _context.AppointmentSchedules.FirstOrDefault(x => x.Id == id);
-        return appointmentSchedule;
+        return await _context.AppointmentSchedules
+            .FirstOrDefaultAsync(x => x.Id == id);
     }
 
-    public AppointmentScheduleContext? FindAppointmentByDateAndTime(DateOnly date, TimeOnly time)
+    public async Task<AppointmentScheduleContext?> GetByDateAndTimeAsync(DateOnly date, TimeOnly time)
     {
-        var appointmentSchedule = _context.AppointmentSchedules.FirstOrDefault(x => x.Date == date && x.Time == time);
-        return appointmentSchedule;
+        return await _context.AppointmentSchedules
+            .FirstOrDefaultAsync(x => x.Date == date && x.Time == time);
     }
 
-    public List<AppointmentScheduleContext>? GetAppointmentSchedules(Guid userId)
+    public async Task<List<AppointmentScheduleContext>> GetByUserIdAsync(Guid userId)
     {
-        var appointments  = _context.AppointmentSchedules.Where(x => x.UserId == userId).ToList();
-        return appointments;
+        return await _context.AppointmentSchedules
+            .Where(x => x.UserId == userId)
+            .ToListAsync();
     }
 
-    public AppointmentScheduleContext CreateAppointmentSchedule(AppointmentScheduleContext request)
+    public async Task CreateAsync(AppointmentScheduleContext appointment)
     {
-        _context.AppointmentSchedules.Add(request);
-        _context.SaveChanges();
-        return request;
+        await _context.AppointmentSchedules.AddAsync(appointment);
+        await _context.SaveChangesAsync();
     }
 
-    public AppointmentScheduleContext UpdateAppointmentSchedule(Guid id, AppointmentScheduleContext request)
+    public async Task UpdateAsync(AppointmentScheduleContext appointment)
     {
-        var appointment = GetAppointmentById(id);
-        appointment.Status = request.Status;
         _context.AppointmentSchedules.Update(appointment);
-        _context.SaveChanges();
-        return appointment;
+        await _context.SaveChangesAsync();
     }
 
-    public AppointmentScheduleContext DeleteAppointmentSchedule(Guid id)
+    public async Task<AppointmentScheduleContext?> GetAppointmentByClinicDateAndTime(Guid clinicId, Guid vetId,
+        DateOnly date, TimeOnly time)
     {
-        var appointment = GetAppointmentById(id);
-        _context.AppointmentSchedules.Remove(appointment);
-        _context.SaveChanges();
+        var appointment = await _context.AppointmentSchedules
+            .FirstOrDefaultAsync(x => x.ClinicId == clinicId 
+                                      && x.Date == date 
+                                      && x.Time == time && x.VetId == vetId);
+        
         return appointment;
+        
+    }
+    
+    public async Task<bool> HasFutureAppointmentsByPetIdAsync(Guid petId, DateOnly currentDate, TimeOnly currentTime)
+    {
+        return await _context.Set<AppointmentScheduleContext>()
+            .AnyAsync(a => a.PetId == petId && 
+                           a.Status == StatusEnum.Scheduled && 
+                           (a.Date > currentDate || (a.Date == currentDate && a.Time > currentTime)));
     }
 }

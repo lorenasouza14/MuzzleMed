@@ -53,6 +53,9 @@ namespace MuzzleMedBackend.Migrations
                     b.Property<Guid>("AppointmentId")
                         .HasColumnType("char(36)");
 
+                    b.Property<DateOnly>("Date")
+                        .HasColumnType("date");
+
                     b.Property<string>("Diagnostic")
                         .IsRequired()
                         .HasMaxLength(500)
@@ -61,6 +64,9 @@ namespace MuzzleMedBackend.Migrations
                     b.PrimitiveCollection<string>("Medication")
                         .IsRequired()
                         .HasColumnType("longtext");
+
+                    b.Property<Guid>("PetId")
+                        .HasColumnType("char(36)");
 
                     b.HasKey("Id");
 
@@ -146,6 +152,11 @@ namespace MuzzleMedBackend.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
+                    b.Property<string>("SymptomDescription")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("varchar(150)");
+
                     b.Property<TimeOnly>("Time")
                         .HasColumnType("time(6)");
 
@@ -203,7 +214,12 @@ namespace MuzzleMedBackend.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("varchar(30)");
 
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("char(36)");
+
                     b.HasKey("PetId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("PetsSchedule", (string)null);
                 });

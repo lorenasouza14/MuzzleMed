@@ -2,44 +2,62 @@ using MuzzleMedBackend.Core.Contexts.Schedule.DTOs;
 using MuzzleMedBackend.Domain.Contexts.Schedule.Entities;
 using MuzzleMedBackend.Domain.Contexts.Schedule.Interfaces;
 using MuzzleMedBackend.Domain.Contexts.Schedule.Interfaces.IUseCases;
+using MuzzleMedBackend.Domain.Contexts.Schedule.Interfaces.Repositories;
+using MuzzleMedBackend.Domain.Contexts.Schedule.ValueObjects.Enums;
+using MuzzleMedBackend.Services.Interfaces;
 
-namespace MuzzleMedBackend.Core.Contexts.Schedule.UseCases.AppointmentUseCases;
+namespace MuzzleMedBackend.Core.Contexts.Schedule.UseCases.AppointmentScheduleUseCases;
 
 public class CreateAppointmentUseCase : ICreateAppointmentUseCase
 {
     private readonly IAppointmentRepository _appointmentRepository;
+    private readonly IGetUserIdService _getUserIdService;
+    private readonly IPetScheduleRepository _petScheduleRepository;
+    private readonly IUserScheduleRepository _userScheduleRepository;
 
-    public CreateAppointmentUseCase(IAppointmentRepository  appointmentRepository)
+    public CreateAppointmentUseCase(IAppointmentRepository appointmentRepository, IGetUserIdService getUserIdService, IPetScheduleRepository petScheduleRepository, IUserScheduleRepository userScheduleRepository)
     {
         _appointmentRepository = appointmentRepository;
+        _getUserIdService = getUserIdService;
+        _petScheduleRepository = petScheduleRepository;
+        _userScheduleRepository = userScheduleRepository;
     }
-    public AppointmentScheduleContext Execute(CreateAppointmentDto dto)
+    public async Task<AppointmentScheduleContext> ExecuteAsync(CreateAppointmentDto dto)
     {
-        try
+        ArgumentNullException.ThrowIfNull(dto);
+        
+        var appointmentDateTime = dto.Date.ToDateTime(dto.Time);
+
+        if (appointmentDateTime < DateTime.Now)
         {
-            ArgumentNullException.ThrowIfNull(dto, nameof(dto));
-            if(_appointmentRepository.FindAppointmentByDateAndTime(dto.Date, dto.Time) != null)
+            throw new InvalidOperationException("Data de agendamento nao pode ser menor que a data atual");
+        }
+        
+        var appointment = await _appointmentRepository.GetAppointmentByClinicDateAndTime(dto.ClinicId, dto.VetId, dto.Date, dto.Time);
+        
+        if (appointment != null)
+        {
+            if (appointment.Status == StatusEnum.Canceled || appointment.Status == StatusEnum.Completed)
             {
-                throw new Exception("An appointment already exists at the specified date and time.");
+                throw new InvalidOperationException("Consulta já cancelada ou completa");
             }
-
-            var appointment = new AppointmentScheduleContext
-            {
-                ClinicId = dto.ClinicId,
-                Date = dto.Date,
-                Time = dto.Time,
-                UserId = dto.UserId,
-                VetId = dto.VetId,
-                PetId = dto.PetId
-            };
-            
-            _appointmentRepository.CreateAppointmentSchedule(appointment);
-            return appointment;
-
+            throw new InvalidOperationException("Uma consulta ja existe nesse dia e horario para esse veterinario.");
         }
-        catch (Exception ex)
-        {
-            throw new Exception(ex.Message);
-        }
+        
+        var userId = _getUserIdService.GetUserId(); 
+        
+        var newAppointment = new AppointmentScheduleContext(
+            userId, 
+            dto.PetId, 
+            dto.ClinicId, 
+            dto.VetId, 
+            dto.Date, 
+            dto.Time, 
+            dto.SymptomDescription
+        );
+        
+        await _appointmentRepository.CreateAsync(newAppointment);
+        
+        return newAppointment; 
     }
 }

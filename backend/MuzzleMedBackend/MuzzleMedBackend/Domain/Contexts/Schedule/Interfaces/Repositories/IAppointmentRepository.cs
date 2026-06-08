@@ -1,14 +1,14 @@
+using MuzzleMedBackend.Core.Contexts.Schedule.DTOs;
 using MuzzleMedBackend.Domain.Contexts.Schedule.Entities;
 
 namespace MuzzleMedBackend.Domain.Contexts.Schedule.Interfaces;
 
 public interface IAppointmentRepository
 {
-    public AppointmentScheduleContext? GetAppointmentById(Guid id);
-    public AppointmentScheduleContext? FindAppointmentByDateAndTime(DateOnly date, TimeOnly time);
-    public List<AppointmentScheduleContext>? GetAppointmentSchedules(Guid userId);
-    public AppointmentScheduleContext CreateAppointmentSchedule(AppointmentScheduleContext request);
-    public AppointmentScheduleContext UpdateAppointmentSchedule(Guid id, AppointmentScheduleContext request);
-    public AppointmentScheduleContext DeleteAppointmentSchedule(Guid id);
-    
+    Task<AppointmentScheduleContext?> GetByIdAsync(Guid id);
+    Task<AppointmentScheduleContext?> GetByDateAndTimeAsync(DateOnly date, TimeOnly time);
+    Task<List<AppointmentScheduleContext>> GetByUserIdAsync(Guid userId);
+    Task CreateAsync(AppointmentScheduleContext appointment);
+    Task UpdateAsync(AppointmentScheduleContext appointment);
+    Task<AppointmentScheduleContext?> GetAppointmentByClinicDateAndTime(Guid clinicId, Guid vetId, DateOnly date, TimeOnly time);
 }

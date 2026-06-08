@@ -64,6 +64,7 @@
 
 .branch-address p {
     margin: 0;
+    padding: 10px;
 }
 
 .sub-addr {

@@ -1,8 +1,7 @@
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using MuzzleMedBackend.Core.Contexts.Auth.DTOs;
 using MuzzleMedBackend.Core.Contexts.Auth.UseCases;
+using MuzzleMedBackend.Domain.Contexts.Auth.Interfaces.UseCases;
 
 namespace MuzzleMedBackend.API.Controllers;
 
@@ -10,7 +9,7 @@ namespace MuzzleMedBackend.API.Controllers;
 [Route("api/[controller]")]
 public class UserAuthContextController : ControllerBase
 {
-    private readonly LoginUseCase _loginUseCase;
+    private readonly ILoginUseCase _loginUseCase;
     
     public UserAuthContextController(LoginUseCase loginUseCase)
     {

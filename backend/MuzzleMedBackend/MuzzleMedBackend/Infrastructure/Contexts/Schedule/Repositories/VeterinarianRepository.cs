@@ -35,4 +35,10 @@ public class VeterinarianRepository : IVetRepository
         await _context.Veterinarians.AddAsync(veterinarian);
         await _context.SaveChangesAsync();
     }
+
+    public async Task<Veterinary> GetVeterinaryById(Guid id)
+    {
+        var vet = await _context.Veterinarians.FirstOrDefaultAsync(v => v.Id == id);
+        return vet;
+    }
 }

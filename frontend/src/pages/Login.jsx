@@ -1,12 +1,32 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import FormsInput from "../components/FormsInput/FormsInput";
 import LoginButton from "../components/LoginButton/LoginButton";
 import "../styles/Login.css";
 import logo from '../assets/images/logo.png';
+import api from "../services/api";
 
 function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const navigate = useNavigate();
+
+    const handleLogin = async () => {
+        try{
+            console.log("TENTANDO ACESSAR: ",{ email, password });
+            const response = await api.post("/api/UserAuthContext/login", { 
+                email: email,
+                password: password 
+            });
+        
+        localStorage.setItem("user", JSON.stringify(response.data));
+        navigate("/home");
+
+    } catch (error) {
+        console.error("Login failed:", error);
+        alert("Login falhou. Verifique suas credenciais e tente novamente.");
+    }
+}
 
     return (
         <main className="container">
@@ -32,7 +52,7 @@ function Login() {
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                         />
-                        <LoginButton onClick={() => console.log("Login clicked")} />
+                        <LoginButton onClick={handleLogin} />
 
                         <div className="login-footer">
                             <p>

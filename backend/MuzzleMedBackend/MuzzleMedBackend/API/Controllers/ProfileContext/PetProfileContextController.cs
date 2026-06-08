@@ -1,4 +1,6 @@
-﻿namespace MuzzleMedBackend.API.Controllers.ProfileContext;
+﻿using MuzzleMedBackend.Services.Interfaces;
+
+namespace MuzzleMedBackend.API.Controllers.ProfileContext;
 
 using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
@@ -12,6 +14,13 @@ using Core.Contexts.Profile.DTOs;
 
 public class PetProfileContextController : ControllerBase
 {
+    private readonly IGetUserIdService _getUserIdService;
+
+    public PetProfileContextController(IGetUserIdService getUserIdService)
+    {
+        _getUserIdService = getUserIdService;
+    }
+    
     [HttpPost]
     public async Task<IActionResult> Create(
         [FromBody] CreatePetRequest request,
@@ -19,20 +28,14 @@ public class PetProfileContextController : ControllerBase
     {
         try
         {
-            // Extrai o ID do usuário de dentro do Token JWT decodificado
-            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var userId = _getUserIdService.GetUserId();
             
-            if (string.IsNullOrEmpty(userIdClaim) || !Guid.TryParse(userIdClaim, out var userId))
-                return Unauthorized(new { Error = "Token inválido ou ID de usuário não encontrado." });
-
-            // Executa passando o DTO e o ID seguro
             await useCase.ExecuteAsync(request, userId);
             
             return StatusCode(201, new { Message = "Pet cadastrado com sucesso" });
         }
         catch (ArgumentException ex)
         {
-            // Erros de regra de negócio do construtor da Entidade
             return BadRequest(new { Error = ex.Message });
         }
     }
@@ -40,10 +43,7 @@ public class PetProfileContextController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAllByUser([FromServices] GetPetsByUserUseCase useCase)
     {
-        var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
-        
-        if (string.IsNullOrEmpty(userIdClaim) || !Guid.TryParse(userIdClaim, out var userId))
-            return Unauthorized(new { Error = "Token inválido ou ID de usuário não encontrado." });
+        var userId = _getUserIdService.GetUserId();
 
         var pets = await useCase.ExecuteAsync(userId);
 
@@ -57,10 +57,7 @@ public class PetProfileContextController : ControllerBase
     {
         try
         {
-            var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
-            
-            if (string.IsNullOrEmpty(userIdClaim) || !Guid.TryParse(userIdClaim, out var userId))
-                return Unauthorized(new { Error = "Token inválido ou ID de usuário não encontrado." });
+            var userId = _getUserIdService.GetUserId();
 
             var history = await useCase.ExecuteAsync(petId, userId);
             
@@ -68,7 +65,34 @@ public class PetProfileContextController : ControllerBase
         }
         catch (UnauthorizedAccessException ex)
         {
-            return Forbid(ex.Message); // HTTP 403: Proibido
+            return Forbid(ex.Message);
+        }
+    }
+    
+    [HttpDelete("{petId}")]
+    public async Task<IActionResult> Delete(
+        [FromRoute] Guid petId,
+        [FromServices] DeletePetUseCase useCase)
+    {
+        try
+        {
+            Guid userId = _getUserIdService.GetUserId();
+
+            await useCase.ExecuteAsync(petId, userId);
+
+            return Ok(new { Message = "Pet removido com sucesso." }); 
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            return Unauthorized(new { Error = ex.Message });
+        }
+        catch (InvalidOperationException ex) 
+        {
+            return BadRequest(new { Error = ex.Message }); 
+        }
+        catch (ArgumentException ex)
+        {
+            return NotFound(new { Error = ex.Message }); 
         }
     }
 }

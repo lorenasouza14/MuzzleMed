@@ -5,10 +5,25 @@ import Navbar from "../components/NavBar/NavBar";
 import CarouselConsultation from '../components/CarouselConsultation/CarouselConsultation';
 import ListLatestConsultations from "../components/ListLatestConsultations/ListLatestConsultations";
 import BranchList from "../components/BranchList/BranchList"; 
+import { getUser } from "../services/routes/user";
+import { useState } from 'react';
 
 
 function Home() {
-    
+    const [user, setUser] = useState("");
+
+        useState(() => {
+            const fetchUser = async () => {
+                try {
+                    const data = await getUser();
+                    setUser(data);
+                } catch (error) {
+                    console.error("Erro ao buscar usuário:", error);
+                }
+            };
+
+            fetchUser();
+        }, []);
 
     const mockConsultations = [
         { namePet: "Pituffinho", date: "19/05/2026", time: "09:30", symptoms: "Coceira intensa nas costas...Coceira intensa nas costas..Coceira intensa nas costas..", location: "Clínica LevaAUqui", veterinarian: "Roberto Caulos" },
@@ -25,7 +40,7 @@ function Home() {
                 <div className='column-hm'>
 
                     <Title
-                        title="Próximas Consultas"
+                        title={`Olá, ${user?.fullName || 'usuário'}! Veja as Próximas Consultas`}
                         showButton={false}
                         showCloseButton={false}
                     />

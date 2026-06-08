@@ -6,5 +6,6 @@ namespace MuzzleMedBackend.Domain.Contexts.Schedule.Interfaces
     {
         public void CreateClinic(Clinic clinic);
         public IEnumerable<Clinic> GetAllClinics();
+        Task<Clinic> GetClinicById(Guid clinicId);
     }
 }

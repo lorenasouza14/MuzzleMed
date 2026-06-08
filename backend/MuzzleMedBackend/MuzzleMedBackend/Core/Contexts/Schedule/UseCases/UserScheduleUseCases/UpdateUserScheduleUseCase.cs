@@ -19,7 +19,7 @@ public class UpdateUserScheduleUseCase : IUpdateUserScheduleUseCase
         if (userSchedule != null)
         {
             userSchedule.UpdateDetails(fullName, phone);
-            // O SaveChanges será executado pelo UnitOfWork na classe UpdateUserUseCase do Profile.
+            // O SaveChanges será executado pelo UnitOfWork na classe UpdateUserUseCase do Profile
         }
     }
 }

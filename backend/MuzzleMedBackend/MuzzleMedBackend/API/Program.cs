@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using Microsoft.OpenApi.Models;
+using System.Text.Json.Serialization;
 using MuzzleMedBackend.Core.Contexts.Auth.UseCases;
 using MuzzleMedBackend.Core.Contexts.Profile.UseCases;
 using MuzzleMedBackend.Core.Contexts.Schedule.UseCases;
@@ -25,6 +26,16 @@ using MuzzleMedBackend.Infrastructure.Contexts.Schedule.Persistence;
 using MuzzleMedBackend.Infrastructure.Contexts.Schedule.Repositories;
 using MuzzleMedBackend.Infrastructure.Contexts.Veterinarians.Repositories;
 using MuzzleMedBackend.Infrastructure.Security;
+using MuzzleMedBackend.Core.Contexts.Profile.UseCases;
+using MuzzleMedBackend.Core.Contexts.Schedule.UseCases.AppointmentScheduleUseCases;
+using MuzzleMedBackend.Core.Contexts.Schedule.UseCases.PetScheduleUseCases;
+using MuzzleMedBackend.Domain.Contexts.Auth.Interfaces.UseCases;
+using MuzzleMedBackend.Domain.Contexts.Profile.Interfaces;
+using MuzzleMedBackend.Domain.Contexts.Schedule.Interfaces.Repositories;
+using MuzzleMedBackend.Domain.Contexts.Schedule.Interfaces.UseCases;
+using MuzzleMedBackend.Infrastructure.Contexts.Profile.Repositories;
+using MuzzleMedBackend.Services;
+using MuzzleMedBackend.Services.Interfaces;
 using System.Text;
 using System.Text.Json.Serialization;
 
@@ -110,6 +121,12 @@ builder.Services.AddScoped<IUserAuthContextRepository, UserAuthContextRepository
 builder.Services.AddTransient<LoginUseCase>();
 builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
 builder.Services.AddTransient<ICreateAppointmentUseCase, CreateAppointmentUseCase>();
+builder.Services.AddScoped<IGetAppointmentsByUserUseCase, GetAppointmentsByUserUseCase>();
+builder.Services.AddScoped<IGetAppointmentByIdUseCase, GetAppointmentByIdUseCase>();
+builder.Services.AddScoped<ICancelAppointmentScheduleUseCase, CancelAppointmentScheduleUseCase>();
+builder.Services.AddScoped<IUpdateAppointmentScheduleUseCase, UpdateAppointmentScheduleUseCase>();
+
+// Veterinarians
 builder.Services.AddScoped<IVetRepository, VeterinarianRepository>();
 builder.Services.AddScoped<GetVetsAllUseCase>();
 builder.Services.AddScoped<GetVetsByClinicIdUseCase>();
@@ -133,6 +150,11 @@ builder.Services.AddScoped<ICreatePetScheduleUseCase, CreatePetScheduleUseCase>(
 builder.Services.AddScoped<GetPetsByUserUseCase>();
 builder.Services.AddScoped<IHistoricAppointmentRepository, HistoricAppointmentRepository>();
 builder.Services.AddScoped<GetPetHistoryUseCase>();
+
+//Services
+//service para nos pegarmos o id do usuario pelo jwt
+builder.Services.AddScoped<IGetUserIdService, GetUserIdService>();
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 

@@ -30,8 +30,8 @@ public class AppointmentConfiguration : IEntityTypeConfiguration<AppointmentSche
         builder.Property(a => a.Time).IsRequired();
         
         builder.Property(a => a.Status).IsRequired();
-
-
-
+        
+        builder.Property(a => a.SymptomDescription).IsRequired().HasMaxLength(150);
+        
     }
 }
