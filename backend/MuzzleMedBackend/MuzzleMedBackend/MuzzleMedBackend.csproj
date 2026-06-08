@@ -25,6 +25,8 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Core\Contexts\Schedule\DTOs\ClinicDtos\Response\" />
+      <Folder Include="Core\Contexts\Schedule\DTOs\VetDtos\Response\" />
       <Folder Include="Infrastructure\Contexts\Auth\" />
     </ItemGroup>
 

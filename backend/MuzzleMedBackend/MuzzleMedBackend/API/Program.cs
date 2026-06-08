@@ -97,7 +97,6 @@ builder.Services.AddTransient<ICreateAppointmentUseCase, CreateAppointmentUseCas
 builder.Services.AddScoped<IGetAppointmentsByUserUseCase, GetAppointmentsByUserUseCase>();
 builder.Services.AddScoped<IGetAppointmentByIdUseCase, GetAppointmentByIdUseCase>();
 builder.Services.AddScoped<ICancelAppointmentScheduleUseCase, CancelAppointmentScheduleUseCase>();
-builder.Services.AddScoped<IUpdateAppointmentScheduleUseCase, UpdateAppointmentScheduleUseCase>();
 builder.Services.AddScoped<ICheckFutureAppointmentsScheduleUseCase, CheckFutureAppointmentsScheduleUseCase>();
 
 // Veterinarians
@@ -140,6 +139,8 @@ builder.Services.AddScoped<ICreateHistoricUseCase, CreateHistoricUseCase>();
 builder.Services.AddScoped<IGetHistoricByIdUseCase, GetHistoricByIdUseCase>();
 builder.Services.AddScoped<IGetHistoricByPetUseCase, GetHistoricByPetUseCase>();
 builder.Services.AddScoped<IHistoricAppointmentRepository, HistoricAppointmentRepository>();
+builder.Services.AddScoped<IBuildAppointmentResponseUseCase,  BuildAppointmentResponseUseCase>();
+builder.Services.AddScoped<IDeletePetScheduleUseCase, DeletePetScheduleUseCase>();
 
 //Services
 //service para nos pegarmos o id do usuario pelo jwt

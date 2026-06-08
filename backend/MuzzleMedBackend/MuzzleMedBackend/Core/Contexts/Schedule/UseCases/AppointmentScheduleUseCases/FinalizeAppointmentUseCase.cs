@@ -1,5 +1,6 @@
 using MuzzleMedBackend.Core.Contexts.Profile.DTOs;
 using MuzzleMedBackend.Core.Contexts.Schedule.DTOs;
+using MuzzleMedBackend.Domain.Contexts.Profile.Interfaces;
 using MuzzleMedBackend.Domain.Contexts.Profile.Interfaces.UseCases;
 using MuzzleMedBackend.Domain.Contexts.Schedule.Interfaces;
 using MuzzleMedBackend.Domain.Contexts.Schedule.Interfaces.Repositories;
@@ -13,12 +14,14 @@ public class FinalizeAppointmentUseCase : IFinalizeAppointmentUseCase
     private readonly IAppointmentRepository _appointmentRepository;
     private readonly ICreateHistoricUseCase _historicAppointmentCreateUseCase;
     private readonly IBuildAppointmentResponseUseCase _buildAppointmentResponseUseCase;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public FinalizeAppointmentUseCase(IAppointmentRepository appointmentRepository, ICreateHistoricUseCase historicAppointmentCreateUseCase, IVetRepository vetRepository, IClinicRepository clinicRepository, IPetScheduleRepository petScheduleRepository, IBuildAppointmentResponseUseCase buildAppointmentResponseUseCase)
+    public FinalizeAppointmentUseCase(IAppointmentRepository appointmentRepository, ICreateHistoricUseCase historicAppointmentCreateUseCase, IVetRepository vetRepository, IClinicRepository clinicRepository, IPetScheduleRepository petScheduleRepository, IBuildAppointmentResponseUseCase buildAppointmentResponseUseCase, IUnitOfWork unitOfWork)
     {
         _appointmentRepository = appointmentRepository;
         _historicAppointmentCreateUseCase = historicAppointmentCreateUseCase;
         _buildAppointmentResponseUseCase = buildAppointmentResponseUseCase;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<FinalizeAppointmentResponse> ExecuteAsync(Guid appointmentId, FinalizeAppointmentRequestDto dto)
@@ -33,7 +36,7 @@ public class FinalizeAppointmentUseCase : IFinalizeAppointmentUseCase
         }
         
         appointment.Completed();
-        await _appointmentRepository.UpdateAsync(appointment);
+        
         
         /*
         var clinic = await _clinicRepository.GetClinicById(appointment.ClinicId);
@@ -75,8 +78,14 @@ public class FinalizeAppointmentUseCase : IFinalizeAppointmentUseCase
             UserId = appointment.UserId,
         };
         
-        await _historicAppointmentCreateUseCase.ExecuteAsync(historicAppointmentDto);
+        var historicCreate = _historicAppointmentCreateUseCase.Execute(historicAppointmentDto);
+        if (historicCreate == false)
+        {
+            throw new Exception("Erro ao criar histórico da consulta");
+        }
+        _appointmentRepository.UpdateWithOutSave(appointment);
         
+        await _unitOfWork.CommitAsync();
         
         var finalizeDto = new FinalizeAppointmentResponse()
         {

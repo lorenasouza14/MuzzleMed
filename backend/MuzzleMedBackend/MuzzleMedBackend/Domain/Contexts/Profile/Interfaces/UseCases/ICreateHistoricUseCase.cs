@@ -5,5 +5,5 @@ namespace MuzzleMedBackend.Domain.Contexts.Profile.Interfaces.UseCases;
 
 public interface ICreateHistoricUseCase
 {
-    Task<HistoricAppointment> ExecuteAsync(CreateHistoricAppointmentRequestDto dto);
+    public bool Execute(CreateHistoricAppointmentRequestDto dto);
 }

@@ -3,7 +3,7 @@ using MuzzleMedBackend.Domain.Contexts.Schedule.Entities;
 
 namespace MuzzleMedBackend.Domain.Contexts.Schedule.Interfaces.UseCases;
 
-public interface IGetAppointmentByIdUseCase
+public interface IGetAppointmentsByUserUseCase
 {
-    Task <AppointmentScheduleResponseDto?> ExecuteAsync(Guid id);
+    Task<List<AppointmentResponseDto>?> ExecuteAsync();
 }

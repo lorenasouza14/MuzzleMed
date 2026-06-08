@@ -2,7 +2,7 @@ using MuzzleMedBackend.Domain.Contexts.Veterinarians.ValueObjects;
 
 namespace MuzzleMedBackend.Core.Contexts.Schedule.DTOs;
 
-public class AppointmentScheduleResponseDto
+public class AppointmentResponseDto
 {
     public Guid Id { get; set; }
     public DateOnly Date { get; set; }

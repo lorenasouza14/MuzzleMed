@@ -12,4 +12,5 @@ public interface IAppointmentRepository
     Task UpdateAsync(AppointmentScheduleContext appointment);
     Task<AppointmentScheduleContext?> GetAppointmentByClinicDateAndTime(Guid clinicId, Guid vetId, DateOnly date, TimeOnly time);
     Task<bool> HasFutureAppointmentsByPetIdAsync(Guid petId, DateOnly currentDate, TimeOnly currentTime);
+    public void UpdateWithOutSave(AppointmentScheduleContext appointment);
 }
