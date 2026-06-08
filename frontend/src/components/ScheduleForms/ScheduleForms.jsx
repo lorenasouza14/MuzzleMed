@@ -58,9 +58,9 @@ function ScheduleForms({ onSave, onCancel }) {
 
 
 
-    const handleVeterinarioSelecionado = (id) => {
-        console.log("ID do veterinário escolhido:", id);
-    };
+    // const handleVeterinarioSelecionado = (id) => {
+    //     console.log("ID do veterinário escolhido:", id);
+    // };
 
     const getTomorrowDateString = () => {
         const tomorrow = new Date();
