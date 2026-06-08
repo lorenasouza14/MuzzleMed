@@ -26,6 +26,12 @@ public class AppointmentRepository : IAppointmentRepository
             .FirstOrDefaultAsync(x => x.Date == date && x.Time == time);
     }
 
+    public async Task<AppointmentScheduleContext?> GetByPetAndDateAsync(Guid petId, DateOnly date)
+    {
+        return await _context.AppointmentSchedules
+            .FirstOrDefaultAsync(x => x.PetId == petId && x.Date == date && x.Status == StatusEnum.Scheduled);
+    }
+
     public async Task<List<AppointmentScheduleContext>> GetByUserIdAsync(Guid userId)
     {
         return await _context.AppointmentSchedules
