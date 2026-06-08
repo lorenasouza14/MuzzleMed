@@ -15,9 +15,7 @@ public class UserAuthContextRepository : IUserAuthContextRepository
     public UserAuthContext GetByEmail(string email)
     {
         var searchEmail = new Email(email);
-        return _context.UsersAuth.FirstOrDefault(
-            u => 
-                u.EmailAuthContext == searchEmail);
+        return _context.UsersAuth.FirstOrDefault(u => u.EmailAuthContext == searchEmail);
     }
 
     public void SaveNewUserAuthContext(UserAuthContext userAuthContext)

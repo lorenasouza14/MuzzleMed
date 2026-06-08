@@ -13,13 +13,17 @@ public class User
 
     protected User() { }
 
-    public User(string fullName, Email email, Cpf cpf, Phone phone, DateOnly dateOfBirth)
+    public User(string fullName, Email email, Cpf cpf, Phone phone, DateOnly dateOfBirth) //Preciso adicionar a regra de 18 anos...
     {
         if (string.IsNullOrWhiteSpace(fullName))
             throw new ArgumentException("O nome completo é obrigatório.");
 
         if (dateOfBirth > DateOnly.FromDateTime(DateTime.UtcNow))
             throw new ArgumentException("A data de nascimento não pode estar no futuro.");
+        
+        var dataMinimaPara18Anos = DateOnly.FromDateTime(DateTime.UtcNow).AddYears(-18);
+        if (dateOfBirth > dataMinimaPara18Anos)
+            throw new ArgumentException("O usuário precisa ter pelo menos 18 anos de idade.");
 
         Id = Guid.NewGuid();
         FullName = fullName;

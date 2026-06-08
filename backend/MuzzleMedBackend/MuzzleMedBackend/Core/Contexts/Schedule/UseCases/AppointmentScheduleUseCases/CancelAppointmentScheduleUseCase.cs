@@ -1,12 +1,12 @@
 using MuzzleMedBackend.Core.Contexts.Schedule.DTOs;
 using MuzzleMedBackend.Domain.Contexts.Schedule.Entities;
 using MuzzleMedBackend.Domain.Contexts.Schedule.Interfaces;
-using MuzzleMedBackend.Domain.Contexts.Schedule.Interfaces.UseCases; // Assumindo que a interface está aqui
+using MuzzleMedBackend.Domain.Contexts.Schedule.Interfaces.UseCases; 
 using MuzzleMedBackend.Domain.Contexts.Schedule.ValueObjects.Enums;
 
 namespace MuzzleMedBackend.Core.Contexts.Schedule.UseCases.AppointmentScheduleUseCases;
 
-public class CancelAppointmentScheduleUseCase : ICancelAppointmentScheduleUseCase // Lembre-se de mudar para Task na interface!
+public class CancelAppointmentScheduleUseCase : ICancelAppointmentScheduleUseCase 
 {
     private readonly IAppointmentRepository _appointmentRepository;
 

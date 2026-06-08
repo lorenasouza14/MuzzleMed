@@ -2,11 +2,10 @@ import { useState } from "react";
 import CardConsultation from "../CardConsultation/CardConsultation";
 import './CarouselConsultation.css';
 
-function CarouselConsultation({ consultations }) {
+function CarouselConsultation({ consultations, onCancelAppointment }) {
     const [currentIndex, setCurrentIndex] = useState(0);
     const cardsPerPage = 2;
 
-    // Calcula o limite máximo que o carrossel pode avançar
     const maxIndex = Math.max(0, consultations.length - cardsPerPage);
 
     const nextSlide = () => {
@@ -21,13 +20,10 @@ function CarouselConsultation({ consultations }) {
         }
     };
 
-    // Cada avanço desloca a largura de 1 card + o gap entre eles (calculado no CSS)
-    // Usando 50% porque são 2 cards por tela (cada um ocupa quase 50%)
     const translateXValue = currentIndex * (100 / cardsPerPage);
 
     return (
         <div className="carousel-container-wrapper">
-            {/* Botão Esquerdo */}
             <button 
                 className="carousel-arrow" 
                 onClick={prevSlide} 
@@ -36,9 +32,7 @@ function CarouselConsultation({ consultations }) {
                 ‹
             </button>
 
-            {/* Janela que esconde o que transborda */}
             <div className="carousel-window">
-                {/* A faixa que desliza de verdade */}
                 <div 
                     className="carousel-track"
                     style={{ transform: `translateX(-${translateXValue}%)` }}
@@ -46,19 +40,20 @@ function CarouselConsultation({ consultations }) {
                     {consultations.map((consultation, index) => (
                         <div className="carousel-item" key={index}>
                             <CardConsultation 
+                                id={consultation.id}
                                 namePet={consultation.namePet}
                                 date={consultation.date}
                                 time={consultation.time}
                                 symptoms={consultation.symptoms}
                                 location={consultation.location}
                                 veterinarian={consultation.veterinarian}
+                                onDelete={onCancelAppointment}
                             />
                         </div>
                     ))}
                 </div>
             </div>
 
-            {/* Botão Direito */}
             <button 
                 className="carousel-arrow" 
                 onClick={nextSlide} 

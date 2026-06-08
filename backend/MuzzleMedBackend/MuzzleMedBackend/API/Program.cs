@@ -28,9 +28,11 @@ using MuzzleMedBackend.Infrastructure.Contexts.Veterinarians.Repositories;
 using MuzzleMedBackend.Infrastructure.Security;
 using MuzzleMedBackend.Core.Contexts.Profile.UseCases;
 using MuzzleMedBackend.Core.Contexts.Schedule.UseCases.AppointmentScheduleUseCases;
+using MuzzleMedBackend.Core.Contexts.Schedule.UseCases.HistoricAppointmentsUseCases;
 using MuzzleMedBackend.Core.Contexts.Schedule.UseCases.PetScheduleUseCases;
 using MuzzleMedBackend.Domain.Contexts.Auth.Interfaces.UseCases;
 using MuzzleMedBackend.Domain.Contexts.Profile.Interfaces;
+using MuzzleMedBackend.Domain.Contexts.Profile.Interfaces.UseCases;
 using MuzzleMedBackend.Domain.Contexts.Schedule.Interfaces.Repositories;
 using MuzzleMedBackend.Domain.Contexts.Schedule.Interfaces.UseCases;
 using MuzzleMedBackend.Infrastructure.Contexts.Profile.Repositories;
@@ -41,17 +43,8 @@ using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Configuração de CORS (Essencial para o seu React rodar sem erro)
-builder.Services.AddCors(options => {
-    options.AddPolicy("AllowAll", policy => {
-        policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
-    });
-});
+var _secretKey = Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]);
 
-// Configuração de JWT
-var _secretKey = Encoding.UTF8.GetBytes( "muzzlemed-chave-secreta-super-segura-2026-producao");
-string keyBase64 = Convert.ToBase64String(_secretKey);
-Console.WriteLine($"TESTE: {keyBase64}");
 builder.Services.AddAuthentication(x =>
 {
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -125,6 +118,7 @@ builder.Services.AddScoped<IGetAppointmentsByUserUseCase, GetAppointmentsByUserU
 builder.Services.AddScoped<IGetAppointmentByIdUseCase, GetAppointmentByIdUseCase>();
 builder.Services.AddScoped<ICancelAppointmentScheduleUseCase, CancelAppointmentScheduleUseCase>();
 builder.Services.AddScoped<IUpdateAppointmentScheduleUseCase, UpdateAppointmentScheduleUseCase>();
+builder.Services.AddScoped<ICheckFutureAppointmentsScheduleUseCase, CheckFutureAppointmentsScheduleUseCase>();
 
 // Veterinarians
 builder.Services.AddScoped<IVetRepository, VeterinarianRepository>();
@@ -150,6 +144,13 @@ builder.Services.AddScoped<ICreatePetScheduleUseCase, CreatePetScheduleUseCase>(
 builder.Services.AddScoped<GetPetsByUserUseCase>();
 builder.Services.AddScoped<IHistoricAppointmentRepository, HistoricAppointmentRepository>();
 builder.Services.AddScoped<GetPetHistoryUseCase>();
+builder.Services.AddScoped<DeletePetUseCase>();
+
+builder.Services.AddScoped<IFinalizeAppointmentUseCase, FinalizeAppointmentUseCase>();
+builder.Services.AddScoped<ICreateHistoricUseCase, CreateHistoricUseCase>();
+builder.Services.AddScoped<IGetHistoricByIdUseCase, GetHistoricByIdUseCase>();
+builder.Services.AddScoped<IGetHistoricByPetUseCase, GetHistoricByPetUseCase>();
+builder.Services.AddScoped<IHistoricAppointmentRepository, HistoricAppointmentRepository>();
 
 //Services
 //service para nos pegarmos o id do usuario pelo jwt

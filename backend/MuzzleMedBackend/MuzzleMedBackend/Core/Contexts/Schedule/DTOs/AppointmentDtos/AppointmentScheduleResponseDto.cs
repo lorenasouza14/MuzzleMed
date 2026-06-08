@@ -17,5 +17,6 @@ public class AppointmentScheduleResponseDto
     
     public Guid PetId { get; set; }
     public string PetName { get; set; }
-    
+    public string SymptomDescription { get; set; }
+
 }
