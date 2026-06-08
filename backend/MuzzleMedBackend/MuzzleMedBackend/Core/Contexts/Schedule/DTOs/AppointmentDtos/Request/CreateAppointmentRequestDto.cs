@@ -1,6 +1,6 @@
 namespace MuzzleMedBackend.Core.Contexts.Schedule.DTOs;
 
-public class CreateAppointmentDto
+public class CreateAppointmentRequestDto
 { 
     public Guid PetId { get; set; }
     public Guid ClinicId { get; set; }
@@ -9,9 +9,9 @@ public class CreateAppointmentDto
     public TimeOnly Time { get; set; }
     public String SymptomDescription { get; set; }
     
-    public CreateAppointmentDto(){}
+    public CreateAppointmentRequestDto(){}
     
-    public CreateAppointmentDto(Guid petId, Guid clinicId, Guid vetId,
+    public CreateAppointmentRequestDto(Guid petId, Guid clinicId, Guid vetId,
         DateOnly date, TimeOnly time, string symptomDescription)
     {
         PetId = petId;

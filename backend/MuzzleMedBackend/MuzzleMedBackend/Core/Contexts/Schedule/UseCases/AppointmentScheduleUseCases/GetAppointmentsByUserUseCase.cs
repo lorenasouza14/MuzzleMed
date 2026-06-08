@@ -29,13 +29,13 @@ public class GetAppointmentsByUserUseCase : IGetAppointmentsByUserUseCase
         _buildAppointmentResponseUseCase = buildAppointmentResponseUseCase;
     }
 
-    public async Task<List<AppointmentScheduleResponseDto>?> ExecuteAsync()
+    public async Task<List<AppointmentResponseDto>?> ExecuteAsync()
     {
         var userId = _getUserIdService.GetUserId();
         
         var appointments = await _appointmentRepository.GetByUserIdAsync(userId);
         
-        var responseList = new List<AppointmentScheduleResponseDto>();
+        var responseList = new List<AppointmentResponseDto>();
 
         if (appointments == null)
             return responseList;

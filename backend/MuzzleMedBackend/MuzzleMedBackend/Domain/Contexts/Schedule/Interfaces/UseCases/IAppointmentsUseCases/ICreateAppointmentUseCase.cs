@@ -5,5 +5,5 @@ namespace MuzzleMedBackend.Domain.Contexts.Schedule.Interfaces.IUseCases;
 
 public interface ICreateAppointmentUseCase
 {
-    Task<AppointmentScheduleContext> ExecuteAsync(CreateAppointmentDto dto);
+    Task<AppointmentScheduleContext> ExecuteAsync(CreateAppointmentRequestDto requestDto);
 }

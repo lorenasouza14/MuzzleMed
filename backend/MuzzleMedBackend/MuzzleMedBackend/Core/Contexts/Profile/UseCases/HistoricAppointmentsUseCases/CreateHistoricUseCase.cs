@@ -13,7 +13,7 @@ public class CreateHistoricUseCase : ICreateHistoricUseCase
         _historicAppointmentRepository = historicAppointmentRepository;
     }
 
-    public async Task<HistoricAppointment> ExecuteAsync(CreateHistoricAppointmentRequestDto dto)
+    public bool Execute(CreateHistoricAppointmentRequestDto dto)
     {
         ArgumentNullException.ThrowIfNull(dto);
         
@@ -29,8 +29,8 @@ public class CreateHistoricUseCase : ICreateHistoricUseCase
             dto.ClinicName,
             dto.VetName);
 
-        await _historicAppointmentRepository.CreateAsync(historic);
-        return historic;
+        _historicAppointmentRepository.AddWithOutSave(historic);
+        return true;
     }
     
 }

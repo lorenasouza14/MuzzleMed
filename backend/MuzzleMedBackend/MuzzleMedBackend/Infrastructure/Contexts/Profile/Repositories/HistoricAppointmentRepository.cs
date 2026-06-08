@@ -33,5 +33,10 @@ public class HistoricAppointmentRepository : IHistoricAppointmentRepository
         await _context.HistoricAppointments.AddAsync(historic);
         await _context.SaveChangesAsync();
     }
+
+    public void AddWithOutSave(HistoricAppointment historic)
+    {
+        _context.HistoricAppointments.Add(historic);
+    }
     
 }

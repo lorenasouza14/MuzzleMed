@@ -23,7 +23,7 @@ public class GetAppointmentByIdUseCase : IGetAppointmentByIdUseCase
         _petScheduleRepository = petScheduleRepository;
         _buildAppointmentResponseUseCase = buildAppointmentResponseUseCase;
     }
-    public async Task<AppointmentScheduleResponseDto?> ExecuteAsync(Guid id)
+    public async Task<AppointmentResponseDto?> ExecuteAsync(Guid id)
     {
         ArgumentNullException.ThrowIfNull(id);
         

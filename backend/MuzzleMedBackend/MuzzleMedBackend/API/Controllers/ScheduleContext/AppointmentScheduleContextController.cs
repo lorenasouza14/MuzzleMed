@@ -31,7 +31,7 @@ public class AppointmentScheduleContextController : ControllerBase
     }
 
     [HttpPost("create")]
-    public async Task<IActionResult> Create([FromBody] CreateAppointmentDto request)
+    public async Task<IActionResult> Create([FromBody] CreateAppointmentRequestDto request)
     {
         try
         {

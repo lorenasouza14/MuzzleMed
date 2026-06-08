@@ -8,15 +8,17 @@ public class DeletePetUseCase
     private readonly IPetRepository _petRepository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly ICheckFutureAppointmentsScheduleUseCase _scheduleIntegration;
+    private readonly IDeletePetScheduleUseCase _deletePetScheduleUseCase;
 
     public DeletePetUseCase(
         IPetRepository petRepository, 
         IUnitOfWork unitOfWork,
-        ICheckFutureAppointmentsScheduleUseCase scheduleIntegration)
+        ICheckFutureAppointmentsScheduleUseCase scheduleIntegration, IDeletePetScheduleUseCase deletePetScheduleUseCase)
     {
         _petRepository = petRepository;
         _unitOfWork = unitOfWork;
         _scheduleIntegration = scheduleIntegration;
+        _deletePetScheduleUseCase = deletePetScheduleUseCase;
     }
 
     public async Task ExecuteAsync(Guid petId, Guid userId)
@@ -38,6 +40,11 @@ public class DeletePetUseCase
             throw new InvalidOperationException("Não é possível remover o pet, pois existem consultas futuras agendadas.");
 
         pet.Deactivate();
+        var updatePetSchedule = await _deletePetScheduleUseCase.ExecuteAsync(petId);
+        if (!updatePetSchedule)
+        {
+            throw new Exception("Ocorreu um erro ao tentar remover o pet do sistema de agendamento. Tente novamente mais tarde.");
+        }
 
         await _unitOfWork.CommitAsync();
     }
