@@ -37,7 +37,8 @@ public class BuildAppointmentResponseUseCase : IBuildAppointmentResponseUseCase
             VetId = appointment.VetId,
             VetName = vet.Name,
             PetId = appointment.PetId,
-            PetName = pet.Name
+            PetName = pet.Name,
+            SymptomDescription = appointment.SymptomDescription
         };
     }
 }

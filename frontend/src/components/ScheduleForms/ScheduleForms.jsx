@@ -86,6 +86,7 @@ function ScheduleForms({ onSave, onCancel }) {
             alert("Consulta agendada com sucesso!");
             
             onSave(); 
+            window.location.reload();
         } catch (error) {
             console.error("Erro completo:", error);
             

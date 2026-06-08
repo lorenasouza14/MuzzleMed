@@ -44,7 +44,7 @@ public class AppointmentScheduleContextController : ControllerBase
         }
         catch (Exception ex)
         {
-            return StatusCode(500, new { message = "Erro interno no servidor." });
+            return StatusCode(500, new { message = $"Erro: {ex.Message}" });
         }
     }
 

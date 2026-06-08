@@ -49,13 +49,14 @@ function Home() {
                         horaFormatada = horaRaw;
                     }
                 }
-
+                const textoSintoma = schedule.symptomDescription || schedule.SymptomDescription || "Sem sintomas descritos";
                 return {
                     id: schedule.id || schedule.Id,    
                     namePet: schedule.petName || schedule.PetName || "Pet cadastrado", 
                     date: dataFormatada, 
                     time: horaFormatada,
-                    symptoms: schedule.symptomDescription || schedule.SymptomDescription || "Sem sintomas descritos",
+                    symptoms: textoSintoma,
+                    symptomDescription: textoSintoma,
                     location: schedule.clinicName || schedule.ClinicName || "Unidade selecionada",
                     veterinarian: vetData?.fullName || (typeof vetData === 'string' ? vetData : "Profissional"),
                     status: schedule.status || schedule.Status || "aberto"
@@ -136,7 +137,6 @@ function Home() {
                                 let medFormatada = "Sem medicação informada";
                                 
                                 if (Array.isArray(medData) && medData.length > 0) {
-                                    // Em vez de texto, montamos tags HTML (display: block força a pular linha)
                                     medFormatada = medData.map((medicamento, i) => (
                                         <span key={i} style={{ display: "block", marginBottom: "4px" }}>
                                             • {medicamento}
@@ -151,13 +151,10 @@ function Home() {
                                         key={hist.id || index} 
                                         namePet={hist.petName || hist.PetName || "Pet cadastrado"} 
                                         dateConsultation={dataFormatada} 
-                                        symptoms={hist.diagnostic || hist.Diagnostic || "Sem diagnóstico"} 
-                                        medication={medFormatada} s
+                                        symptoms={hist.diagnostic || hist.Diagnostic || "Sem diagnóstico informado"}
+                                        medication={medFormatada} 
                                         location={hist.clinicName || hist.ClinicName || "Unidade não informada"} 
-                                        
-                                        // Passando apenas o texto blindado para o componente
                                         veterinarian={nomeVet} 
-                                        
                                         status={hist.status || hist.Status || "Concluído"} 
                                     />
                                 );
