@@ -8,9 +8,10 @@ using Microsoft.AspNetCore.Authorization;
 using Core.Contexts.Profile.UseCases;
 using Core.Contexts.Profile.DTOs;
 
+[Authorize]
 [ApiController]
 [Route("api/v1/pets")]
-[Authorize] // EXIGE TOKEN JWT PARA ACESSAR QUALQUER ROTA DESTA CONTROLLER
+
 public class PetProfileContextController : ControllerBase
 {
     private readonly IGetUserIdService _getUserIdService;

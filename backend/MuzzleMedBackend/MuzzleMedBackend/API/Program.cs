@@ -6,7 +6,10 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using StackExchange.Redis; // IMPORTANTE: Namespace do Redis
 using MuzzleMedBackend.Core.Contexts.Auth.UseCases;
+using MuzzleMedBackend.Core.Contexts.Profile.UseCases;
 using MuzzleMedBackend.Core.Contexts.Schedule.UseCases;
+using MuzzleMedBackend.Core.Contexts.Schedule.UseCases.AppointmentUseCases;
+using MuzzleMedBackend.Core.Contexts.Schedule.UseCases.PetScheduleUseCases;
 using MuzzleMedBackend.Core.Contexts.Veterinarians.UseCases;
 using MuzzleMedBackend.Core.Contexts.Profile.UseCases;
 using MuzzleMedBackend.Core.Contexts.Schedule.UseCases.AppointmentScheduleUseCases;
@@ -17,11 +20,16 @@ using MuzzleMedBackend.Domain.Contexts.BookTime.Interfaces;
 using MuzzleMedBackend.Infrastructure.Contexts.BookTime.Repository;
 using MuzzleMedBackend.Domain.Contexts.Auth.Interfaces.Repositories;
 using MuzzleMedBackend.Domain.Contexts.Auth.Interfaces.Services;
+using MuzzleMedBackend.Domain.Contexts.Auth.Interfaces.UseCases;
+using MuzzleMedBackend.Domain.Contexts.Profile.Interfaces;
 using MuzzleMedBackend.Domain.Contexts.Schedule.Interfaces;
 using MuzzleMedBackend.Domain.Contexts.Schedule.Interfaces.IUseCases;
+using MuzzleMedBackend.Domain.Contexts.Schedule.Interfaces.Repositories;
+using MuzzleMedBackend.Domain.Contexts.Schedule.Interfaces.UseCases;
 using MuzzleMedBackend.Domain.Contexts.Veterinarians.Interfaces;
 using MuzzleMedBackend.Infrastructure;
 using MuzzleMedBackend.Infrastructure.Contexts.Auth.Repositories;
+using MuzzleMedBackend.Infrastructure.Contexts.Profile.Repositories;
 using MuzzleMedBackend.Infrastructure.Contexts.Schedule.Persistence;
 using MuzzleMedBackend.Infrastructure.Contexts.Schedule.Repositories;
 using MuzzleMedBackend.Infrastructure.Contexts.Veterinarians.Repositories;
@@ -34,6 +42,8 @@ using MuzzleMedBackend.Domain.Contexts.Schedule.Interfaces.UseCases;
 using MuzzleMedBackend.Infrastructure.Contexts.Profile.Repositories;
 using MuzzleMedBackend.Services;
 using MuzzleMedBackend.Services.Interfaces;
+using System.Text;
+using System.Text.Json.Serialization;
 
 // Configs
 var builder = WebApplication.CreateBuilder(args);
@@ -62,12 +72,16 @@ builder.Services.AddSwaggerGen(options =>
 {
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
+        Name = "Authorization",
         Type = SecuritySchemeType.Http,
         Scheme = "Bearer",
         BearerFormat = "JWT",
-        Description = "JWT Authorization header using the Bearer scheme."
+        In = ParameterLocation.Header,
+        Description = "Insira o token JWT: Bearer {seu token}"
     });
-    options.AddSecurityRequirement(document => new OpenApiSecurityRequirement
+
+   
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         [new OpenApiSecuritySchemeReference("Bearer", document)] = []
     });

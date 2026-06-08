@@ -1,27 +1,49 @@
 import { useState } from "react";
 import TimeSlotModal from "../TimeSlotModal/TimeSlotModal";
+import { bookTime } from "../../services/routes/reservarhorario"; 
 import "./TimeSlotSelector.css";
 
 function TimeSlotSelector({ label, selectedTime, onTimeChange, isDateSelected, dateSchedule }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); 
 
-  // Valida se a data selecionada é menor que amanhã
   const isDateInvalid = () => {
     if (!dateSchedule) return true;
 
-    // Criamos a data de amanhã zerando as horas para comparar apenas os dias
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
     tomorrow.setHours(0, 0, 0, 0);
 
-    // O input date retorna no fuso local, adicionamos o replace para evitar problemas de fuso
     const selected = new Date(dateSchedule + "T00:00:00");
 
     return selected < tomorrow;
   };
 
-  // O botão só deve ser liberado se houver data selecionada E ela for válida (de amanhã em diante)
-  const isButtonDisabled = !isDateSelected || isDateInvalid();
+  const isButtonDisabled = !isDateSelected || isDateInvalid() || isLoading;
+
+  const handleConfirmTime = async (time) => {
+    setIsLoading(true);
+    
+    const scheduleData = {
+      dateSchedule: dateSchedule,
+      timeSchedule: time
+    };
+
+    try {
+      const response = await bookTime(scheduleData);
+
+      onTimeChange(time);
+      setIsModalOpen(false);
+      
+      alert(response.message || "Horário pré-reservado com sucesso!");
+    } catch (error) {
+      
+      const apiMessage = error.response?.data?.message || "Erro ao tentar reservar o horário. Tente novamente.";
+      alert(apiMessage);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="time-selector-container">
@@ -43,7 +65,7 @@ function TimeSlotSelector({ label, selectedTime, onTimeChange, isDateSelected, d
           cursor: isButtonDisabled ? "not-allowed" : "pointer"
         }}
       >
-        {selectedTime ? `Horário: ${selectedTime}` : "Selecionar Horário"}
+        {isLoading ? "Salvando..." : selectedTime ? `Horário: ${selectedTime}` : "Selecionar Horário"}
       </button>
 
       {!isDateSelected && (
@@ -54,15 +76,12 @@ function TimeSlotSelector({ label, selectedTime, onTimeChange, isDateSelected, d
         <span className="date-warning-text" style={{ color: "red" }}>A data deve ser a partir de amanhã</span>
       )}
 
-      {/* Janelinha de horários */}
+      
       <TimeSlotModal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        onClose={() => !isLoading && setIsModalOpen(false)} 
         initialSelectedTime={selectedTime}
-        onConfirm={(time) => {
-          onTimeChange(time);
-          console.log(`Regra de negócio: Reservando o horário ${time}`);
-        }}
+        onConfirm={handleConfirmTime} 
       />
     </div>
   );
