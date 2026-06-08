@@ -13,13 +13,15 @@ public class GetAppointmentByIdUseCase : IGetAppointmentByIdUseCase
     private readonly IVetRepository _vetRepository;
     private readonly IClinicRepository _clinicRepository;
     private readonly IPetScheduleRepository _petScheduleRepository;
+    private readonly IBuildAppointmentResponseUseCase _buildAppointmentResponseUseCase;
 
-    public GetAppointmentByIdUseCase(IAppointmentRepository appointmentRepository, IClinicRepository clinicRepository, IVetRepository vetRepository, IPetScheduleRepository petScheduleRepository)
+    public GetAppointmentByIdUseCase(IAppointmentRepository appointmentRepository, IClinicRepository clinicRepository, IVetRepository vetRepository, IPetScheduleRepository petScheduleRepository, IBuildAppointmentResponseUseCase buildAppointmentResponseUseCase)
     {
         _appointmentRepository = appointmentRepository;
         _clinicRepository = clinicRepository;
         _vetRepository = vetRepository;
         _petScheduleRepository = petScheduleRepository;
+        _buildAppointmentResponseUseCase = buildAppointmentResponseUseCase;
     }
     public async Task<AppointmentScheduleResponseDto?> ExecuteAsync(Guid id)
     {
@@ -30,23 +32,7 @@ public class GetAppointmentByIdUseCase : IGetAppointmentByIdUseCase
         if (appointment == null) 
             return null;
 
-        var clinic = await _clinicRepository.GetClinicById(appointment.ClinicId);
-        var vet = await _vetRepository.GetVeterinaryById(appointment.VetId);
-        var pet = await _petScheduleRepository.GetByIdAsync(appointment.PetId);
-
-        return new AppointmentScheduleResponseDto
-        {
-            Id = appointment.Id,
-            Date = appointment.Date,
-            Time = appointment.Time,
-            Status = appointment.Status.ToString(),
-            ClinicId = appointment.ClinicId,
-            ClinicName = clinic.Name, 
-            VetId = appointment.VetId,
-            VetName = vet.Name,
-            PetId = appointment.PetId,
-            PetName = pet.Name
-        };
+        return await _buildAppointmentResponseUseCase.ExecuteAsync(appointment);
     }
     
 }
