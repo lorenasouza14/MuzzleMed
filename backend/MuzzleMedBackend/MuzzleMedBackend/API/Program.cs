@@ -98,6 +98,7 @@ builder.Services.AddScoped<IGetAppointmentsByUserUseCase, GetAppointmentsByUserU
 builder.Services.AddScoped<IGetAppointmentByIdUseCase, GetAppointmentByIdUseCase>();
 builder.Services.AddScoped<ICancelAppointmentScheduleUseCase, CancelAppointmentScheduleUseCase>();
 builder.Services.AddScoped<IUpdateAppointmentScheduleUseCase, UpdateAppointmentScheduleUseCase>();
+builder.Services.AddScoped<ICheckFutureAppointmentsScheduleUseCase, CheckFutureAppointmentsScheduleUseCase>();
 
 // Veterinarians
 builder.Services.AddScoped<IVetRepository, VeterinarianRepository>();
@@ -132,6 +133,7 @@ builder.Services.AddScoped<ICreatePetScheduleUseCase, CreatePetScheduleUseCase>(
 builder.Services.AddScoped<GetPetsByUserUseCase>();
 builder.Services.AddScoped<IHistoricAppointmentRepository, HistoricAppointmentRepository>();
 builder.Services.AddScoped<GetPetHistoryUseCase>();
+builder.Services.AddScoped<DeletePetUseCase>();
 
 builder.Services.AddScoped<IFinalizeAppointmentUseCase, FinalizeAppointmentUseCase>();
 builder.Services.AddScoped<ICreateHistoricUseCase, CreateHistoricUseCase>();
