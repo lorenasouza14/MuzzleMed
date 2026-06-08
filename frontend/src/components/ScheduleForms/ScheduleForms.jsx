@@ -8,12 +8,12 @@ import "../PetForms/PetForms.css";
 import { getClinics } from "../../services/routes/clinic";
 import { getVetById } from "../../services/routes/veterinary";
 import { getPets } from "../../services/routes/pet";
+
 // import { createSchedule } from "../../services/routes/schedule";
 
 
 function ScheduleForms({ onSave, onCancel }) {
     const [selectedClinicId, setSelectedClinicId] = useState(null);
-    // 
     const [pets, setPets] = useState([]);
     const [dateSchedule, setDateSchedule] = useState("");
     const [timeSchedule, setTimeSchedule] = useState("");
@@ -55,6 +55,7 @@ function ScheduleForms({ onSave, onCancel }) {
         };
         fetchPets();
     }, []);
+
 
 
     const handleVeterinarioSelecionado = (id) => {

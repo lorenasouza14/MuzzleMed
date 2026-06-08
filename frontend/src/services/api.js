@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: 'https://localhost:57393',
+    baseURL: 'https://localhost:5001',
 });
 
 //Envia o token de autentificacao para as outras rotas da API

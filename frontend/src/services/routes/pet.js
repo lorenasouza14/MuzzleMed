@@ -23,3 +23,13 @@ export const createPet = async (petData) => {
     throw error;
   }
 };
+
+
+export const deletePet = async (petId) => {
+  try {
+    await api.delete(`/api/v1/pets/${petId}`);
+  } catch (error) {
+    console.error("Erro ao deletar pet:", error);
+    throw error;
+  }
+};
